@@ -1,0 +1,14 @@
+# Ambiente virtual local (criado por `uv sync`)
+.venv/
+
+# Bytecode Python
+__pycache__/
+*.py[cod]
+
+# Bentos construidos localmente
+bentos/
+
+# Saidas geradas pelas receitas curl-* do justfile
+/grayscale.png
+/blur.png
+/resized.png
