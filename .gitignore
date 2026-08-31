@@ -5,10 +5,10 @@
 __pycache__/
 *.py[cod]
 
-# Bentos construidos localmente
+# Bentos construídos localmente
 bentos/
 
-# Saidas geradas pelas receitas curl-* do justfile
+# Saídas geradas pelas receitas curl-* do justfile
 /grayscale.png
 /blur.png
 /resized.png

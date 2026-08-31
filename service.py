@@ -7,12 +7,12 @@ from pydantic import Field, WrapValidator
 
 
 def _decode(value, handler):
-    # PIL levanta UnidentifiedImageError (um OSError), que o pydantic nao
-    # converte em erro de validacao: vira 500. Reempacota como ValueError -> 400.
+    # O PIL levanta UnidentifiedImageError (um OSError), que o pydantic não
+    # converte em erro de validação: vira 500. Reempacota como ValueError -> 400.
     try:
         return handler(value)
     except OSError as exc:
-        raise ValueError("arquivo enviado nao e uma imagem valida") from exc
+        raise ValueError("o arquivo enviado não é uma imagem válida") from exc
 
 
 ImageInput = Annotated[PILImage, WrapValidator(_decode)]

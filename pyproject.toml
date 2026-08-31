@@ -1,7 +1,7 @@
 [project]
 name = "bentoml-image-demo"
 version = "0.1.0"
-description = "Add your description here"
+description = "Serviço BentoML de processamento de imagens"
 readme = "README.md"
 authors = [
     { name = "Lucas Gallindo", email = "15238731+lgallindo@users.noreply.github.com" }

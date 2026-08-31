@@ -1,31 +1,31 @@
 default:
     @just --list
 
-# Install/refresh the local .venv from pyproject.toml + uv.lock.
+# Instala/atualiza a .venv local a partir do pyproject.toml + uv.lock.
 sync:
     uv sync --no-active
 
-# Start the BentoML development server with automatic reload.
+# Sobe o servidor de desenvolvimento do BentoML com recarga automática.
 serve port="3000":
     uv run --no-active bentoml serve service:ImageProcessor --reload --port {{port}}
 
-# Open the Swagger UI when xdg-open is available; otherwise print its URL.
+# Abre a Swagger UI quando há xdg-open disponível; senão, imprime a URL.
 swagger port="3000":
     @url="http://localhost:{{port}}/"; \
     if command -v xdg-open >/dev/null 2>&1; then \
-        xdg-open "$url" >/dev/null 2>&1 || printf 'Swagger UI: %s\n' "$url"; \
+        xdg-open "$url" >/dev/null 2>&1 || printf 'Abra a Swagger UI em: %s\n' "$url"; \
     else \
-        printf 'Swagger UI: %s\n' "$url"; \
+        printf 'Abra a Swagger UI em: %s\n' "$url"; \
     fi
 
-# Submit an image to the grayscale API and save the returned image.
+# Envia uma imagem para a API grayscale e salva a imagem retornada.
 curl-grayscale image output="grayscale.png" port="3000":
     curl --fail --show-error --request POST \
         --form "image=@{{image}}" \
         "http://localhost:{{port}}/grayscale" \
         --output "{{output}}"
 
-# Submit an image to the blur API and save the returned image.
+# Envia uma imagem para a API blur e salva a imagem retornada.
 curl-blur image output="blur.png" radius="4.0" port="3000":
     curl --fail --show-error --request POST \
         --form "image=@{{image}}" \
@@ -33,7 +33,7 @@ curl-blur image output="blur.png" radius="4.0" port="3000":
         "http://localhost:{{port}}/blur" \
         --output "{{output}}"
 
-# Submit an image to the resize API and save the returned image.
+# Envia uma imagem para a API resize e salva a imagem retornada.
 curl-resize image output="resized.png" width="256" height="256" port="3000":
     curl --fail --show-error --request POST \
         --form "image=@{{image}}" \
