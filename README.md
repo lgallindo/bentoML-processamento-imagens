@@ -14,3 +14,14 @@ Iniciar servidor usando:
  - `just serve`
 
 O servidor vai rodar em [http://localhost:3000/](http://localhost:3000/).
+
+## Imagens de exemplo
+
+As imagens de teste ficam em `samples/`, versionadas como arquivos comuns do git
+(o projeto nao usa mais git-lfs). Para exercitar as APIs:
+
+ - `just curl-grayscale samples/cesar-fachada-1.webp`
+ - `just curl-blur samples/cesar-fachada-1.webp blur.png 8.0`
+ - `just curl-resize samples/cesar-fachada-1.webp resized.png 320 200`
+
+Os arquivos gerados (`grayscale.png`, `blur.png`, `resized.png`) ja estao no `.gitignore`.

@@ -7,12 +7,12 @@ from PIL.Image import Image as PILImage
 class ImageProcessor:
 
     @bentoml.api
-    def grayscale(self, image: PILImage) -> PILImage:
-        return image.convert("L")
-
-    @bentoml.api
     def blur(self, image: PILImage, radius: float = 4.0) -> PILImage:
         return image.filter(ImageFilter.GaussianBlur(radius))
+
+    @bentoml.api
+    def grayscale(self, image: PILImage) -> PILImage:
+        return image.convert("L")
 
     @bentoml.api
     def resize(self, image: PILImage, width: int = 256, height: int = 256) -> PILImage:
