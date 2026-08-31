@@ -171,11 +171,19 @@ A resposta:
 
 Status **400**, e a mensagem diz exatamente qual campo está errado e por quê.
 
-Aqui o `curl` está escrito à mão de propósito. As receitas `curl-*` do justfile
-usam a opção `--fail`, que descarta o corpo da resposta quando o status é de
-erro — com elas você veria apenas `curl: (22) The requested URL returned error:
-400`, sem a explicação. Vale notar de passagem: este comando `curl` é tudo o que
-`just curl-grayscale` faz por baixo. O `just` é só um apelido.
+Aqui o `curl` está escrito à mão de propósito, para você ver uma vez o que as
+receitas escondem: este comando é tudo o que `just curl-grayscale` faz por baixo.
+O `just` é só um apelido.
+
+Há um motivo prático também. As receitas `curl-grayscale`, `curl-blur` e
+`curl-resize` usam a opção `--fail`, que descarta o corpo da resposta quando o
+status é de erro — com elas você veria apenas `curl: (22) The requested URL
+returned error: 400`, sem a explicação. Quando quiser ler o erro sem escrever o
+`curl` inteiro, existe uma receita só para isso:
+
+```bash
+just curl-erro grayscale lixo.txt
+```
 
 Esse 400 não veio de graça. O Pillow, ao tentar abrir um `.txt` como imagem,
 levanta um `OSError`, que o pydantic não reconhece como problema de validação —
@@ -223,6 +231,12 @@ just swagger            # abre a documentação interativa no navegador
 just curl-grayscale samples/cesar-fachada-1.webp
 just curl-blur         samples/cesar-fachada-1.webp desfoque.png 8.0
 just curl-resize       samples/cesar-fachada-1.webp reduzida.png 320 200
+
+just curl-erro grayscale lixo.txt                    # mostra o erro, não salva imagem
+just curl-erro resize foto.webp 3000 width=0         # campos extras vão soltos no fim
+
+just build              # empacota o serviço num bento, seguindo o bentofile.yaml
+just list               # lista os bentos já empacotados nesta máquina
 ```
 
 Os argumentos das receitas `curl-*` são **posicionais**: para mudar só a porta,
@@ -249,7 +263,7 @@ Os arquivos gerados (`grayscale.png`, `blur.png`, `resized.png`) estão no
 | [`service.py`](service.py) | o serviço inteiro: 3 endpoints em 35 linhas |
 | [`justfile`](justfile) | as receitas, e o comando de verdade que cada uma esconde |
 | [`pyproject.toml`](pyproject.toml) | as bibliotecas que o projeto usa |
-| [`bentofile.yaml`](bentofile.yaml) | a receita de empacotamento, para gerar um *bento* distribuível |
+| [`bentofile.yaml`](bentofile.yaml) | o que entra no pacote; é o que `just build` lê para gerar um *bento* |
 | [`samples/`](samples/) | as três imagens de exemplo |
 
 Vale ler os comentários do `service.py`: eles explicam não só o que o código

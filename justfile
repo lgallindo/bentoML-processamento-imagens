@@ -41,3 +41,27 @@ curl-resize image output="resized.png" width="256" height="256" port="3000":
         --form "height={{height}}" \
         "http://localhost:{{port}}/resize" \
         --output "{{output}}"
+
+# As outras receitas curl-* usam --fail, que descarta a explicação dos erros;
+# esta não usa, então mostra o corpo da resposta e o código HTTP.
+#
+# Campos extras vão soltos no fim, depois da porta:
+#     just curl-erro resize foto.webp 3000 width=0 height=100
+#
+# Use só para investigar erros: numa chamada que dá certo a resposta é uma
+# imagem, e os bytes dela vão embaralhar o seu terminal.
+
+# Mostra o corpo e o código HTTP de uma resposta, em vez de salvar a imagem.
+curl-erro endpoint image port="3000" *campos:
+    @extra=""; for campo in {{campos}}; do extra="$extra --form $campo"; done; \
+    curl --silent --show-error --write-out '\nHTTP %{http_code}\n' \
+        --request POST --form "image=@{{image}}" $extra \
+        "http://localhost:{{port}}/{{endpoint}}"
+
+# Empacota o serviço num bento distribuível, seguindo o bentofile.yaml.
+build:
+    uv run --no-active bentoml build
+
+# Lista os bentos já empacotados nesta máquina.
+list:
+    uv run --no-active bentoml list
