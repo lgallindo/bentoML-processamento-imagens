@@ -1,0 +1,9 @@
+service: "service:ImageProcessor"
+labels:
+  project: image-demo
+include:
+  - "*.py"
+python:
+  packages:
+    - bentoml
+    - pillow
