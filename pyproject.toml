@@ -10,13 +10,7 @@ requires-python = ">=3.13"
 dependencies = [
     "bentoml>=1.4.39",
     "pillow>=10.0.0",
-    "torch>=2.13.0",
-    "transformers>=5.16.1",
 ]
 
-[project.scripts]
-bentoml-image-demo = "bentoml_image_demo:main"
-
-[build-system]
-requires = ["uv_build>=0.12.1,<0.13.0"]
-build-backend = "uv_build"
+[tool.uv]
+package = false

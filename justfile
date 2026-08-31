@@ -1,13 +1,17 @@
 default:
     @just --list
 
+# Install/refresh the local .venv from pyproject.toml + uv.lock.
+sync:
+    uv sync --no-active
+
 # Start the BentoML development server with automatic reload.
 serve port="3000":
-    python -m bentoml serve service:ImageProcessor --reload --port {{port}}
+    uv run --no-active bentoml serve service:ImageProcessor --reload --port {{port}}
 
 # Open the Swagger UI when xdg-open is available; otherwise print its URL.
 swagger port="3000":
-    @url="http://localhost:{{port}}/docs"; \
+    @url="http://localhost:{{port}}/"; \
     if command -v xdg-open >/dev/null 2>&1; then \
         xdg-open "$url" >/dev/null 2>&1 || printf 'Swagger UI: %s\n' "$url"; \
     else \
