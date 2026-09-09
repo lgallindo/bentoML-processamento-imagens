@@ -217,7 +217,7 @@ devolvem **PNG**, qualquer que seja o formato de entrada.
 | endpoint | o que faz | parâmetros além da imagem |
 |---|---|---|
 | `/grayscale` | converte para tons de cinza | — |
-| `/blur` | desfoque gaussiano | `radius` (decimal, padrão `4.0`) |
+| `/blur` | desfoque gaussiano | `radius` (decimal, padrão `1.0`) |
 | `/resize` | redimensiona | `width`, `height` (inteiros > 0, padrão `256`) |
 
 ## Receitas disponíveis

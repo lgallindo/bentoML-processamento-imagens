@@ -23,7 +23,7 @@ Positive = Annotated[int, Field(gt=0)]
 class ImageProcessor:
 
     @bentoml.api
-    def blur(self, image: ImageInput, radius: float = 4.0) -> PILImage:
+    def blur(self, image: ImageInput, radius: float = 1.0) -> PILImage:
         return image.filter(ImageFilter.GaussianBlur(radius))
 
     @bentoml.api
