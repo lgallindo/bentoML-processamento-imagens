@@ -1,9 +1,19 @@
 # Prometheus com o `/metrics` deste projeto
 
-Este tutorial instala o Prometheus localmente, conecta-o ao endpoint que o
-BentoML já publica e usa o histórico coletado para procurar tempos de resposta
-anômalos. Não é necessário alterar `service.py` nem criar um exporter: as
-métricas HTTP do serviço já estão disponíveis em `GET /metrics`.
+Uma API pode continuar respondendo `200` e, ainda assim, estar ficando mais
+lenta. Observar uma chamada isolada não revela esse tipo de degradação: é
+preciso medir continuamente, preservar o histórico e comparar o comportamento
+atual com o padrão anterior do serviço.
+
+O BentoML já publica contadores e histogramas HTTP em `GET /metrics`. O
+Prometheus visita esse endpoint periodicamente, transforma cada coleta em uma
+série temporal e oferece PromQL para calcular taxas, percentis e linhas de base.
+Não é necessário alterar `service.py` nem criar um exporter adicional.
+
+Neste tutorial, você instalará o Prometheus localmente, conectará o servidor ao
+serviço deste repositório e verificará a coleta com tráfego real. Ao final,
+consultará o percentil 95 do tempo de resposta e terá uma regra reproduzível
+para sinalizar desvios anômalos em relação a uma janela móvel.
 
 ## 1. Instale o Prometheus
 
