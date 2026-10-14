@@ -1,0 +1,26 @@
+groups:
+  - name: bentoml-response-time
+    rules:
+      - record: bentoml:http_request_duration_seconds:p95_1m
+        expr: |
+          histogram_quantile(
+            0.95,
+            sum by (le, endpoint) (
+              rate(bentoml_service_request_duration_seconds_bucket{
+                endpoint=~"/(blur|grayscale|resize)"
+              }[1m])
+            )
+          )
+
+      - alert: BentoMLResponseTimeAnomaly
+        expr: |
+          bentoml:http_request_duration_seconds:p95_1m
+            >
+          avg_over_time(bentoml:http_request_duration_seconds:p95_1m[30m])
+            + 3 * stddev_over_time(bentoml:http_request_duration_seconds:p95_1m[30m])
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: Tempo de resposta anômalo no endpoint {{ $labels.endpoint }}
+          description: O p95 atual ultrapassou a média móvel de 30 min em três desvios-padrão.
