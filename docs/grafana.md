@@ -197,6 +197,37 @@ estiver vazio, siga esta ordem:
 4. gere novas requisições e aguarde uma coleta de cinco segundos;
 5. confirme que o painel usa a fonte `Prometheus — BentoML Imagens`.
 
+Após um reboot, `grafana-server` inicia pelo systemd, mas os comandos `just
+serve` e `prometheus` acima rodam em primeiro plano e não são serviços
+habilitados para iniciar automaticamente. Confira a origem e a coleta:
+
+```bash
+sudo systemctl is-active grafana-server
+curl --fail http://127.0.0.1:3000/metrics >/dev/null
+curl --get --silent --show-error --fail \
+  --data-urlencode 'query=up{job="bentoml-imagens"}' \
+  http://127.0.0.1:9090/api/v1/query
+```
+
+Se BentoML ou Prometheus não estiverem ativos, abra terminais na raiz do
+repositório e inicie-os novamente:
+
+```bash
+# terminal 1
+just serve
+```
+
+```bash
+# terminal 2
+prometheus \
+  --config.file=monitoring/prometheus.yml \
+  --storage.tsdb.path=/tmp/bentoml-imagens-prometheus
+```
+
+O Prometheus só atualiza os gráficos enquanto consegue coletar `/metrics`;
+depois de reiniciar os processos, gere tráfego novamente. Como o banco de dados
+do tutorial fica em `/tmp`, o reboot também pode apagar o histórico anterior.
+
 O fluxo completo é:
 
 ```text
