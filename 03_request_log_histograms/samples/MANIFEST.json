@@ -1,0 +1,459 @@
+{
+  "source": "picsum.photos",
+  "seed_prefix": "bentoml-edu",
+  "count": 50,
+  "width": 640,
+  "height": 480,
+  "images": [
+    {
+      "id": 1,
+      "seed": "bentoml-edu-1",
+      "url": "https://picsum.photos/seed/bentoml-edu-1/640/480",
+      "final_url": "https://fastly.picsum.photos/id/396/640/480.jpg?hmac=SOQziZ6FzO0nwmY2fWKmgvpmm577TmY9fpcTKMT1C-s",
+      "path": "samples/train_001.jpg",
+      "sha256": "eb1b411769dd68c563b48cb627c5147f00002e9ab26dfb9366bb227223b6bdc2",
+      "bytes": 50530
+    },
+    {
+      "id": 2,
+      "seed": "bentoml-edu-2",
+      "url": "https://picsum.photos/seed/bentoml-edu-2/640/480",
+      "final_url": "https://fastly.picsum.photos/id/140/640/480.jpg?hmac=1MDgFXqpMDtsrHJUuQF7GZiesZntv97q2pTI9-rPmBk",
+      "path": "samples/train_002.jpg",
+      "sha256": "92b7589489c1e9a2a02f77750a40691313968ace40ba37d4c6570cb75146ab03",
+      "bytes": 74485
+    },
+    {
+      "id": 3,
+      "seed": "bentoml-edu-3",
+      "url": "https://picsum.photos/seed/bentoml-edu-3/640/480",
+      "final_url": "https://fastly.picsum.photos/id/923/640/480.jpg?hmac=ux_UBnCHgQa1iy8TCssSMYa5xbiN3LfsvAXRexgToLQ",
+      "path": "samples/train_003.jpg",
+      "sha256": "31397da6259f89d46b9bd734d4a3814c674a2e48b3bade5f5a97116e827f5953",
+      "bytes": 71091
+    },
+    {
+      "id": 4,
+      "seed": "bentoml-edu-4",
+      "url": "https://picsum.photos/seed/bentoml-edu-4/640/480",
+      "final_url": "https://fastly.picsum.photos/id/1055/640/480.jpg?hmac=tsxJSbf72P58uXZ7rH3mpA0JmHK6Nlb13I3PiVd4vM0",
+      "path": "samples/train_004.jpg",
+      "sha256": "e549de3f5257625bdd9670723c9a028d965f45da0feed4ad67111243f43bc674",
+      "bytes": 22141
+    },
+    {
+      "id": 5,
+      "seed": "bentoml-edu-5",
+      "url": "https://picsum.photos/seed/bentoml-edu-5/640/480",
+      "final_url": "https://fastly.picsum.photos/id/160/640/480.jpg?hmac=ggxsa5TsuwPOdCVxZl2uKDB7TAtWR0X7JwQ0xm4LbQE",
+      "path": "samples/train_005.jpg",
+      "sha256": "9c39a86514db5a5fcd693d8f5eec317e82440af75e69dd531166b3c3d060866e",
+      "bytes": 15816
+    },
+    {
+      "id": 6,
+      "seed": "bentoml-edu-6",
+      "url": "https://picsum.photos/seed/bentoml-edu-6/640/480",
+      "final_url": "https://fastly.picsum.photos/id/1013/640/480.jpg?hmac=U2An6DwTr56MM5mytSkeALjrazVJJWM4KIVkBVdPuH0",
+      "path": "samples/train_006.jpg",
+      "sha256": "79dd1131c5561d631430079a572f10d136fa49c6f23db817bb4bb31efaed8933",
+      "bytes": 41254
+    },
+    {
+      "id": 7,
+      "seed": "bentoml-edu-7",
+      "url": "https://picsum.photos/seed/bentoml-edu-7/640/480",
+      "final_url": "https://fastly.picsum.photos/id/965/640/480.jpg?hmac=dyDxZdA8gal6_Xto9SLQG9j41Vfuf1jN2V6bmW4rLrY",
+      "path": "samples/train_007.jpg",
+      "sha256": "9735d712faf765855f2b172e66b0f476ca18e5ff50a7b3cbe654bb1dce0ebac8",
+      "bytes": 23934
+    },
+    {
+      "id": 8,
+      "seed": "bentoml-edu-8",
+      "url": "https://picsum.photos/seed/bentoml-edu-8/640/480",
+      "final_url": "https://fastly.picsum.photos/id/937/640/480.jpg?hmac=FDbaOBWFNUipl3P628gMOwD6UX1AeaP9fCgMr03-omE",
+      "path": "samples/train_008.jpg",
+      "sha256": "39f2cf37699611b83f4562bc1f09de3d373b42b227285e39e2b1f76368b06273",
+      "bytes": 74971
+    },
+    {
+      "id": 9,
+      "seed": "bentoml-edu-9",
+      "url": "https://picsum.photos/seed/bentoml-edu-9/640/480",
+      "final_url": "https://fastly.picsum.photos/id/204/640/480.jpg?hmac=M8wYMGD_83fj3ZxaFRGj8dFRlIZE-0NKjQwhpmQwiwI",
+      "path": "samples/train_009.jpg",
+      "sha256": "88a3f5c79ea0e83ca4ac6acf28410a3a4fd80efc51f8b857292b2e4ebf614082",
+      "bytes": 57409
+    },
+    {
+      "id": 10,
+      "seed": "bentoml-edu-10",
+      "url": "https://picsum.photos/seed/bentoml-edu-10/640/480",
+      "final_url": "https://fastly.picsum.photos/id/14/640/480.jpg?hmac=JBy9aU0REWUECfbVic8Bwhz22yA2XqTwaP6DXK5gg3Y",
+      "path": "samples/train_010.jpg",
+      "sha256": "b36c96d5815d059a8a5f946c8d7bfca4b12ae88d0b6a99665b1b4c321516b538",
+      "bytes": 47328
+    },
+    {
+      "id": 11,
+      "seed": "bentoml-edu-11",
+      "url": "https://picsum.photos/seed/bentoml-edu-11/640/480",
+      "final_url": "https://fastly.picsum.photos/id/84/640/480.jpg?hmac=KzCD9cRlSLKeRjDhdFhhzZqpM2VHXXVxvT4s0OgOiPM",
+      "path": "samples/train_011.jpg",
+      "sha256": "c8480e37595ed1a3597a8c600afbd0bbf4cfe5ba3a0b62c473f6a39e32583d35",
+      "bytes": 28943
+    },
+    {
+      "id": 12,
+      "seed": "bentoml-edu-12",
+      "url": "https://picsum.photos/seed/bentoml-edu-12/640/480",
+      "final_url": "https://fastly.picsum.photos/id/583/640/480.jpg?hmac=kyLB4Q5ETiUqoz2-FZmp01jCfZt8eyStaUCE4cGSNZM",
+      "path": "samples/train_012.jpg",
+      "sha256": "08e94cae1d8d4f3c7d3f88fd7b1e4ce72d295ccfe26f5c3946beb72bfc7d92c2",
+      "bytes": 21615
+    },
+    {
+      "id": 13,
+      "seed": "bentoml-edu-13",
+      "url": "https://picsum.photos/seed/bentoml-edu-13/640/480",
+      "final_url": "https://fastly.picsum.photos/id/839/640/480.jpg?hmac=_3PwNVoH9E4EpEPjzx_BGBvWKAuaaqqGUbV9TPBa-MI",
+      "path": "samples/train_013.jpg",
+      "sha256": "38c8ad726ccb7c4d5b46c7b2a54c378c193b141417c53584467c58f2257ddbc6",
+      "bytes": 53366
+    },
+    {
+      "id": 14,
+      "seed": "bentoml-edu-14",
+      "url": "https://picsum.photos/seed/bentoml-edu-14/640/480",
+      "final_url": "https://fastly.picsum.photos/id/270/640/480.jpg?hmac=tWL1xaVPRYLyfUMXrb_4cHATT6arN67CL80KWeIa_9s",
+      "path": "samples/train_014.jpg",
+      "sha256": "8e77b6c7a2b295980e0e75a99bd7119ebabc424e0a421b56687ad08140c28cee",
+      "bytes": 40212
+    },
+    {
+      "id": 15,
+      "seed": "bentoml-edu-15",
+      "url": "https://picsum.photos/seed/bentoml-edu-15/640/480",
+      "final_url": "https://fastly.picsum.photos/id/306/640/480.jpg?hmac=VHOX7p32ymKDXiOiziojHVtJ9Sce5k5EKhq3hvrAhLw",
+      "path": "samples/train_015.jpg",
+      "sha256": "7887a7dc30a6d35a3749f0626e906a3d7b5c9e1860aef7fbe9a02d47775192ef",
+      "bytes": 26890
+    },
+    {
+      "id": 16,
+      "seed": "bentoml-edu-16",
+      "url": "https://picsum.photos/seed/bentoml-edu-16/640/480",
+      "final_url": "https://fastly.picsum.photos/id/571/640/480.jpg?hmac=awCC4_vvFo95FKD3X5-pNJG67669hsJ5TM6ohVxIjO8",
+      "path": "samples/train_016.jpg",
+      "sha256": "3fa044ed77949bf970a84b0a227e9f9403f88b41c3beb22fc27ec455870ef2b7",
+      "bytes": 75777
+    },
+    {
+      "id": 17,
+      "seed": "bentoml-edu-17",
+      "url": "https://picsum.photos/seed/bentoml-edu-17/640/480",
+      "final_url": "https://fastly.picsum.photos/id/659/640/480.jpg?hmac=bEWJiZWNHAzKl7OzDKw5E3f7LNsvpcuo2awKtJCvFJg",
+      "path": "samples/train_017.jpg",
+      "sha256": "c1ea8ea7502f45e0da034cad50c43289e3514dbac79426ae389062d4e784697a",
+      "bytes": 28433
+    },
+    {
+      "id": 18,
+      "seed": "bentoml-edu-18",
+      "url": "https://picsum.photos/seed/bentoml-edu-18/640/480",
+      "final_url": "https://fastly.picsum.photos/id/178/640/480.jpg?hmac=UcP3ZvMpjCmRm_aCOG1AzPllM6JMme8cUqIs7h_PIQI",
+      "path": "samples/train_018.jpg",
+      "sha256": "6363db6b39b6ca0635f34d5ef1d86214d8bf453a89957e4dcc92e8958e023fe2",
+      "bytes": 50813
+    },
+    {
+      "id": 19,
+      "seed": "bentoml-edu-19",
+      "url": "https://picsum.photos/seed/bentoml-edu-19/640/480",
+      "final_url": "https://fastly.picsum.photos/id/85/640/480.jpg?hmac=NDUAM49dv1C2y-845X9Rk_QIYpIEI8h98uUu9V7GpU8",
+      "path": "samples/train_019.jpg",
+      "sha256": "0974a09b56cf125b723ca43ef377543b2a00e764a86496a96b21d4d620de4892",
+      "bytes": 36460
+    },
+    {
+      "id": 20,
+      "seed": "bentoml-edu-20",
+      "url": "https://picsum.photos/seed/bentoml-edu-20/640/480",
+      "final_url": "https://fastly.picsum.photos/id/145/640/480.jpg?hmac=wxDPfbj52O5wiEEiHARFT2naqdhjWfusuCscEJCqnzc",
+      "path": "samples/train_020.jpg",
+      "sha256": "3323f7c320158245cb341594a01b1b1dbee052fb3244111093c76d3c2d3e057a",
+      "bytes": 32824
+    },
+    {
+      "id": 21,
+      "seed": "bentoml-edu-21",
+      "url": "https://picsum.photos/seed/bentoml-edu-21/640/480",
+      "final_url": "https://fastly.picsum.photos/id/408/640/480.jpg?hmac=B7EMdsNd2nbIpRXrWcj3r-n7kBuUW8aNZE5PQqckzyQ",
+      "path": "samples/train_021.jpg",
+      "sha256": "576d02b5838973ea4ecfeb5b8947ab6efee2c90466b6d45996bb12ad814a5826",
+      "bytes": 36349
+    },
+    {
+      "id": 22,
+      "seed": "bentoml-edu-22",
+      "url": "https://picsum.photos/seed/bentoml-edu-22/640/480",
+      "final_url": "https://fastly.picsum.photos/id/1064/640/480.jpg?hmac=fUJaD35MBE791wC1i1oYnlt23kZrXhr_6bxUZpA0Fac",
+      "path": "samples/train_022.jpg",
+      "sha256": "154dac3ac5be043471126e676e4e140d4e996694bd93bdec435329857d0be135",
+      "bytes": 25006
+    },
+    {
+      "id": 23,
+      "seed": "bentoml-edu-23",
+      "url": "https://picsum.photos/seed/bentoml-edu-23/640/480",
+      "final_url": "https://fastly.picsum.photos/id/841/640/480.jpg?hmac=k1x_0B3JZ4GUmsy3Td8ZO8UI6mmsI2L3g0pT5d5eP4Q",
+      "path": "samples/train_023.jpg",
+      "sha256": "04d0f582e49fd918933d013255a2ac7a6c37e2ccb4694935dff94bcf34f0e08a",
+      "bytes": 30448
+    },
+    {
+      "id": 24,
+      "seed": "bentoml-edu-24",
+      "url": "https://picsum.photos/seed/bentoml-edu-24/640/480",
+      "final_url": "https://fastly.picsum.photos/id/68/640/480.jpg?hmac=1yA3LLFI4wrgam1rouAhC094Rw6cr1rZg7hyT28TNRc",
+      "path": "samples/train_024.jpg",
+      "sha256": "4f4442996d63dced03012a0d0354baddf51d395920aa402948e595365d107698",
+      "bytes": 36132
+    },
+    {
+      "id": 25,
+      "seed": "bentoml-edu-25",
+      "url": "https://picsum.photos/seed/bentoml-edu-25/640/480",
+      "final_url": "https://fastly.picsum.photos/id/828/640/480.jpg?hmac=mZIR6yZ1MC7XETnyoghSmPKqAGUyJgx6PXtVxvtZOqM",
+      "path": "samples/train_025.jpg",
+      "sha256": "c7f74e7ead9f3a206f8e0af0d6683d24da9b2735ae8ccea59523a5d7f98f203e",
+      "bytes": 40211
+    },
+    {
+      "id": 26,
+      "seed": "bentoml-edu-26",
+      "url": "https://picsum.photos/seed/bentoml-edu-26/640/480",
+      "final_url": "https://fastly.picsum.photos/id/721/640/480.jpg?hmac=ewdB_jTnlRc3CJjw9i-XbLemGjj0ZAIWT4suX_RL3Po",
+      "path": "samples/train_026.jpg",
+      "sha256": "cbcb314b6f74ac0050fe98f4e76b3db367f8f437cf6776a02978e0d20f81e252",
+      "bytes": 14130
+    },
+    {
+      "id": 27,
+      "seed": "bentoml-edu-27",
+      "url": "https://picsum.photos/seed/bentoml-edu-27/640/480",
+      "final_url": "https://fastly.picsum.photos/id/783/640/480.jpg?hmac=tk3RLlmo17xc1RCjdt6KnZ6E1w2D9aQHP7G7DxBDl1A",
+      "path": "samples/train_027.jpg",
+      "sha256": "c360855484bbbfde3749fc4e2507f90b0143a4a013378300e850efc26d1e63a7",
+      "bytes": 57249
+    },
+    {
+      "id": 28,
+      "seed": "bentoml-edu-28",
+      "url": "https://picsum.photos/seed/bentoml-edu-28/640/480",
+      "final_url": "https://fastly.picsum.photos/id/858/640/480.jpg?hmac=JsWzhVmrU2h0dH6aL42JMq74GUFVzPL0J3hsz9UHlUg",
+      "path": "samples/train_028.jpg",
+      "sha256": "fe413d5aa995324e2f36141fdbe38726cff95ae3e72eff06480946342597a1b6",
+      "bytes": 36151
+    },
+    {
+      "id": 29,
+      "seed": "bentoml-edu-29",
+      "url": "https://picsum.photos/seed/bentoml-edu-29/640/480",
+      "final_url": "https://fastly.picsum.photos/id/791/640/480.jpg?hmac=docxFhkEERNqSLOln5rAFtWX-zKiclKdxO_HimsEyE8",
+      "path": "samples/train_029.jpg",
+      "sha256": "bf4f953117f29b184dd8cb6b01f0b4592f22b2c0f6a4093d206464a60bd7969e",
+      "bytes": 49243
+    },
+    {
+      "id": 30,
+      "seed": "bentoml-edu-30",
+      "url": "https://picsum.photos/seed/bentoml-edu-30/640/480",
+      "final_url": "https://fastly.picsum.photos/id/909/640/480.jpg?hmac=kDHccIa6XfKEPef8wgpljnS0IWcveNrvD62lNcesJhw",
+      "path": "samples/train_030.jpg",
+      "sha256": "d7288c0a4893de2f319f361cc554414c79b2029106b55c4b57e13135f868e006",
+      "bytes": 34525
+    },
+    {
+      "id": 31,
+      "seed": "bentoml-edu-31",
+      "url": "https://picsum.photos/seed/bentoml-edu-31/640/480",
+      "final_url": "https://fastly.picsum.photos/id/563/640/480.jpg?hmac=HgOJcraslnax8BGv1b3THTt384SlL1cAIX7a7GMMmRw",
+      "path": "samples/train_031.jpg",
+      "sha256": "ebc2a9ec2674f1381f5f70e81c139a6a40877133a357a19cbb6c0afc23bbac63",
+      "bytes": 31982
+    },
+    {
+      "id": 32,
+      "seed": "bentoml-edu-32",
+      "url": "https://picsum.photos/seed/bentoml-edu-32/640/480",
+      "final_url": "https://fastly.picsum.photos/id/436/640/480.jpg?hmac=_wUYVRUlgVEac1E3bNnyQHo-3MvZ00UOfv2qibG5PI8",
+      "path": "samples/train_032.jpg",
+      "sha256": "b1541cf9d9160396352adda404cb398b4ecbdb0b08a4d17d88592af8dad23eaa",
+      "bytes": 32434
+    },
+    {
+      "id": 33,
+      "seed": "bentoml-edu-33",
+      "url": "https://picsum.photos/seed/bentoml-edu-33/640/480",
+      "final_url": "https://fastly.picsum.photos/id/253/640/480.jpg?hmac=Vc3TytWeualrBSe1ygDkrKFmqwa36hryRcJpzhSlbrA",
+      "path": "samples/train_033.jpg",
+      "sha256": "171c367b79d14ea961f8d8f35c3ee847f5f17246534f46738fa52989fd2d48ab",
+      "bytes": 105092
+    },
+    {
+      "id": 34,
+      "seed": "bentoml-edu-34",
+      "url": "https://picsum.photos/seed/bentoml-edu-34/640/480",
+      "final_url": "https://fastly.picsum.photos/id/256/640/480.jpg?hmac=C7SGKo5BXPfGunOb2zyFoU-F6vpBJ-doOF20lrfjGLM",
+      "path": "samples/train_034.jpg",
+      "sha256": "7b8628a92c952ce277a0f541a685d994a2b57deac5b7650116c183d3a334e995",
+      "bytes": 38263
+    },
+    {
+      "id": 35,
+      "seed": "bentoml-edu-35",
+      "url": "https://picsum.photos/seed/bentoml-edu-35/640/480",
+      "final_url": "https://fastly.picsum.photos/id/369/640/480.jpg?hmac=FMMXv47mB5wGIJy_c4dXNuvC_qa3cqtusu17utkc4bk",
+      "path": "samples/train_035.jpg",
+      "sha256": "a4555d07255837f42aac9320b06fa54c03186f6618255499958b362f88f7d203",
+      "bytes": 81043
+    },
+    {
+      "id": 36,
+      "seed": "bentoml-edu-36",
+      "url": "https://picsum.photos/seed/bentoml-edu-36/640/480",
+      "final_url": "https://fastly.picsum.photos/id/695/640/480.jpg?hmac=Ro0h-pgXZxne9Bf-Gk7317gdrbMVYwUziho6D-FkPzs",
+      "path": "samples/train_036.jpg",
+      "sha256": "db4bee3a38ab1232ad8b1f7fda82b73cd400622e2148990ade53ed16b82cf936",
+      "bytes": 55416
+    },
+    {
+      "id": 37,
+      "seed": "bentoml-edu-37",
+      "url": "https://picsum.photos/seed/bentoml-edu-37/640/480",
+      "final_url": "https://fastly.picsum.photos/id/908/640/480.jpg?hmac=WYQNOBnnDk4isBjgUToqbGZn4cuKlPe0GFs7Z_EJ1GY",
+      "path": "samples/train_037.jpg",
+      "sha256": "a5333ca2db4a6df9a84e02448afa03612078afa247fbc09ad5f68ab3fdb4af95",
+      "bytes": 73012
+    },
+    {
+      "id": 38,
+      "seed": "bentoml-edu-38",
+      "url": "https://picsum.photos/seed/bentoml-edu-38/640/480",
+      "final_url": "https://fastly.picsum.photos/id/864/640/480.jpg?hmac=n8NLoklag6B4kVLsbmoqXo0xcxwfsjSuuGuVc1aUH7o",
+      "path": "samples/train_038.jpg",
+      "sha256": "a4ed1d47d5b6ba1ead5ba3b4969326a5447f1d235fb162e8bc8c421acf706233",
+      "bytes": 64364
+    },
+    {
+      "id": 39,
+      "seed": "bentoml-edu-39",
+      "url": "https://picsum.photos/seed/bentoml-edu-39/640/480",
+      "final_url": "https://fastly.picsum.photos/id/213/640/480.jpg?hmac=pT9ZCnShZ6v6_sdJ4K-uZ0tYSgLWXTY4P2SNcgByRN0",
+      "path": "samples/train_039.jpg",
+      "sha256": "feb6a47bf47379dc56df5ca46396fff1bf180e944f941f03e48fe6c5b76a74a7",
+      "bytes": 25133
+    },
+    {
+      "id": 40,
+      "seed": "bentoml-edu-40",
+      "url": "https://picsum.photos/seed/bentoml-edu-40/640/480",
+      "final_url": "https://fastly.picsum.photos/id/1009/640/480.jpg?hmac=mMIUmT0AJSSfE_y5NchNC8F2mWTkKna5AJavwIBOpT0",
+      "path": "samples/train_040.jpg",
+      "sha256": "6a28a409e521fd10a3a217d36697b6b01097a778edab791df4208807fcba756f",
+      "bytes": 11494
+    },
+    {
+      "id": 41,
+      "seed": "bentoml-edu-41",
+      "url": "https://picsum.photos/seed/bentoml-edu-41/640/480",
+      "final_url": "https://fastly.picsum.photos/id/364/640/480.jpg?hmac=QctV7k7sM-BAZs9AohB8SSO870S9NpRy0g9pd_i-OYw",
+      "path": "samples/train_041.jpg",
+      "sha256": "fd4d98a42e948cf54a383b2e5325ce5673087f4681bcc54264a3abd38f8a3448",
+      "bytes": 61189
+    },
+    {
+      "id": 42,
+      "seed": "bentoml-edu-42",
+      "url": "https://picsum.photos/seed/bentoml-edu-42/640/480",
+      "final_url": "https://fastly.picsum.photos/id/949/640/480.jpg?hmac=dQrWhpyO9tXnMcni-zKdxTqHdeB9EYrAR0RrnYOCzsg",
+      "path": "samples/train_042.jpg",
+      "sha256": "9c8ec4a97b3cc16908b3aee4a5c65a87da8bdf8c4577bbf025dbef45bb75d58d",
+      "bytes": 26432
+    },
+    {
+      "id": 43,
+      "seed": "bentoml-edu-43",
+      "url": "https://picsum.photos/seed/bentoml-edu-43/640/480",
+      "final_url": "https://fastly.picsum.photos/id/88/640/480.jpg?hmac=sOkvXx5wynfvf4amNoAHEuQRIG62qZn8sA2JPXOcS6E",
+      "path": "samples/train_043.jpg",
+      "sha256": "08fcafee37f094ae2002fba37d24ab8a39b7a484bdddffdee97ccbee7c0e6475",
+      "bytes": 47638
+    },
+    {
+      "id": 44,
+      "seed": "bentoml-edu-44",
+      "url": "https://picsum.photos/seed/bentoml-edu-44/640/480",
+      "final_url": "https://fastly.picsum.photos/id/670/640/480.jpg?hmac=o1sJY12BxBLRfW_GwSz78_Qo2EeaM9K7ZeuST__kGjY",
+      "path": "samples/train_044.jpg",
+      "sha256": "b4a40355b05fccd3284ce0e35c7311ec624945a5436f72a4d6895a8c65cb11f6",
+      "bytes": 70041
+    },
+    {
+      "id": 45,
+      "seed": "bentoml-edu-45",
+      "url": "https://picsum.photos/seed/bentoml-edu-45/640/480",
+      "final_url": "https://fastly.picsum.photos/id/261/640/480.jpg?hmac=Zqdq0PjrL2xCtJ74ww4Ac0kq8aM12Jv0WCKFRoclTc0",
+      "path": "samples/train_045.jpg",
+      "sha256": "c507ae849d9b6dc6ccf9aa4f27c594509d9df6cefc4379ab95f70aaa630029f1",
+      "bytes": 41840
+    },
+    {
+      "id": 46,
+      "seed": "bentoml-edu-46",
+      "url": "https://picsum.photos/seed/bentoml-edu-46/640/480",
+      "final_url": "https://fastly.picsum.photos/id/524/640/480.jpg?hmac=Y8qq-MpI_2dPhV7zbqkJbDm6c_p-4sZUSwvwVfKgb8A",
+      "path": "samples/train_046.jpg",
+      "sha256": "90852fbc884f80186d147edf97af07a65933c5fd4f0da117cc77cff1add46a87",
+      "bytes": 39220
+    },
+    {
+      "id": 47,
+      "seed": "bentoml-edu-47",
+      "url": "https://picsum.photos/seed/bentoml-edu-47/640/480",
+      "final_url": "https://fastly.picsum.photos/id/202/640/480.jpg?hmac=iUVzxt9pmu6eOSnfaDe0dOikEkN1WwwukdqIsM8MTz4",
+      "path": "samples/train_047.jpg",
+      "sha256": "6d5b378881f70b81d270a26ae942a87ba194e8ff305f55d0288f86c020352b7e",
+      "bytes": 48914
+    },
+    {
+      "id": 48,
+      "seed": "bentoml-edu-48",
+      "url": "https://picsum.photos/seed/bentoml-edu-48/640/480",
+      "final_url": "https://fastly.picsum.photos/id/542/640/480.jpg?hmac=c7eiMmtAmdhpEtW8bu3rpnj6q1Xr48DCQLcNfEho4ro",
+      "path": "samples/train_048.jpg",
+      "sha256": "6703c9a8d16845b0b53d10b95529668e72d69138975970040b1abedce876f00b",
+      "bytes": 30456
+    },
+    {
+      "id": 49,
+      "seed": "bentoml-edu-49",
+      "url": "https://picsum.photos/seed/bentoml-edu-49/640/480",
+      "final_url": "https://fastly.picsum.photos/id/399/640/480.jpg?hmac=2jhXVrCM-mE3VZibslHQTdIlDcn4GO9H2QZ5GO1FrVs",
+      "path": "samples/train_049.jpg",
+      "sha256": "a1abe2a08a5bcaa8c205ff10ec6021fa805ba5cbac0c4818c1417b7251398799",
+      "bytes": 15546
+    },
+    {
+      "id": 50,
+      "seed": "bentoml-edu-50",
+      "url": "https://picsum.photos/seed/bentoml-edu-50/640/480",
+      "final_url": "https://fastly.picsum.photos/id/395/640/480.jpg?hmac=fdV2DlmVdfy38NKuCEiBg3NFz5HNGaN1hoanAkFMt00",
+      "path": "samples/train_050.jpg",
+      "sha256": "9e2580a9d45957ebe4db8bb0266846cc53c6b3a73be6007c008b5d84d80657d5",
+      "bytes": 56878
+    }
+  ]
+}

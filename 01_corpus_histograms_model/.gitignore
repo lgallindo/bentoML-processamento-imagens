@@ -1,0 +1,32 @@
+# Ambiente virtual local (criado por `uv sync`)
+.venv/
+
+# Bytecode Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Bentos construídos localmente
+bentos/
+
+# Saídas geradas pelas receitas curl-* do justfile
+/grayscale.png
+/blur.png
+/resized.png
+/training-histogram.png
+
+# Corpus de treino baixado (restaurável via samples/MANIFEST.json)
+samples/train_*
+
+# Camada 1 — features por imagem (não são API)
+features/
+
+# Camada 2 — agregação do corpus (reconstruível)
+corpus_stats.json
+reference_stats.json
+
+# Fixtures locais de teste (se geradas)
+.pytest_train_fixtures/
+
+# Armazém local BentoML (modelos gerados por save-grayscale-model)
+.bentoml/

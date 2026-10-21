@@ -1,0 +1,24 @@
+language: pt_BR
+types:
+  - feat
+  - fix
+  - docs
+  - test
+  - refactor
+  - chore
+  - ci
+  - build
+  - perf
+  - style
+scopes:
+  - lessons
+  - service
+  - docs
+  - monitoring
+  - inference
+  - openspec
+  - rules
+  - deps
+subject_max_chars: 72
+require_body: true
+latest_commit_file: LATEST_COMMIT

@@ -1,0 +1,10 @@
+service: "service:ImageProcessor"
+labels:
+  project: image-demo-01-corpus-histograms-model
+include:
+  - "*.py"
+  - "reference_stats.json"
+python:
+  packages:
+    - bentoml
+    - pillow

@@ -105,7 +105,7 @@ Em outro terminal, escolha uma imagem e envie uma requisição por segundo:
 IMAGE=$(find samples -type f \( -name '*.jpg' -o -name '*.webp' \) | head -1)
 
 for i in $(seq 1 60); do
-  just curl-resize "$IMAGE" /tmp/resized.png 256 256
+  just curl-inference-resize "$IMAGE" /tmp/resized.png 256 256
   sleep 1
 done
 ```

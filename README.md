@@ -82,7 +82,7 @@ ocupado sendo um servidor. É assim que tem que ser.
 **Terminal 2 — o cliente.** Aqui você faz os pedidos:
 
 ```bash
-just curl-grayscale samples/cesar-fachada-1.webp
+just curl-inference-grayscale samples/cesar-fachada-1.webp
 ```
 
 Isso manda `samples/cesar-fachada-1.webp` para o servidor e salva a resposta em
@@ -126,7 +126,7 @@ Essas três linhas produzem, sozinhas:
 
 | o que está escrito no Python | o que o BentoML construiu com isso |
 |---|---|
-| `@bentoml.api` | uma rota `POST /resize` |
+| `@bentoml.api` | uma rota `POST /inference-resize` |
 | `image: ImageInput` | um campo de upload de arquivo, decodificado como imagem |
 | `width: Positive = 256` | um campo inteiro opcional, padrão 256, **recusado se for ≤ 0** |
 | `-> PILImage` | uma resposta PNG, com o `Content-Type` correto |
@@ -142,7 +142,7 @@ resolve o **como**. De graça vieram também `/healthz`, `/livez`, `/readyz` e
 > `Service instance cleanup finalized` e `Service ImageProcessor initialized` — o
 > servidor se reiniciou sozinho, porque `just serve` passa a opção `--reload`.
 > Agora recarregue a Swagger UI e veja o padrão do campo. Depois rode
-> `just curl-resize samples/cesar-fachada-1.webp saida.png` e confira o tamanho
+> `just curl-inference-resize samples/cesar-fachada-1.webp saida.png` e confira o tamanho
 > da imagem gerada. Por fim, desfaça a mudança.
 
 ---
@@ -159,7 +159,7 @@ Mande um arquivo que não é imagem:
 
 ```bash
 echo "nao sou uma imagem" > lixo.txt
-curl -X POST -F "image=@lixo.txt" http://localhost:3000/grayscale
+curl -X POST -F "image=@lixo.txt" http://localhost:3000/inference-grayscale
 ```
 
 A resposta:
@@ -172,11 +172,11 @@ A resposta:
 Status **400**, e a mensagem diz exatamente qual campo está errado e por quê.
 
 Aqui o `curl` está escrito à mão de propósito, para você ver uma vez o que as
-receitas escondem: este comando é tudo o que `just curl-grayscale` faz por baixo.
+receitas escondem: este comando é tudo o que `just curl-inference-grayscale` faz por baixo.
 O `just` é só um apelido.
 
-Há um motivo prático também. As receitas `curl-grayscale`, `curl-blur` e
-`curl-resize` usam a opção `--fail`, que descarta o corpo da resposta quando o
+Há um motivo prático também. As receitas `curl-inference-grayscale`, `curl-inference-blur` e
+`curl-inference-resize` usam a opção `--fail`, que descarta o corpo da resposta quando o
 status é de erro — com elas você veria apenas `curl: (22) The requested URL
 returned error: 400`, sem a explicação. Quando quiser ler o erro sem escrever o
 `curl` inteiro, existe uma receita só para isso:
@@ -192,9 +192,9 @@ para reempacotar esse erro como `ValueError`, que o pydantic entende e traduz
 para 400. Foram sete linhas de código para não mentir sobre de quem é a culpa.
 
 > **Experimento.** Peça um redimensionamento com largura zero:
-> `curl -X POST -F "image=@samples/cesar-fachada-1.webp" -F "width=0" -F "height=100" http://localhost:3000/resize`
+> `curl -X POST -F "image=@samples/cesar-fachada-1.webp" -F "width=0" -F "height=100" http://localhost:3000/inference-resize`
 > Antes de rodar, responda: erro seu ou erro do servidor? Qual código você espera?
-> Depois tente também `-F "radius=abc"` no `/blur`, um `GET` em `/grayscale` e um
+> Depois tente também `-F "radius=abc"` no `/inference-blur`, um `GET` em `/inference-grayscale` e um
 > `POST` em `/nope`. São quatro erros diferentes e três códigos diferentes
 > (400, 405 e 404). Explique cada um.
 
@@ -216,9 +216,9 @@ devolvem **PNG**, qualquer que seja o formato de entrada.
 
 | endpoint | o que faz | parâmetros além da imagem |
 |---|---|---|
-| `/grayscale` | converte para tons de cinza | — |
-| `/blur` | desfoque gaussiano | `radius` (decimal, padrão `1.0`) |
-| `/resize` | redimensiona | `width`, `height` (inteiros > 0, padrão `256`) |
+| `/inference-grayscale` | converte para tons de cinza | — |
+| `/inference-blur` | desfoque gaussiano | `radius` (decimal, padrão `1.0`) |
+| `/inference-resize` | redimensiona | `width`, `height` (inteiros > 0, padrão `256`) |
 
 ## Receitas disponíveis
 
@@ -228,9 +228,9 @@ just sync               # monta ou atualiza a .venv/
 just serve              # sobe o servidor na porta 3000
 just swagger            # abre a documentação interativa no navegador
 
-just curl-grayscale samples/cesar-fachada-1.webp
-just curl-blur         samples/cesar-fachada-1.webp desfoque.png 8.0
-just curl-resize       samples/cesar-fachada-1.webp reduzida.png 320 200
+just curl-inference-grayscale samples/cesar-fachada-1.webp
+just curl-inference-blur         samples/cesar-fachada-1.webp desfoque.png 8.0
+just curl-inference-resize       samples/cesar-fachada-1.webp reduzida.png 320 200
 
 just curl-erro grayscale lixo.txt                    # mostra o erro, não salva imagem
 just curl-erro resize foto.webp 3000 width=0         # campos extras vão soltos no fim
@@ -240,7 +240,7 @@ just list               # lista os bentos já empacotados nesta máquina
 ```
 
 Os argumentos das receitas `curl-*` são **posicionais**: para mudar só a porta,
-você precisa passar todos os anteriores — `just curl-resize foto.webp saida.png
+você precisa passar todos os anteriores — `just curl-inference-resize foto.webp saida.png
 320 200 3001`. Para subir o servidor em outra porta: `just serve 3001`.
 
 Os arquivos gerados (`grayscale.png`, `blur.png`, `resized.png`) estão no

@@ -1,0 +1,10 @@
+service: "service:ImageProcessor"
+labels:
+  project: image-demo-02-grayscale-request-logging
+include:
+  - "*.py"
+  - "reference_stats.json"
+python:
+  packages:
+    - bentoml
+    - pillow

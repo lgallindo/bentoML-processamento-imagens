@@ -12,3 +12,9 @@ bentos/
 /grayscale.png
 /blur.png
 /resized.png
+
+# Armazém local BentoML (modelos gerados por save-grayscale-model)
+.bentoml/
+
+# Mensagem de commit em elaboração (COMMIT-PIPE)
+LATEST_COMMIT

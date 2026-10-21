@@ -19,27 +19,27 @@ swagger port="3000":
     fi
 
 # Envia uma imagem para a API grayscale e salva a imagem retornada.
-curl-grayscale image output="grayscale.png" port="3000":
+curl-inference-grayscale image output="grayscale.png" port="3000":
     curl --fail --show-error --request POST \
         --form "image=@{{image}}" \
-        "http://localhost:{{port}}/grayscale" \
+        "http://localhost:{{port}}/inference-grayscale" \
         --output "{{output}}"
 
 # Envia uma imagem para a API blur e salva a imagem retornada.
-curl-blur image output="blur.png" radius="4.0" port="3000":
+curl-inference-blur image output="blur.png" radius="4.0" port="3000":
     curl --fail --show-error --request POST \
         --form "image=@{{image}}" \
         --form "radius={{radius}}" \
-        "http://localhost:{{port}}/blur" \
+        "http://localhost:{{port}}/inference-blur" \
         --output "{{output}}"
 
 # Envia uma imagem para a API resize e salva a imagem retornada.
-curl-resize image output="resized.png" width="256" height="256" port="3000":
+curl-inference-resize image output="resized.png" width="256" height="256" port="3000":
     curl --fail --show-error --request POST \
         --form "image=@{{image}}" \
         --form "width={{width}}" \
         --form "height={{height}}" \
-        "http://localhost:{{port}}/resize" \
+        "http://localhost:{{port}}/inference-resize" \
         --output "{{output}}"
 
 # As outras receitas curl-* usam --fail, que descarta a explicação dos erros;
