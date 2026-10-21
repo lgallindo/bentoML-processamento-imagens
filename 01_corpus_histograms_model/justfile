@@ -85,5 +85,9 @@ build:
 list:
     uv run --no-active bentoml list
 
+# Ilustrações do tutorial de features em illustrations/
+generate-feature-illustrations:
+    uv run --no-active --with matplotlib python scripts/generate_feature_illustrations.py
+
 test:
     uv run --no-active pytest -q
