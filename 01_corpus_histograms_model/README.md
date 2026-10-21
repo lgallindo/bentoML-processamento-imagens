@@ -142,6 +142,65 @@ se **extrai e regista** por imagem de treino é brilho médio de L mais quatro
 histogramas de intensidade; o que se **serve** ao cliente é só o resumo
 agregado desse registo.
 
+#### Onde está o código de extracção
+
+Abra, nesta pasta da lição (não na raiz do repositório):
+
+| Ficheiro | Papel |
+| :--- | :--- |
+| `image_extract.py` | Biblioteca: `extract_image_features`, `save_image_features`. |
+| `scripts/extract_image_features.py` | CLI da receita `just extract-features` (só `samples/train_*`). |
+| `histogram.py` | `compute_histogram`, `rebin_counts`, canais L/R/G/B. |
+
+O ponto de entrada que o estudante deve ler primeiro é
+`save_image_features` em `image_extract.py`: abre o ficheiro, chama
+`extract_image_features`, acrescenta `source` e grava `features/<stem>.json`.
+
+#### Extrair dados de uma imagem sua (aleatória)
+
+O lote do corpus exige nomes `train_*`. Para **uma** fotografia ou captura
+qualquer (JPEG, PNG, WebP, …), use a mesma função de biblioteca, apontando
+para o caminho do ficheiro. Na raiz **desta** lição:
+
+```bash
+cd /home/lugatj/code/research/bentoML-processamento-imagens/01_corpus_histograms_model
+
+# Coloque a sua imagem onde preferir, por exemplo:
+#   samples/minha_foto.jpg
+# ou um caminho absoluto fora de samples/
+
+uv run --no-active python -c "
+from pathlib import Path
+from image_extract import save_image_features
+
+# Altere este caminho para o da sua imagem:
+caminho = Path('samples/cesar-fachada-1.webp')
+
+saida = save_image_features(caminho)
+print('gravado:', saida)
+"
+```
+
+O JSON aparece em `features/` com o mesmo *stem* do ficheiro (ex.:
+`cesar-fachada-1.json`). Para inspeccionar:
+
+```bash
+uv run --no-active python -c "
+import json
+from pathlib import Path
+p = Path('features/cesar-fachada-1.json')  # ajuste ao stem da sua imagem
+d = json.loads(p.read_text())
+print('bins', d['bins'], 'luminance_mean', d['luminance_mean'])
+print('chaves histograma', list(d['histograms']))
+print('soma L', sum(d['histograms']['L']))
+"
+```
+
+Cumpre observar: um JSON avulso **não** entra sozinho no relatório HTTP. As
+rotas `/monitor-histogram-corpus-*` leem `corpus_stats.json`. Se quiser incluir
+a imagem no agregado do corpus, copie-a (ou ligue-a) como `samples/train_NNN.*`,
+volte a correr `just extract-features` e `just build-corpus-stats`.
+
 ### Conceitos mínimos (resumo)
 
 | Canal | Significado |

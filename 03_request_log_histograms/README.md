@@ -2,8 +2,13 @@
 
 ## Objectivo
 
+- **Finalidade pedagógica (MLOps):** descobrir se as imagens que chegam em
+  *production* (pedidos reais a `/inference-grayscale`) **diferem** das imagens
+  usadas no *training* (corpus `train_*`), olhando para as mesmas estatísticas
+  de canal — e compreender **por que** essa vigilância importa.
 - Agregar `request_features/` em `request_stats.json` e **reportar** histogramas
-  de production (`/monitor-histogram-production-*`), gémeos dos do corpus.
+  de production (`/monitor-histogram-production-*`), gémeos dos do corpus, para
+  que a comparação visual/numérica seja possível lado a lado.
 - Separar **download offline** do exercitador (`bentoml-exer-*`) da **submissão
   cronometrada** a `/inference-grayscale`.
 - Árvore **autocontida**: cópia independente do serviço base (raiz); **sem pesos neurais**.
@@ -43,6 +48,39 @@ def monitor_histogram_production_json(self, channel: str = "L", bins: Positive =
 | `/monitor-histogram-production-{json,csv,image}` | não | sim |
 
 ## Utilização
+
+### Finalidade: treino versus produção
+
+Em sistemas de visão (e, por analogia, em qualquer modelo servido), o
+desempenho no laboratório só se mantém se os dados de **produção** se
+parecerem com os de **treino**. Quando a distribuição muda — câmaras
+diferentes, iluminação nocturna, compressão agressiva, outro domínio de
+conteúdo — o serviço continua a responder HTTP 200, mas a qualidade da
+transformação (ou, noutros projectos, da predição) **degrada em silêncio**.
+
+Esta lição não treina uma rede: usa histogramas e CDF de L/R/G/B como
+**proxy observável** dessa distribuição. O corpus (`/monitor-histogram-corpus-*`)
+é a referência do que o sistema “viu” no treino; o log agregado
+(`/monitor-histogram-production-*`) é o que a API está a receber agora. Ao
+colocar os dois relatórios no mesmo formato, o estudante pode:
+
+1. Exercitar o serviço com imagens **outras** que as do corpus (`bentoml-exer-*`).
+2. Reconstruir `request_stats.json` e comparar forma das curvas (picos, caudas,
+   brilho) com `corpus_stats.json`.
+3. Formular a pergunta de monitorização: *a produção ainda se parece com o
+   treino?* — base da detecção de *data drift* / *covariate shift*, que mais
+   tarde se formaliza com testes estatísticos sobre as mesmas CDF.
+
+Por que isto é importante na prática:
+
+- **Falsos negativos de qualidade:** métricas de *uptime* e latência não
+  detectam imagens “estranhas”; só métricas de **dados** o fazem.
+- **Decisão de re-treino ou de alerta:** se production diverge de forma
+  estável, há de se investigar a origem (cliente, pipeline, domínio) antes de
+  culpar o modelo.
+- **Separação de responsabilidades:** inferência continua a servir o cliente;
+  monitorização observa o tráfego sem misturar os conjuntos de ficheiros
+  (`train_*` versus `exer_*`).
 
 ### Conceitos mínimos
 

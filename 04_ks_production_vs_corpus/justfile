@@ -120,5 +120,9 @@ build:
 list:
     uv run --no-active bentoml list
 
+# Ilustrações do capítulo KS em illustrations/ (matplotlib efémero via --with)
+generate-ks-illustrations:
+    uv run --no-active --with matplotlib python scripts/generate_ks_illustrations.py
+
 test:
     uv run --no-active pytest -q
