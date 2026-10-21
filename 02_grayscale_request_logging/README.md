@@ -1,9 +1,9 @@
-# Lição 02 — Registo de estatísticas em `/inference-grayscale`
+# Lição 02 — Registro de estatísticas em `/inference-grayscale`
 
-## Objectivo
+## Objetivo
 
 - Manter corpus e relatórios `/monitor-histogram-corpus-*` e o modelo picklable.
-- **Registar em disco** as features de cada imagem submetida a `/inference-grayscale`
+- **Registrar em disco** as features de cada imagem submetida a `/inference-grayscale`
   (antes da conversão a cinza), em `request_features/`.
 - Compreender por que o log ocorre **antes** do cinza (canais R/G/B ainda existem).
 - Árvore **autocontida**: cópia independente do serviço base (raiz); **sem pesos neurais**.
@@ -37,19 +37,19 @@ relatório de production.
 | :--- | :---: | :---: |
 | `/inference-{blur,grayscale,resize}` | sim | sim (grayscale com log) |
 | `/monitor-histogram-corpus-{json,csv,image}` | não | sim |
-| Relatórios do log de pedidos | não | não (só ficheiros) |
+| Relatórios do log de pedidos | não | não (só arquivos) |
 
 ## Utilização
 
 ### Onde está o código novo e o que faz
 
-Dois sítios nesta pasta (procure pelo nome do símbolo, não por pastas de outras
+Dois locais nesta pasta (procure pelo nome do símbolo, não por pastas de outras
 lições):
 
 | Local | O que procurar |
 | :--- | :--- |
-| `service.py` | método `inference_grayscale` — a **chamada** ao registo. |
-| `request_log.py` | função `log_grayscale_submission` — a **implementação** do registo. |
+| `service.py` | método `inference_grayscale` — a **chamada** ao registro. |
+| `request_log.py` | função `log_grayscale_submission` — a **implementação** do registro. |
 
 No editor: abra `service.py` e salte para `inference_grayscale`; a primeira
 linha útil é `log_grayscale_submission(image)`. Em seguida abra `request_log.py`
@@ -67,19 +67,19 @@ def inference_grayscale(self, image: ImageInput) -> PILImage:
     return self._grayscale_model(image)
 ```
 
-**Implementação do registo** (`request_log.py`), comentada:
+**Implementação do registro** (`request_log.py`), comentada:
 
 ```python
 def log_grayscale_submission(
     image: PILImage,
-    features_dir: Path = REQUEST_FEATURES_DIR,  # predefinição: request_features/
+    features_dir: Path = REQUEST_FEATURES_DIR,  # padrão: request_features/
 ) -> Path:
-    # Reutiliza a mesma extracção do corpus (image_extract.extract_image_features)
+    # Reutiliza a mesma extração do corpus (image_extract.extract_image_features)
     payload = extract_image_features(image)
     payload["logged_at"] = datetime.now(timezone.utc).isoformat()  # instante UTC
     payload["endpoint"] = "grayscale"  # marca a origem do pedido
     features_dir.mkdir(parents=True, exist_ok=True)
-    # Nome único: carimbo temporal + sufixo aleatório → um ficheiro por pedido
+    # Nome único: carimbo temporal + sufixo aleatório → um arquivo por pedido
     name = f"{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')}_{uuid4().hex[:8]}.json"
     out = features_dir / name
     out.write_text(json.dumps(payload) + "\n", encoding="utf-8")
@@ -97,7 +97,7 @@ imagem a cores  →  log_grayscale_submission  →  modelo grayscale  →  PNG
                request_features/*.json
 ```
 
-Canais **L** / **R** / **G** / **B**; predefinição dos relatórios de corpus:
+Canais **L** / **R** / **G** / **B**; padrão dos relatórios de corpus:
 `channel="L"`, `bins=256`. Porta: **3333**.
 
 ### Preparação
@@ -121,7 +121,7 @@ just serve
 
 ```bash
 just curl-inference-grayscale samples/cesar-fachada-1.webp
-# confira novos ficheiros em request_features/
+# confira novos arquivos em request_features/
 just curl-monitor-histogram-corpus-json
 just curl-inference-blur samples/cesar-fachada-1.webp
 just curl-inference-resize samples/cesar-fachada-1.webp

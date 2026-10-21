@@ -1,13 +1,13 @@
 # Lição 03 — Histogramas do log de pedidos e exercitador
 
-## Objectivo
+## Objetivo
 
 - **Finalidade pedagógica (MLOps):** descobrir se as imagens que chegam em
   *production* (pedidos reais a `/inference-grayscale`) **diferem** das imagens
   usadas no *training* (corpus `train_*`), olhando para as mesmas estatísticas
   de canal — e compreender **por que** essa vigilância importa.
 - Agregar `request_features/` em `request_stats.json` e **reportar** histogramas
-  de production (`/monitor-histogram-production-*`), gémeos dos do corpus, para
+  de production (`/monitor-histogram-production-*`), gêmeos dos do corpus, para
   que a comparação visual/numérica seja possível lado a lado.
 - Separar **download offline** do exercitador (`bentoml-exer-*`) da **submissão
   cronometrada** a `/inference-grayscale`.
@@ -15,7 +15,7 @@
 
 ## Comparação com a base
 
-O serviço base não regista pedidos nem expõe monitorização. Esta lição acrescenta
+O serviço base não registra pedidos nem expõe monitoramento. Esta lição acrescenta
 o par corpus/production e o exercitador.
 
 **AS-IS (base)** — só inferência:
@@ -53,10 +53,10 @@ def monitor_histogram_production_json(self, channel: str = "L", bins: Positive =
 
 Em sistemas de visão (e, por analogia, em qualquer modelo servido), o
 desempenho no laboratório só se mantém se os dados de **produção** se
-parecerem com os de **treino**. Quando a distribuição muda — câmaras
+parecerem com os de **treino**. Quando a distribuição muda — câmeras
 diferentes, iluminação nocturna, compressão agressiva, outro domínio de
 conteúdo — o serviço continua a responder HTTP 200, mas a qualidade da
-transformação (ou, noutros projectos, da predição) **degrada em silêncio**.
+transformação (ou, em outros projetos, da predição) **degrada em silêncio**.
 
 Esta lição não treina uma rede: usa histogramas e CDF de L/R/G/B como
 **proxy observável** dessa distribuição. O corpus (`/monitor-histogram-corpus-*`)
@@ -67,7 +67,7 @@ colocar os dois relatórios no mesmo formato, o estudante pode:
 1. Exercitar o serviço com imagens **outras** que as do corpus (`bentoml-exer-*`).
 2. Reconstruir `request_stats.json` e comparar forma das curvas (picos, caudas,
    brilho) com `corpus_stats.json`.
-3. Formular a pergunta de monitorização: *a produção ainda se parece com o
+3. Formular a pergunta de monitoramento: *a produção ainda se parece com o
    treino?* — base da detecção de *data drift* / *covariate shift*, que mais
    tarde se formaliza com testes estatísticos sobre as mesmas CDF.
 
@@ -79,7 +79,7 @@ Por que isto é importante na prática:
   estável, há de se investigar a origem (cliente, pipeline, domínio) antes de
   culpar o modelo.
 - **Separação de responsabilidades:** inferência continua a servir o cliente;
-  monitorização observa o tráfego sem misturar os conjuntos de ficheiros
+  monitoramento observa o tráfego sem misturar os conjuntos de arquivos
   (`train_*` versus `exer_*`).
 
 ### Conceitos mínimos
@@ -89,7 +89,7 @@ samples/train_*.jpg            seeds  bentoml-edu-N    (corpus)
 exerciser_samples/exer_*.jpg   seeds  bentoml-exer-N   (exercitador)
 ```
 
-Não misturar os dois conjuntos. Predefinição: `channel="L"`, `bins=256`. Porta: **3333**.
+Não misturar os dois conjuntos. Padrão: `channel="L"`, `bins=256`. Porta: **3333**.
 
 ```text
 download-exerciser-samples  →  exerciser_samples/   (offline, sem servidor)

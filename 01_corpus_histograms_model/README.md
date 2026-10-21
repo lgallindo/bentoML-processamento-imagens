@@ -1,6 +1,6 @@
 # Lição 01 — Corpus, histogramas e modelo de tons de cinza
 
-## Objectivo
+## Objetivo
 
 - Compreender um **corpus de treino** offline (extração → agregação → relatório).
 - Servir estatísticas agregadas do corpus por HTTP (`/monitor-histogram-corpus-*`).
@@ -10,9 +10,9 @@
 ## Comparação com a base
 
 O serviço base (raiz) expõe apenas três filtros de inferência: desfoque, cinza e
-redimensionamento. O cinza é Pillow inline; **não** há corpus nem rotas de monitorização.
+redimensionamento. O cinza é Pillow inline; **não** há corpus nem rotas de monitoramento.
 
-**AS-IS (base)** — cinza directo:
+**AS-IS (base)** — cinza direto:
 
 ```python
 @bentoml.api(route="/inference-grayscale")
@@ -48,12 +48,12 @@ Pipeline offline novo (sem endpoint): `image_extract` → `corpus_stats` →
 
 ## Utilização
 
-### Características extraídas e registadas das imagens de treino
+### Características extraídas e registradas das imagens de treino
 
 Cumpre observar que, nesta lição, **nada** do que se extrai por imagem é exposto
-por HTTP directamente. A camada 1 (`image_extract.py`, receita
-`just extract-features`) percorre `samples/train_*`, abre cada ficheiro com
-Pillow, calcula um dicionário de características e **regista-o em disco** como
+por HTTP diretamente. A camada 1 (`image_extract.py`, receita
+`just extract-features`) percorre `samples/train_*`, abre cada arquivo com
+Pillow, calcula um dicionário de características e **registra-o em disco** como
 `features/<stem>.json` (por exemplo `train_001.jpg` → `features/train_001.json`).
 Só depois a camada 2 (`corpus_stats.py`) lê esses JSON — sem reabrir as imagens —
 e produz `corpus_stats.json`, que as rotas `/monitor-histogram-corpus-*` reportam.
@@ -64,13 +64,13 @@ Para cada `train_*`, o payload gravado contém exactamente estes campos:
 
 | Campo | Tipo | Significado |
 | :--- | :--- | :--- |
-| `bins` | inteiro | Resolução dos histogramas; predefinição **256** (`DEFAULT_BINS`). |
+| `bins` | inteiro | Resolução dos histogramas; padrão **256** (`DEFAULT_BINS`). |
 | `luminance_mean` | flutuante | Média ponderada dos níveis do canal **L** (ver abaixo). |
-| `histograms` | objecto | Quatro listas de contagens: chaves `"L"`, `"R"`, `"G"`, `"B"`. |
+| `histograms` | objeto | Quatro listas de contagens: chaves `"L"`, `"R"`, `"G"`, `"B"`. |
 | `source` | cadeia | Caminho da imagem de origem (barra `/`), para auditoria. |
 
-Não se registam: largura/altura, formato de ficheiro, EXIF, hashes, embutidos
-neurais, nem estatísticas de textura (GLCM, etc.). O objecto didáctico é a
+Não se registram: largura/altura, formato de arquivo, EXIF, hashes, embutidos
+neurais, nem estatísticas de textura (GLCM, etc.). O objeto didático é a
 **distribuição de intensidade** por canal.
 
 #### Canais
@@ -120,12 +120,12 @@ imagem. Com 256 bins, coincide com a média clássica dos valores 0…255 do can
 ```
 
 A soma de cada lista de contagens iguala o número de píxeis da imagem (após a
-conversão de canal). A **CDF não** é gravada neste ficheiro: só aparece no
+conversão de canal). A **CDF não** é gravada neste arquivo: só aparece no
 agregado do corpus.
 
 #### O que a agregação acrescenta (ainda offline)
 
-`just build-corpus-stats` exige pelo menos **50** ficheiros em `features/`. Para
+`just build-corpus-stats` exige pelo menos **50** arquivos em `features/`. Para
 cada canal, **soma** as contagens bin a bin; sobre a lista de
 `luminance_mean` por imagem calcula brilho do corpus:
 
@@ -138,29 +138,29 @@ cada canal, **soma** as contagens bin a bin; sobre a lista de
 
 As chaves do agregado usam nomes longos (`luminance`, `r`, `g`, `b`); as rotas
 HTTP aceitam o canal curto `L`/`R`/`G`/`B` e mapeiam-no de volta. Em suma: o que
-se **extrai e regista** por imagem de treino é brilho médio de L mais quatro
+se **extrai e registra** por imagem de treino é brilho médio de L mais quatro
 histogramas de intensidade; o que se **serve** ao cliente é só o resumo
-agregado desse registo.
+agregado desse registro.
 
-#### Onde está o código de extracção
+#### Onde está o código de extração
 
 Abra, nesta pasta da lição (não na raiz do repositório):
 
-| Ficheiro | Papel |
+| Arquivo | Papel |
 | :--- | :--- |
 | `image_extract.py` | Biblioteca: `extract_image_features`, `save_image_features`. |
 | `scripts/extract_image_features.py` | CLI da receita `just extract-features` (só `samples/train_*`). |
 | `histogram.py` | `compute_histogram`, `rebin_counts`, canais L/R/G/B. |
 
 O ponto de entrada que o estudante deve ler primeiro é
-`save_image_features` em `image_extract.py`: abre o ficheiro, chama
+`save_image_features` em `image_extract.py`: abre o arquivo, chama
 `extract_image_features`, acrescenta `source` e grava `features/<stem>.json`.
 
 #### Extrair dados de uma imagem sua (aleatória)
 
 O lote do corpus exige nomes `train_*`. Para **uma** fotografia ou captura
 qualquer (JPEG, PNG, WebP, …), use a mesma função de biblioteca, apontando
-para o caminho do ficheiro. Na raiz **desta** lição:
+para o caminho do arquivo. Na raiz **desta** lição:
 
 ```bash
 cd /home/lugatj/code/research/bentoML-processamento-imagens/01_corpus_histograms_model
@@ -181,7 +181,7 @@ print('gravado:', saida)
 "
 ```
 
-O JSON aparece em `features/` com o mesmo *stem* do ficheiro (ex.:
+O JSON aparece em `features/` com o mesmo *stem* do arquivo (ex.:
 `cesar-fachada-1.json`). Para inspeccionar:
 
 ```bash
@@ -205,10 +205,10 @@ volte a correr `just extract-features` e `just build-corpus-stats`.
 
 | Canal | Significado |
 | :--- | :--- |
-| **L** | Luminância (`convert("L")`) — predefinição dos relatórios |
+| **L** | Luminância (`convert("L")`) — padrão dos relatórios |
 | **R** / **G** / **B** | Componentes RGB |
 
-Histograma: contagens por nível (predefinição **256** bins). **CDF**: acumulação
+Histograma: contagens por nível (padrão **256** bins). **CDF**: acumulação
 normalizada no agregado (último valor = **1,0**). Porta do `just serve`: **3333**.
 
 ### Preparação
