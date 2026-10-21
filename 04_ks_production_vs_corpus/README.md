@@ -277,3 +277,13 @@ just curl-monitor-histogram-production-json
 ```
 
 Swagger: `just swagger`. Testes: `just test`.
+
+### Atividade assíncrona
+
+Com corpus e production agregados, chame
+`just curl-monitor-ks-production-corpus-json` e anote `statistic`, `p_value` e
+`n_eff`. Depois, **substitua** mentalmente (ou num script) o exemplo de 4 bins
+do capítulo KS (`[10,0,0,10]` vs `[0,10,10,0]`) e calcule D à mão; confira com
+`ks_statistic` + `ks_p_value` para `n_eff = 10`. Entregue: (a) o JSON real do
+endpoint; (b) D e p do exemplo de brinquedo; (c) uma frase dizendo se rejeitaria
+H₀ a 5% em cada caso.

@@ -126,3 +126,15 @@ just curl-monitor-histogram-production-image
 ```
 
 Swagger: `just swagger`. Testes: `just test`.
+
+### Atividade assíncrona
+
+Rode `just download-exerciser-samples` (se ainda não tiver), `just serve`,
+`just exercise-grayscale`, `just build-request-stats`. Guarde lado a lado:
+
+- a PNG de `just curl-monitor-histogram-corpus-image`
+- a PNG de `just curl-monitor-histogram-production-image`
+
+(canal L, 256 bins). Em meia página: as curvas coincidem? Onde divergem
+(brilho, caudas, pico)? Por que isso importa para alguém que opera o serviço em
+produção?

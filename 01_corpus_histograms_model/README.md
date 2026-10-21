@@ -2,17 +2,51 @@
 
 ## Objetivo
 
-- Compreender um **corpus de treino** offline (extração → agregação → relatório).
-- Servir estatísticas agregadas do corpus por HTTP (`/monitor-histogram-corpus-*`).
-- Empacotar `/inference-grayscale` como **modelo BentoML picklable** (Pillow `convert("L")`).
-- Árvore **autocontida**: cópia independente do serviço base (raiz); **sem pesos neurais**.
+- Relembrar o que o **programa base** (raiz do repositório) já faz com BentoML.
+- Acrescentar um **corpus de treino** offline e rotas de monitoramento do corpus.
+- Trocar o cinza «inline» por um **modelo BentoML picklable** (ainda Pillow
+  `convert("L")` — **sem pesos neurais**).
+- Árvore **autocontida**: cópia independente do serviço base.
 
 ## Comparação com a base
 
-O serviço base (raiz) expõe apenas três filtros de inferência: desfoque, cinza e
-redimensionamento. O cinza é Pillow inline; **não** há corpus nem rotas de monitoramento.
+### O que o programa base faz (antes de abrir esta pasta)
 
-**AS-IS (base)** — cinza direto:
+Na **raiz** do repositório há um serviço mínimo de processamento de imagens. A
+ideia pedagógica da base é: você escreve métodos Python com *anotações de tipo*;
+o BentoML lê essas anotações e monta HTTP, validação e OpenAPI **sem** você
+escrever rotas Flask/FastAPI à mão.
+
+Comportamento da base:
+
+1. Sobe com `just serve` (BentoML serve a classe `ImageProcessor`).
+2. Aceita `POST` multipart com uma imagem.
+3. Devolve outra imagem (PNG) após um filtro Pillow.
+4. Três operações apenas: desfoque, tons de cinza, redimensionamento.
+
+Não há corpus, não há estatísticas em disco, não há modelo salvo no armazém
+BentoML: o cinza é uma linha `image.convert("L")` dentro do handler.
+
+### Recursos BentoML — antes (base) versus depois (esta lição)
+
+| Recurso BentoML | Base (raiz) | Esta lição |
+| :--- | :--- | :--- |
+| `@bentoml.service` | Sim — declara `ImageProcessor` | Sim — igual |
+| `@bentoml.api` + tipos (`ImageInput`, `Positive`) | Sim — gera `POST` a partir das assinaturas | Sim — iguais + rotas novas |
+| Rotas `/inference-{blur,grayscale,resize}` | Sim | Sim |
+| `bentoml serve service:ImageProcessor` | Sim | Sim |
+| OpenAPI / Swagger automático | Sim | Sim |
+| `bentoml.picklable_model` (salvar / carregar artefato) | **Não** | **Sim** — cinza vira modelo versionado |
+| Rotas `/monitor-*` (relatórios) | **Não** | **Sim** — só corpus |
+| Pipeline offline de features / stats | **Não** | **Sim** — fora do HTTP |
+
+Em uma frase: a base ensina **API por anotações**; esta lição acrescenta
+**modelo empacotado** e **monitoramento do corpus**, sem abandonar os três
+filtros de inferência.
+
+### Trecho decisivo no `service.py`
+
+**AS-IS (base)** — cinza direto, sem modelo:
 
 ```python
 @bentoml.api(route="/inference-grayscale")
@@ -20,11 +54,11 @@ def inference_grayscale(self, image: ImageInput) -> PILImage:
     return image.convert("L")
 ```
 
-**TO-BE (esta lição)** — modelo carregado no arranque; relatórios do corpus:
+**TO-BE (esta lição)** — carrega o modelo no arranque; acrescenta relatórios:
 
 ```python
 def __init__(self) -> None:
-    self._grayscale_model = load_grayscale_model()
+    self._grayscale_model = load_grayscale_model()  # picklable_model:latest
 
 @bentoml.api(route="/inference-grayscale")
 def inference_grayscale(self, image: ImageInput) -> PILImage:
@@ -36,8 +70,16 @@ def monitor_histogram_corpus_json(self, channel: str = "L", bins: Positive = 256
 # + /monitor-histogram-corpus-csv  e  /monitor-histogram-corpus-image
 ```
 
-Pipeline offline novo (sem endpoint): `image_extract` → `corpus_stats` →
-`corpus_report` lê `corpus_stats.json`.
+O pipeline offline (sem endpoint) alimenta esses relatórios:
+
+```text
+samples/train_*  →  image_extract  →  features/*.json
+                 →  corpus_stats   →  corpus_stats.json
+                 →  corpus_report  →  respostas /monitor-histogram-corpus-*
+```
+
+Antes de servir: `just save-grayscale-model` grava o artefato com
+`picklable_model.save_model` (ver `grayscale_model.py`).
 
 | Rotas | Base | Esta lição |
 | :--- | :---: | :---: |
@@ -50,58 +92,45 @@ Pipeline offline novo (sem endpoint): `image_extract` → `corpus_stats` →
 
 ### Características extraídas e registradas das imagens de treino
 
-Cumpre observar que, nesta lição, **nada** do que se extrai por imagem é exposto
-por HTTP diretamente. A camada 1 (`image_extract.py`, receita
-`just extract-features`) percorre `samples/train_*`, abre cada arquivo com
-Pillow, calcula um dicionário de características e **registra-o em disco** como
-`features/<stem>.json` (por exemplo `train_001.jpg` → `features/train_001.json`).
-Só depois a camada 2 (`corpus_stats.py`) lê esses JSON — sem reabrir as imagens —
-e produz `corpus_stats.json`, que as rotas `/monitor-histogram-corpus-*` reportam.
+Cumpre observar: o que se extrai por imagem **não** é exposto por HTTP
+diretamente. A camada 1 (`image_extract.py`, receita `just extract-features`)
+percorre `samples/train_*`, abre cada arquivo com Pillow, calcula um dicionário
+de características e **registra-o em disco** como `features/<stem>.json`
+(ex.: `train_001.jpg` → `features/train_001.json`). A camada 2
+(`corpus_stats.py`) lê esses JSON — sem reabrir as imagens — e produz
+`corpus_stats.json`, que as rotas `/monitor-histogram-corpus-*` reportam.
 
 #### O que se calcula por imagem
-
-Para cada `train_*`, o payload gravado contém exactamente estes campos:
 
 | Campo | Tipo | Significado |
 | :--- | :--- | :--- |
 | `bins` | inteiro | Resolução dos histogramas; padrão **256** (`DEFAULT_BINS`). |
-| `luminance_mean` | flutuante | Média ponderada dos níveis do canal **L** (ver abaixo). |
-| `histograms` | objeto | Quatro listas de contagens: chaves `"L"`, `"R"`, `"G"`, `"B"`. |
-| `source` | cadeia | Caminho da imagem de origem (barra `/`), para auditoria. |
+| `luminance_mean` | flutuante | Média ponderada dos níveis do canal **L**. |
+| `histograms` | objeto | Contagens `"L"`, `"R"`, `"G"`, `"B"`. |
+| `source` | cadeia | Caminho da imagem de origem (barra `/`). |
 
-Não se registram: largura/altura, formato de arquivo, EXIF, hashes, embutidos
-neurais, nem estatísticas de textura (GLCM, etc.). O objeto didático é a
-**distribuição de intensidade** por canal.
+Não se registram largura/altura, EXIF, hashes nem embutidos neurais. O objeto
+didático é a **distribuição de intensidade** por canal.
 
 #### Canais
 
-Cada histograma parte de um mapa de intensidade em modo `L` do Pillow (valores
-inteiros tipicamente **0…255**):
-
 | Canal | Origem Pillow | Interpretação |
 | :--- | :--- | :--- |
-| **L** | `image.convert("L")` | Luminância / tons de cinza (fórmula de conversão do Pillow). |
-| **R** | `convert("RGB").getchannel(0)` | Componente vermelha. |
-| **G** | `convert("RGB").getchannel(1)` | Componente verde. |
-| **B** | `convert("RGB").getchannel(2)` | Componente azul. |
+| **L** | `image.convert("L")` | Luminância / tons de cinza. |
+| **R** | `convert("RGB").getchannel(0)` | Vermelho. |
+| **G** | `convert("RGB").getchannel(1)` | Verde. |
+| **B** | `convert("RGB").getchannel(2)` | Azul. |
 
-Assim, mesmo uma imagem WebP ou JPEG acaba normalizada a RGB (ou L) antes da
-contagem. O histograma de um canal é a lista devolvida por
-`Image.histogram()` sobre esse mapa, eventualmente **reagrupada** se `bins` ≠ 256
-(`rebin_counts`): o índice `i` conta quantos píxeis caem no nível (ou no grupo
-de níveis) correspondente.
+O histograma de um canal é `Image.histogram()` sobre esse mapa, eventualmente
+reagrupado com `rebin_counts` se `bins` ≠ 256.
 
 #### `luminance_mean`
 
-Não é a média aritmética dos píxeis lida à parte: deriva do histograma de **L**.
-Se `counts[i]` é o número de píxeis no nível `i` (com `bins` níveis),
+Deriva do histograma de **L** (não de uma passagem separada pelos píxeis):
 
 ```text
 luminance_mean = (Σ i · counts[i]) / (Σ counts[i])
 ```
-
-isto é, a esperança do nível de luminância sob a distribuição empírica da
-imagem. Com 256 bins, coincide com a média clássica dos valores 0…255 do canal L.
 
 #### Forma do JSON por imagem (esqueleto)
 
@@ -110,7 +139,7 @@ imagem. Com 256 bins, coincide com a média clássica dos valores 0…255 do can
   "bins": 256,
   "luminance_mean": 112.18537109375,
   "histograms": {
-    "L": [ /* 256 inteiros ≥ 0; soma = número de píxeis */ ],
+    "L": [ /* 256 inteiros; soma = nº de píxeis */ ],
     "R": [ /* idem */ ],
     "G": [ /* idem */ ],
     "B": [ /* idem */ ]
@@ -119,97 +148,71 @@ imagem. Com 256 bins, coincide com a média clássica dos valores 0…255 do can
 }
 ```
 
-A soma de cada lista de contagens iguala o número de píxeis da imagem (após a
-conversão de canal). A **CDF não** é gravada neste arquivo: só aparece no
-agregado do corpus.
+A **CDF não** é gravada neste arquivo: só no agregado `corpus_stats.json`.
 
 #### O que a agregação acrescenta (ainda offline)
 
-`just build-corpus-stats` exige pelo menos **50** arquivos em `features/`. Para
-cada canal, **soma** as contagens bin a bin; sobre a lista de
-`luminance_mean` por imagem calcula brilho do corpus:
+`just build-corpus-stats` exige ≥ **50** arquivos em `features/`. Soma contagens
+bin a bin; sobre os `luminance_mean` calcula brilho do corpus:
 
 | Campo em `corpus_stats.json` | Origem |
 | :--- | :--- |
 | `n_images` | Número de JSON em `features/`. |
-| `brightness.mean` | Média dos `luminance_mean` por imagem. |
-| `brightness.p50` / `p95` | Percentis 50 e 95 dessa mesma lista (ordenada). |
-| `histograms.luminance` / `r` / `g` / `b` | Contagens somadas + `cdf` normalizada (último valor = **1,0**). |
-
-As chaves do agregado usam nomes longos (`luminance`, `r`, `g`, `b`); as rotas
-HTTP aceitam o canal curto `L`/`R`/`G`/`B` e mapeiam-no de volta. Em suma: o que
-se **extrai e registra** por imagem de treino é brilho médio de L mais quatro
-histogramas de intensidade; o que se **serve** ao cliente é só o resumo
-agregado desse registro.
+| `brightness.mean` / `p50` / `p95` | Média e percentis dos `luminance_mean`. |
+| `histograms.luminance` / `r` / `g` / `b` | Contagens somadas + `cdf` (último valor = **1,0**). |
 
 #### Onde está o código de extração
 
-Abra, nesta pasta da lição (não na raiz do repositório):
+Nesta pasta da lição (não na raiz do repositório):
 
 | Arquivo | Papel |
 | :--- | :--- |
-| `image_extract.py` | Biblioteca: `extract_image_features`, `save_image_features`. |
-| `scripts/extract_image_features.py` | CLI da receita `just extract-features` (só `samples/train_*`). |
-| `histogram.py` | `compute_histogram`, `rebin_counts`, canais L/R/G/B. |
+| `image_extract.py` | `extract_image_features`, `save_image_features`. |
+| `scripts/extract_image_features.py` | CLI de `just extract-features` (só `train_*`). |
+| `histogram.py` | `compute_histogram`, `rebin_counts`. |
+| `grayscale_model.py` | `save_model` / `load_model` picklable. |
 
-O ponto de entrada que o estudante deve ler primeiro é
-`save_image_features` em `image_extract.py`: abre o arquivo, chama
-`extract_image_features`, acrescenta `source` e grava `features/<stem>.json`.
+Leia primeiro `save_image_features` em `image_extract.py`.
 
-#### Extrair dados de uma imagem sua (aleatória)
+#### Extrair dados de uma imagem sua
 
-O lote do corpus exige nomes `train_*`. Para **uma** fotografia ou captura
-qualquer (JPEG, PNG, WebP, …), use a mesma função de biblioteca, apontando
-para o caminho do arquivo. Na raiz **desta** lição:
+O lote do corpus exige `train_*`. Para **uma** foto qualquer:
 
 ```bash
 cd /home/lugatj/code/research/bentoML-processamento-imagens/01_corpus_histograms_model
-
-# Coloque a sua imagem onde preferir, por exemplo:
-#   samples/minha_foto.jpg
-# ou um caminho absoluto fora de samples/
 
 uv run --no-active python -c "
 from pathlib import Path
 from image_extract import save_image_features
 
-# Altere este caminho para o da sua imagem:
-caminho = Path('samples/cesar-fachada-1.webp')
-
-saida = save_image_features(caminho)
-print('gravado:', saida)
+caminho = Path('samples/cesar-fachada-1.webp')  # troque pela sua imagem
+print('gravado:', save_image_features(caminho))
 "
 ```
 
-O JSON aparece em `features/` com o mesmo *stem* do arquivo (ex.:
-`cesar-fachada-1.json`). Para inspeccionar:
+Inspecionar:
 
 ```bash
 uv run --no-active python -c "
 import json
 from pathlib import Path
-p = Path('features/cesar-fachada-1.json')  # ajuste ao stem da sua imagem
-d = json.loads(p.read_text())
-print('bins', d['bins'], 'luminance_mean', d['luminance_mean'])
-print('chaves histograma', list(d['histograms']))
-print('soma L', sum(d['histograms']['L']))
+d = json.loads(Path('features/cesar-fachada-1.json').read_text())
+print(d['bins'], d['luminance_mean'], list(d['histograms']), sum(d['histograms']['L']))
 "
 ```
 
-Cumpre observar: um JSON avulso **não** entra sozinho no relatório HTTP. As
-rotas `/monitor-histogram-corpus-*` leem `corpus_stats.json`. Se quiser incluir
-a imagem no agregado do corpus, copie-a (ou ligue-a) como `samples/train_NNN.*`,
-volte a correr `just extract-features` e `just build-corpus-stats`.
+Um JSON avulso **não** entra sozinho no HTTP: as rotas leem `corpus_stats.json`.
+Para incluir a imagem no agregado, coloque-a como `samples/train_NNN.*` e rode
+de novo `just extract-features` e `just build-corpus-stats`.
 
 ### Conceitos mínimos (resumo)
 
 | Canal | Significado |
 | :--- | :--- |
-| **L** | Luminância (`convert("L")`) — padrão dos relatórios |
+| **L** | Luminância — padrão dos relatórios |
 | **R** / **G** / **B** | Componentes RGB |
 
-Histograma: contagens por nível (padrão **256** bins). **CDF**: acumulação
-normalizada no agregado (último valor = **1,0**). Porta do `just serve`: **3333**.
+Porta do `just serve`: **3333**.
 
 ### Preparação
 
@@ -240,3 +243,14 @@ just curl-inference-resize samples/cesar-fachada-1.webp
 ```
 
 Swagger: `just swagger`. Testes: `just test`.
+
+### Atividade assíncrona
+
+Escolha **três** fotografias suas (ou capturas do telemóvel). Para cada uma:
+
+1. Extraia features com `save_image_features` e anote `luminance_mean`.
+2. Sem incluir essas fotos no corpus, rode `just serve` e compare
+   `just curl-monitor-histogram-corpus-json` (só o corpus Picsum) com os três
+   valores individuais que anotou.
+3. Entregue um parágrafo: as suas fotos estão mais claras, mais escuras ou
+   semelhantes ao corpus? Em que canal (L vs R/G/B) a diferença é mais óbvia?

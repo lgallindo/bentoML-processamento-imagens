@@ -128,3 +128,13 @@ just curl-inference-resize samples/cesar-fachada-1.webp
 ```
 
 Swagger: `just swagger`. Testes: `just test`.
+
+### Atividade assíncrona
+
+Com o servidor no ar, envie **cinco** imagens diferentes a
+`/inference-grayscale` (receita `just curl-inference-grayscale` ou Swagger).
+Liste os cinco JSON novos em `request_features/`, abra um deles e verifique se
+existem `logged_at`, `endpoint`, `luminance_mean` e as quatro chaves de
+`histograms`. Em seguida envie a **mesma** imagem a `/inference-blur` e confirme
+que **não** nasceu JSON novo (o log só existe no caminho de grayscale). Entregue
+o comando usado e o nome de um arquivo de log.
