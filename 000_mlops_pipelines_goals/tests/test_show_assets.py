@@ -6,6 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ILLUSTRATIONS = ROOT / "illustrations"
+LOGOS = ILLUSTRATIONS / "logos"
 README = ROOT / "README.md"
 JUSTFILE = ROOT / "justfile"
 MAX_BYTES = 2 * 1024 * 1024
@@ -20,6 +21,12 @@ GOAL_LABELS = (
     "Detecção de anomalias",
 )
 
+GOAL_WATCH_PHRASES = (
+    "taxa de erro e latência",
+    "corpus de referência",
+    "média ± k desvios-padrão",
+)
+
 INDEX_FOLDERS = (
     "001_histogram_cdf_cli",
     "002_histogram_cdf_streamlit",
@@ -30,10 +37,14 @@ INDEX_FOLDERS = (
     "040_ks_production_vs_corpus",
 )
 
-SHOW_BEATS = (
-    "just open-diagram",
-    "just open-target",
-    "just open-goals-map",
+LOGO_FILES = (
+    "mundo.png",
+    "cientista.png",
+    "modelo.png",
+    "bentoml.png",
+    "oci.png",
+    "prometheus.png",
+    "grafana.png",
 )
 
 
@@ -47,8 +58,19 @@ def _load_builder():
     return mod
 
 
+def _mermaid_block(text: str) -> str:
+    return text.split("```mermaid", 1)[1].split("```", 1)[0]
+
+
 def test_three_figures_exist_and_under_budget() -> None:
     for path in (PIPELINES, TARGET, GOALS_MAP):
+        assert path.is_file(), f"missing {path}"
+        assert path.stat().st_size <= MAX_BYTES
+
+
+def test_logos_exist() -> None:
+    for name in LOGO_FILES:
+        path = LOGOS / name
         assert path.is_file(), f"missing {path}"
         assert path.stat().st_size <= MAX_BYTES
 
@@ -57,26 +79,49 @@ def test_readme_goals_path_and_runtime_label() -> None:
     text = README.read_text(encoding="utf-8")
     for label in GOAL_LABELS:
         assert label in text, f"missing goal label: {label}"
+    for phrase in GOAL_WATCH_PHRASES:
+        assert phrase in text, f"missing goal watch phrase: {phrase}"
     assert "BentoML" in text and "Prometheus" in text and "Grafana" in text
     assert "Runtime (BentoML)" in text
     assert "## Comparação com a base" not in text
+    assert "## Por que esta lição existe" not in text
     assert "../docs/prometheus.md" in text
     assert "../docs/grafana.md" in text
 
 
-def test_readme_mermaid_and_index() -> None:
+def test_readme_mermaid_architecture() -> None:
     text = README.read_text(encoding="utf-8")
     assert "```mermaid" in text
-    assert "Runtime (BentoML)" in text.split("```mermaid", 1)[1].split("```", 1)[0]
+    mermaid = _mermaid_block(text)
+    assert "Runtime (BentoML)" in mermaid
+    assert "papel: DB de séries" in mermaid
+    assert "papel: dashboard" in mermaid
+    assert "Mundo" in mermaid
+    assert "L001" not in mermaid
+    assert "001–002" not in mermaid
+    assert "040 KS" not in mermaid
+    for name in LOGO_FILES:
+        assert name in mermaid, f"mermaid missing logo ref: {name}"
+
+
+def test_readme_index() -> None:
+    text = README.read_text(encoding="utf-8")
     for name in INDEX_FOLDERS:
         assert name in text, f"missing index folder: {name}"
 
 
-def test_readme_show_beats_order() -> None:
+def test_readme_commands_section() -> None:
     text = README.read_text(encoding="utf-8")
-    section = text.split("## Como projetar", 1)[1]
-    positions = [section.index(beat) for beat in SHOW_BEATS]
-    assert positions == sorted(positions)
+    assert "## Figuras e comandos" in text
+    section = text.split("## Figuras e comandos", 1)[1]
+    for recipe in (
+        "just sync",
+        "just open-diagram",
+        "just open-target",
+        "just open-goals-map",
+        "just test",
+    ):
+        assert recipe in section, f"missing recipe: {recipe}"
 
 
 def test_justfile_has_open_goals_map() -> None:
