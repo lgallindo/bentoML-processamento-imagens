@@ -2,11 +2,11 @@
 
 ## Por que esta lição existe
 
-Antes de histograma, Prometheus ou teste KS, a turma precisa do **mesmo mapa**:
-treinamento → inferência → monitoramento. Nesta pasta você só **vê** esse mapa
-e guarda três objetivos finais. O runtime que atende o “mundo” é o
-**Runtime (BentoML)**. As métricas seguem **BentoML → Prometheus → Grafana**.
-As pastas seguintes pagam cada pedaço desse desenho.
+A série começa com um **mapa compartilhado**: treinamento → inferência →
+monitoramento. Nesta pasta o mapa e três **objetivos finais** de monitoramento
+ficam na tela. O runtime que atende o “mundo” é o **Runtime (BentoML)**. As
+métricas seguem **BentoML → Prometheus → Grafana**. Cada pasta seguinte
+aprofunda um pedaço desse desenho.
 
 ## Objetivos finais de monitoramento
 
@@ -26,11 +26,9 @@ Três figuras em [`illustrations/`](illustrations/), nesta ordem:
 3. Objetivos finais → pastas da série
 
 O BentoML já expõe `GET /metrics`. O [tutorial de Prometheus](../docs/prometheus.md)
-mostra como instalar o coletor, apontá-lo a esse endpoint e consultar latência
-(p95) e linhas de base em PromQL. O [tutorial de Grafana](../docs/grafana.md)
-parte desse Prometheus e monta painéis (volume, p95, anomalia em relação à
-janela móvel). Os dois roteiros vivem em `docs/` na raiz do repositório; esta
-lição só fixa o desenho — a montagem passo a passo está lá.
+instala o coletor, aponta-o a esse endpoint e consulta latência (p95) e linhas
+de base em PromQL. O [tutorial de Grafana](../docs/grafana.md) consulta esse
+Prometheus e monta painéis (volume, p95, anomalia em relação à janela móvel).
 
 ```mermaid
 flowchart TB
@@ -70,12 +68,13 @@ flowchart TB
 
 ## Como projetar
 
-Quatro batidas (~12 min), nesta ordem:
+Ordem das quatro batidas:
 
 1. **Pipelines** — `just open-diagram`
 2. **Caminho-alvo** — `just open-target`
 3. **Objetivos → pastas** — `just open-goals-map`
-4. **Índice** — esta tabela; próximo passo `001`
+4. **Índice** — a tabela acima; a seguir,
+   [`001_histogram_cdf_cli`](../001_histogram_cdf_cli/README.md)
 
 ```bash
 just sync
@@ -84,5 +83,3 @@ just open-target
 just open-goals-map
 just test
 ```
-
-[`001_histogram_cdf_cli`](../001_histogram_cdf_cli/README.md)
