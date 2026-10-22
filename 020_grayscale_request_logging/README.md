@@ -85,7 +85,7 @@ A partir da raiz do repositório:
 ```bash
 cd 020_grayscale_request_logging
 just sync
-just download-samples
+just download-samples   # samples/beaches/ na raiz do repo
 just extract-features
 just build-corpus-stats
 just save-grayscale-model

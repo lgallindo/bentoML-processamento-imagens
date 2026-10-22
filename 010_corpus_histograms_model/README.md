@@ -88,7 +88,7 @@ como costumam ser os brilhos e as cores do nosso conjunto de treino. Sem isso,
 O trabalho divide-se em **duas camadas offline** (só disco e scripts) e numa
 **camada HTTP** que apenas *lê* o resultado agregado:
 
-1. **Camada 1** — por cada `samples/train_*`, `image_extract.py` (receita
+1. **Camada 1** — por cada JPEG em `samples/beaches/` (raiz do repo), `image_extract.py` (receita
    `just extract-features`) grava `features/<stem>.json`.
 2. **Camada 2** — `corpus_stats.py` (receita `just build-corpus-stats`) lê esses
    JSON (≥ 50) e produz `corpus_stats.json`.
@@ -101,7 +101,7 @@ O trabalho divide-se em **duas camadas offline** (só disco e scripts) e numa
 ![Pipeline: amostras → features → corpus_stats → HTTP](illustrations/01_pipeline_camadas.png)
 
 ```text
-  samples/train_*          (imagens de treino)
+  samples/beaches/         (praias — corpus na raiz)
            |
            v
   [Camada 1] image_extract.py / just extract-features
@@ -195,7 +195,7 @@ Ordem sugerida (caminhos relativos a esta lição):
 
 1. `image_extract.py` — comece por `save_image_features` e `extract_image_features`.
 2. `histogram.py` — `compute_histogram`, `rebin_counts`, `cumulative_distribution`.
-3. `scripts/extract_image_features.py` — CLI de `just extract-features` (só `train_*`).
+3. `scripts/extract_image_features.py` — CLI de `just extract-features` (só o lote `beaches/` na raiz).
 4. `corpus_stats.py` — agregação e limiar de 50 imagens.
 5. `scripts/build_corpus_stats.py` — CLI de `just build-corpus-stats`.
 6. `corpus_report.py` — formata as respostas `/monitor-histogram-corpus-*`.
@@ -204,7 +204,7 @@ Ordem sugerida (caminhos relativos a esta lição):
 
 ### 5. Tutorial: extrair dados de uma imagem sua
 
-Neste tutorial você vê **uma** imagem virar JSON — o mesmo formato dos `train_*`,
+Neste tutorial você vê **uma** imagem virar JSON — o mesmo formato das features do corpus,
 ainda sem passar pelo HTTP.
 
 ![Passos do tutorial: foto → JSON de características](illustrations/04_tutorial_uma_imagem.png)
@@ -216,14 +216,14 @@ cd 010_corpus_histograms_model
 just sync
 ```
 
-Se ainda não tiver as fotos de treino: `just download-samples`.
+O corpus temático já vem em `samples/beaches/` na raiz (`just verify-themed-samples`).
 
 #### Passo 2 — Escolher a imagem
 
 Use o exemplo da pasta ou substitua pelo seu arquivo:
 
 ```bash
-ls -la samples/cesar-fachada-1.webp
+ls -la samples/cesar-fachada-1.webp  # cópia local; na raiz: samples/demo/
 # opcional: cp ~/minha-foto.jpg samples/minha-foto.jpg
 ```
 
@@ -279,7 +279,7 @@ Um JSON avulso em `features/` **não** é servido pela API. As rotas
 
 Para incorporar a foto no corpus de referência:
 
-1. Coloque-a como `samples/train_NNN.*` (mesmo padrão dos demais treinos).
+1. Coloque-a em `samples/beaches/` na raiz do repositório (ou use a cópia local de demo).
 2. Rode de novo `just extract-features` e `just build-corpus-stats`.
 3. Só então o monitoramento HTTP refletirá o agregado atualizado.
 
@@ -290,7 +290,7 @@ Para incorporar a foto no corpus de referência:
 ```bash
 cd 010_corpus_histograms_model
 just sync
-just download-samples
+just download-samples   # aponta para samples/beaches/ na raiz
 just extract-features
 just build-corpus-stats
 just save-grayscale-model

@@ -4,7 +4,7 @@
 
 - **Finalidade pedagógica (MLOps):** descobrir se as imagens que chegam em
   *production* (pedidos reais a `/inference-grayscale`) **diferem** das imagens
-  usadas no *training* (corpus `train_*`), olhando para as mesmas estatísticas
+  usadas no *training* (corpus `samples/beaches/`), olhando para as mesmas estatísticas
   de canal — e compreender **por que** essa vigilância importa.
 - Agregar `request_features/` em `request_stats.json` e **reportar** histogramas
   de production (`/monitor-histogram-production-*`), gêmeos dos do corpus, para
@@ -57,8 +57,9 @@ def monitor_histogram_production_json(self, channel: str = "L", bins: Positive =
 **Conjuntos (não misturar):**
 
 ```text
-samples/train_*.jpg            seeds  bentoml-edu-N    (corpus)
-exerciser_samples/exer_*.jpg   seeds  bentoml-exer-N   (exercitador)
+samples/beaches/*.jpg          Commons  praias   (corpus, raiz do repo)
+samples/forests/*.jpg          Commons  florestas (produção / exercitador)
+samples/balls/*.jpg            Commons  bolas    (contaminantes opcionais)
 ```
 
 **Entrada de monitoramento:** `POST` com `channel` (padrão `L`) e `bins`
@@ -130,7 +131,7 @@ produção?
 ### Fluxo
 
 ```text
-download-exerciser-samples  →  exerciser_samples/   (offline, sem servidor)
+download-exerciser-samples  →  samples/forests/   (já no git; raiz do repo)
 exercise-grayscale          →  POST /inference-grayscale  (só submete; imprime tempos)
 build-request-stats         →  request_stats.json
 monitor-histogram-production-*  ←  lê request_stats.json
@@ -175,7 +176,7 @@ Por que isto é importante na prática:
   culpar o modelo.
 - **Separação de responsabilidades:** inferência continua a servir o cliente;
   monitoramento observa o tráfego sem misturar os conjuntos de arquivos
-  (`train_*` versus `exer_*`).
+  (`samples/beaches/` versus `samples/forests/`).
 
 ### Por que o PNG do histograma usa Pillow
 

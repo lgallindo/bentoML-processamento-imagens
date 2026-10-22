@@ -1,4 +1,7 @@
-"""Passagem offline: baixa o conjunto do exercitador (distinto do corpus)."""
+"""Passagem offline: baixa o conjunto do exercitador (distinto do corpus).
+
+LEGADO: produção padrão = samples/forests/ na raiz do repo.
+"""
 
 from __future__ import annotations
 

@@ -265,8 +265,8 @@ interativos; no HTTP o contrato é «receber/devolver imagem» de ponta a ponta.
 ```bash
 cd 040_ks_production_vs_corpus
 just sync
-just download-samples
-just download-exerciser-samples
+just download-samples            # samples/beaches/ na raiz
+just download-exerciser-samples  # samples/forests/ na raiz
 just extract-features
 just build-corpus-stats
 just save-grayscale-model
