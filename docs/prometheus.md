@@ -109,7 +109,7 @@ diretamente em `samples/`; se você já executou a análise que cria clusters, u
 um arquivo dentro de `samples/clustered/`:
 
 ```bash
-IMAGE=$(find samples -type f \( -name '*.jpg' -o -name '*.webp' \) | head -1)
+IMAGE=$(find samples/demo samples/beaches -type f \( -name '*.jpg' -o -name '*.webp' \) | head -1)
 
 for i in $(seq 1 10); do
   just curl-inference-resize "$IMAGE" /tmp/resized.png 256 256

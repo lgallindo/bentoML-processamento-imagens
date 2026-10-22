@@ -4,7 +4,14 @@ default:
 sync:
     uv sync --no-active
 
-download-samples count="50":
+# Corpus padrão: samples/beaches/ na raiz (já no git). Picsum opcional abaixo.
+download-samples:
+    @echo "Corpus temático: $(git rev-parse --show-toplevel)/samples/beaches/"
+    @echo "Confirme com: just -f $(git rev-parse --show-toplevel)/justfile verify-themed-samples"
+    @echo "Picsum legado (opcional): uv run --no-active python scripts/download_samples.py 50"
+
+# Legado — Lorem Picsum train_* (tema aleatório). Prefira download-samples acima.
+download-samples-picsum count="50":
     uv run --no-active python scripts/download_samples.py {{count}}
 
 # Camada 1: extrai features de cada train_* → features/*.json

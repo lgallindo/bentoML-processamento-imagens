@@ -62,7 +62,7 @@ def _pipelines_source() -> Path:
 
 
 def _overlay_runtime_label(im: Image.Image) -> None:
-    """Draw canonical ownership label near the OCI / runtime mark."""
+    """Always paint RUNTIME_LABEL near the OCI / runtime mark (contract)."""
     draw = ImageDraw.Draw(im)
     font = _font(max(28, im.width // 48))
     pad_x, pad_y = 18, 12

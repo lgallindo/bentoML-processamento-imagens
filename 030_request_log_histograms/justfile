@@ -4,7 +4,14 @@ default:
 sync:
     uv sync --no-active
 
-download-samples count="50":
+# Corpus padrão: samples/beaches/ na raiz (já no git). Picsum opcional abaixo.
+download-samples:
+    @echo "Corpus temático: $(git rev-parse --show-toplevel)/samples/beaches/"
+    @echo "Confirme com: just -f $(git rev-parse --show-toplevel)/justfile verify-themed-samples"
+    @echo "Picsum legado (opcional): uv run --no-active python scripts/download_samples.py 50"
+
+# Legado — Lorem Picsum train_* (tema aleatório). Prefira download-samples acima.
+download-samples-picsum count="50":
     uv run --no-active python scripts/download_samples.py {{count}}
 
 extract-features:
@@ -72,8 +79,14 @@ curl-monitor-histogram-production-image port="3333" channel="L" bins="256" outpu
         "http://localhost:{{port}}/monitor-histogram-production-image" \
         --output "{{output}}"
 
-# Passagem offline: baixa bentoml-exer-* para exerciser_samples/ (sem HTTP local).
-download-exerciser-samples count="50":
+# Produção padrão: samples/forests/ na raiz (já no git). Contaminantes: samples/balls/.
+download-exerciser-samples:
+    @echo "Lote de produção: \$(git rev-parse --show-toplevel)/samples/forests/"
+    @echo "Contaminantes opcionais: \$(git rev-parse --show-toplevel)/samples/balls/"
+    @echo "Picsum legado (opcional): just download-exerciser-samples-picsum"
+
+# Legado — Lorem Picsum exer_* (tema aleatório).
+download-exerciser-samples-picsum count="50":
     uv run --no-active python scripts/download_exerciser_samples.py --count={{count}}
 
 # So submete exer_*.jpg a /inference-grayscale e imprime tempos (servidor: just serve).

@@ -1,4 +1,9 @@
-"""Baixa o corpus de treino (Lorem Picsum, seeds fixas) e grava o manifesto."""
+"""Baixa o corpus de treino (Lorem Picsum, seeds fixas) e grava o manifesto.
+
+LEGADO: o corpus padrão da turma é samples/beaches/ na raiz do repositório
+(ver just download-themed-samples / verify-themed-samples). Este script permanece
+para experimentos com Picsum.
+"""
 
 from __future__ import annotations
 

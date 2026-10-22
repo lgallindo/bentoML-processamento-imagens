@@ -1,27 +1,37 @@
-"""Submete exerciser_samples/exer_*.jpg a /inference-grayscale e cronometra a passagem.
+"""Submete samples/forests/*.jpg (raiz do repo) a /inference-grayscale.
 
-Nao faz download. Prefira: just download-exerciser-samples && just serve
+Não faz download. Prefira: just download-exerciser-samples && just serve
 e, noutro terminal, just exercise-grayscale.
 """
 
 from __future__ import annotations
 
+import subprocess
 import sys
 import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SAMPLES_DIR = ROOT / "exerciser_samples"
-DEFAULT_COUNT = 50
+DEFAULT_COUNT = 24
 DEFAULT_PORT = 3333
 
 
-def list_exerciser_images(samples_dir: Path = SAMPLES_DIR) -> list[Path]:
-    return sorted(samples_dir.glob("exer_*.jpg"))
+def repo_root() -> Path:
+    return Path(
+        subprocess.check_output(
+            ["git", "rev-parse", "--show-toplevel"],
+            text=True,
+        ).strip()
+    )
+
+
+def list_exerciser_images() -> list[Path]:
+    forests = repo_root() / "samples" / "forests"
+    return sorted(forests.glob("*.jpg")) + sorted(forests.glob("*.jpeg"))
 
 
 def submit_to_grayscale(image_path: Path, port: int) -> float:
-    """Devolve a duracao em segundos desta submissao."""
+    """Devolve a duração em segundos desta submissão."""
     import httpx
 
     started = time.perf_counter()
@@ -45,12 +55,13 @@ def main(argv: list[str] | None = None) -> int:
         elif arg.startswith("--count="):
             count = int(arg.split("=", 1)[1])
 
+    samples_dir = repo_root() / "samples" / "forests"
     paths = list_exerciser_images()
     if len(paths) < count:
         print(
-            f"esperadas {count} imagens em {SAMPLES_DIR}/exer_*.jpg; "
+            f"esperadas {count} imagens em {samples_dir}/; "
             f"encontradas {len(paths)}. "
-            f"Execute antes: just download-exerciser-samples",
+            f"Confirme: just verify-themed-samples (raiz do repo)",
             file=sys.stderr,
         )
         return 1

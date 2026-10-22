@@ -65,3 +65,11 @@ build:
 # Lista os bentos já empacotados nesta máquina.
 list:
     uv run --no-active bentoml list
+
+# Baixa (ou regenera) amostras temáticas a partir de samples/SOURCES.toml.
+download-themed-samples:
+    uv run --no-active python scripts/download_themed_samples.py download
+
+# Confere sha256 de samples/{beaches,forests,balls}/ contra MANIFEST.json.
+verify-themed-samples:
+    uv run --no-active python scripts/download_themed_samples.py verify
