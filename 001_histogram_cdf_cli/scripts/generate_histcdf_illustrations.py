@@ -156,6 +156,61 @@ def fig_tabela_passos() -> None:
     plt.close(fig)
 
 
+def _normal_cdf(x: np.ndarray) -> np.ndarray:
+    """CDF da Normal(0,1) via ``math.erf`` (sem SciPy)."""
+    from math import erf, sqrt
+
+    scale = sqrt(2.0)
+    return np.array([0.5 * (1.0 + erf(float(v) / scale)) for v in x])
+
+
+def fig_cdf_sigmoid() -> None:
+    """Histograma em sino + CDF empírica em S (amostra Normal)."""
+    rng = np.random.default_rng(0)
+    sample = rng.normal(loc=0.0, scale=1.0, size=5000)
+    bins = 40
+    lo, hi = -4.0, 4.0
+    counts, edges = np.histogram(sample, bins=bins, range=(lo, hi))
+    centers = 0.5 * (edges[:-1] + edges[1:])
+    widths = np.diff(edges)
+    empiric = np.cumsum(counts) / counts.sum()
+
+    x_smooth = np.linspace(lo, hi, 400)
+    F_theory = _normal_cdf(x_smooth)
+
+    fig, axes = plt.subplots(1, 2, figsize=(10.5, 4.0), constrained_layout=True)
+
+    ax0 = axes[0]
+    ax0.bar(
+        centers,
+        counts,
+        width=widths * 0.95,
+        color="#4c72b0",
+        edgecolor="#222",
+        linewidth=0.3,
+        align="center",
+    )
+    ax0.set_title("Densidade aproximada: amostra Normal(0, 1), n = 5000")
+    ax0.set_xlabel("valor")
+    ax0.set_ylabel("contagem")
+    ax0.set_xlim(lo, hi)
+
+    ax1 = axes[1]
+    ax1.step(edges[1:], empiric, where="post", color="#c44e52", linewidth=2.2, label="CDF empírica")
+    ax1.plot(x_smooth, F_theory, color="#55a868", linewidth=2.0, linestyle="--", label="CDF teórica N(0,1)")
+    ax1.axhline(0, color="#999", linewidth=0.8)
+    ax1.axhline(1, color="#999", linewidth=0.8, linestyle=":")
+    ax1.set_ylim(-0.05, 1.12)
+    ax1.set_xlim(lo, hi)
+    ax1.set_xlabel("valor")
+    ax1.set_ylabel("F — fração acumulada")
+    ax1.set_title("Forma em S: massa no meio → subida íngreme no centro")
+    ax1.legend(loc="lower right", frameon=True)
+
+    fig.savefig(OUT / "05_cdf_sigmoid.png", dpi=160)
+    plt.close(fig)
+
+
 def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
     _style()
@@ -163,6 +218,7 @@ def main() -> int:
     fig_cdf()
     fig_hist_para_cdf()
     fig_tabela_passos()
+    fig_cdf_sigmoid()
     print(f"ilustrações em {OUT}")
     for path in sorted(OUT.glob("*.png")):
         print(path.name)

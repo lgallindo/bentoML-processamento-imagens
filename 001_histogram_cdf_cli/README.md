@@ -85,6 +85,60 @@ para cada c em counts:
 No código desta pasta: `cdf_from_counts` em `histcdf.py` faz
 `np.cumsum(counts) / counts.sum()`.
 
+### Em Python (mesmo cálculo)
+
+Com as contagens do microexemplo:
+
+```python
+import numpy as np
+
+counts = np.array([1, 2, 0, 1])
+cdf = np.cumsum(counts) / counts.sum()
+# array([0.25, 0.75, 0.75, 1.0])
+```
+
+A partir dos valores brutos, o mesmo pacote que a CLI usa:
+
+```python
+from histcdf import histogram_with_cdf
+
+resultado = histogram_with_cdf([1, 2, 2, 5], bins=4)
+# resultado["counts"] → [1, 2, 0, 1]
+# resultado["cdf"]    → [0.25, 0.75, 0.75, 1.0]
+```
+
+### Por que a CDF “ideal” tem forma de S (sigmoid)
+
+A CDF de uma densidade contínua é a integral acumulada dessa densidade. Quando a
+densidade é **unimodal e aproximadamente simétrica** (formato de sino, como a
+Normal), a maior parte da massa fica no centro: nas caudas a CDF sobe devagar;
+perto da moda sobe depressa; depois volta a aplanar. O resultado é a clássica
+**curva em S** (sigmoid).
+
+O microexemplo com `n = 4` produz uma CDF em **degraus** — correta para poucos
+pontos. Com muitas observações de uma distribuição em sino, a CDF empírica
+aproxima a S suave.
+
+```python
+import numpy as np
+from math import erf, sqrt
+
+rng = np.random.default_rng(0)
+amostra = rng.normal(loc=0.0, scale=1.0, size=5000)
+
+counts, edges = np.histogram(amostra, bins=40, range=(-4.0, 4.0))
+cdf_empirica = np.cumsum(counts) / counts.sum()
+
+# CDF teórica da Normal(0, 1), para comparar com a empírica:
+x = np.linspace(-4.0, 4.0, 400)
+cdf_teorica = 0.5 * (1.0 + np.array([erf(v / sqrt(2.0)) for v in x]))
+```
+
+![Histograma em sino e CDF empírica em S](illustrations/05_cdf_sigmoid.png)
+
+Outras densidades geram outras formas (uniforme → rampa; assimétrica → S
+deslocada). A S é o caso “ideal” quando a massa se concentra no meio.
+
 ## Entrada e saída
 
 ### Exemplo principal
