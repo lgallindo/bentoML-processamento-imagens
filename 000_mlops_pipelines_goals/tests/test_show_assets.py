@@ -60,6 +60,8 @@ def test_readme_goals_path_and_runtime_label() -> None:
     assert "BentoML" in text and "Prometheus" in text and "Grafana" in text
     assert "Runtime (BentoML)" in text
     assert "## Comparação com a base" not in text
+    assert "../docs/prometheus.md" in text
+    assert "../docs/grafana.md" in text
 
 
 def test_readme_mermaid_and_index() -> None:

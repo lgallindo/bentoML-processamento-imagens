@@ -25,6 +25,13 @@ Três figuras em [`illustrations/`](illustrations/), nesta ordem:
 2. Caminho-alvo BentoML → Prometheus → Grafana
 3. Objetivos finais → pastas da série
 
+O BentoML já expõe `GET /metrics`. O [tutorial de Prometheus](../docs/prometheus.md)
+mostra como instalar o coletor, apontá-lo a esse endpoint e consultar latência
+(p95) e linhas de base em PromQL. O [tutorial de Grafana](../docs/grafana.md)
+parte desse Prometheus e monta painéis (volume, p95, anomalia em relação à
+janela móvel). Os dois roteiros vivem em `docs/` na raiz do repositório; esta
+lição só fixa o desenho — a montagem passo a passo está lá.
+
 ```mermaid
 flowchart TB
   subgraph treino [Treinamento]
