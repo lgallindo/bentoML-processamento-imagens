@@ -10,5 +10,11 @@ open-diagram:
 open-target:
     xdg-open illustrations/bentoml-prometheus-grafana.webp
 
+open-goals-map:
+    xdg-open illustrations/goals-lessons-map.webp
+
+build-illustrations:
+    uv run --no-active python scripts/build_illustrations.py
+
 test:
     uv run --no-active pytest -q
