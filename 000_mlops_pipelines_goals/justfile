@@ -1,0 +1,14 @@
+default:
+    @just --list
+
+sync:
+    uv sync --no-active
+
+open-diagram:
+    xdg-open illustrations/pipelines-mlops.webp
+
+open-target:
+    xdg-open illustrations/bentoml-prometheus-grafana.webp
+
+test:
+    uv run --no-active pytest -q

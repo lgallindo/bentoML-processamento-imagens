@@ -1,0 +1,20 @@
+[project]
+name = "mlops-pipelines-goals"
+version = "0.1.0"
+description = "Lição 000 — show das pipelines de MLOps e objetivos de monitoramento"
+readme = "README.md"
+authors = [
+    { name = "Lucas Gallindo", email = "15238731+lgallindo@users.noreply.github.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "pillow>=11.0.0",
+]
+
+[tool.uv]
+package = false
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
