@@ -19,7 +19,7 @@ def save_grayscale_model(name: str = MODEL_NAME) -> str:
         GrayscaleModel(),
         signatures={"__call__": {"batchable": False}},
         metadata={
-                "lesson": "02_grayscale_request_logging",
+                "lesson": "020_grayscale_request_logging",
             "algorithm": "pillow.convert.L",
         },
     )

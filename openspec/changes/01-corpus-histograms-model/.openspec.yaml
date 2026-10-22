@@ -1,5 +1,0 @@
-schema: spec-driven
-created: 2026-10-21
-goal: Add in-repo 01_corpus_histograms_model sibling with sample corpus,
-  training histograms endpoint, and grayscale via picklable_model without new ML
-  weights

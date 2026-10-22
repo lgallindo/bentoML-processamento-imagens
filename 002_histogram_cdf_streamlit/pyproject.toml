@@ -1,0 +1,22 @@
+[project]
+name = "histogram-cdf-streamlit"
+version = "0.1.0"
+description = "Histograma e CDF numéricos em Streamlit (NumPy + Seaborn)"
+readme = "README.md"
+authors = [
+    { name = "Lucas Gallindo", email = "15238731+lgallindo@users.noreply.github.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "numpy>=2.0.0",
+    "seaborn>=0.13.0",
+    "streamlit>=1.40.0",
+]
+
+[tool.uv]
+package = false
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
