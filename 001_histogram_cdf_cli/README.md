@@ -49,3 +49,5 @@ Testes:
 ```bash
 just test
 ```
+
+[`002_histogram_cdf_streamlit`](../002_histogram_cdf_streamlit/README.md)

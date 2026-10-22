@@ -1,0 +1,11 @@
+default:
+    @just --list
+
+sync:
+    uv sync --no-active
+
+app port="8503":
+    uv run --no-active streamlit run app.py --server.port {{port}} --server.headless true
+
+test:
+    uv run --no-active pytest -q

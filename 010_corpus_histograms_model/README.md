@@ -338,3 +338,5 @@ Escolha **três** fotografias suas (ou capturas do celular). Para cada uma:
 3. Entregue um parágrafo: as suas fotos estão mais claras, mais escuras ou
    semelhantes ao corpus? Em que canal (L versus R/G/B) a diferença aparece com
    mais clareza?
+
+[`020_grayscale_request_logging`](../020_grayscale_request_logging/README.md)

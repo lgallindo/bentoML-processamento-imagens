@@ -268,3 +268,5 @@ Os arquivos gerados (`grayscale.png`, `blur.png`, `resized.png`) estão no
 
 Vale ler os comentários do `service.py`: eles explicam não só o que o código
 faz, mas por que algumas decisões foram tomadas.
+
+[`001_histogram_cdf_cli`](001_histogram_cdf_cli/README.md)

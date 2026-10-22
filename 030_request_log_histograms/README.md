@@ -149,3 +149,5 @@ Rode `just download-exerciser-samples` (se ainda não tiver), `just serve`,
 (canal L, 256 bins). Em meia página: as curvas coincidem? Onde divergem
 (brilho, caudas, pico)? Por que isso importa para alguém que opera o serviço em
 produção?
+
+[`040_ks_production_vs_corpus`](../040_ks_production_vs_corpus/README.md)
