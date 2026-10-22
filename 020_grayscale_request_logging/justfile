@@ -87,3 +87,7 @@ list:
 
 test:
     uv run --no-active pytest -q
+
+# Ilustrações do tutorial em illustrations/
+generate-request-log-illustrations:
+    uv run --no-active --with matplotlib python scripts/generate_request_log_illustrations.py

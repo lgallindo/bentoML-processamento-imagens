@@ -2,34 +2,69 @@
 
 ## Objetivo
 
-- Baixar os **buckets cumulativos** de latência que o Prometheus guarda a partir
-  do `/metrics` do serviço BentoML na raiz do repositório.
-- Montar **tabela**, **histograma** e **CDF** em Python (NumPy + Seaborn) num
-  app Streamlit.
-- Colocar o **quantil em Python** ao lado do **`histogram_quantile` em PromQL**
-  (números e trechos de código) para comparar resultado e complexidade.
+Baixar os **buckets cumulativos** de latência que o Prometheus guarda a partir
+do `/metrics` do serviço BentoML na raiz do repositório; montar **tabela**,
+**histograma** e **CDF** em Python (NumPy + Seaborn) num app Streamlit; e
+colocar o **quantil em Python** ao lado do **`histogram_quantile` em PromQL**
+(números e trechos de código) para comparar resultado e complexidade.
 
-## Comparação com a base
+A entrada do app é a **série de buckets** já agregada (fixture gravada ou
+consulta live). O scrape da raiz (`monitoring/prometheus.yml`,
+`docs/prometheus.md`) alimenta o modo live; o modo fixture funciona sem rede.
 
-### O que o programa base faz
+As figuras abaixo vivem em `illustrations/` (regeneráveis com
+`just generate-prom-illustrations`).
 
-Na **raiz** do repositório o BentoML serve filtros de imagem e publica métricas
-HTTP em `/metrics`. O ficheiro `monitoring/prometheus.yml` configura o scrape;
-`docs/prometheus.md` mostra como consultar p95 com PromQL.
+![Do /metrics ao gráfico no app](illustrations/01_scrape_to_buckets.png)
 
-### O que esta lição acrescenta
+## Entrada e saída
 
-Aqui a entrada é a **série de buckets** já agregada pelo Prometheus (não a
-imagem). O app pede esses números à API HTTP do Prometheus (ou a uma fixture
-gravada), diferencia contagens cumulativas, desenha histograma + CDF e mostra
-Python e PromQL lado a lado.
+### Fixture `/grayscale` (modo offline)
 
-| Recurso | Base (raiz) | Esta lição |
-| :--- | :--- | :--- |
-| Entrada | imagem → `/metrics` | buckets Prometheus |
-| Interface | HTTP / Swagger + Prometheus UI | Streamlit |
-| Quantil | PromQL / Grafana | Python **e** PromQL |
-| Gráfico | — (Grafana à parte) | Seaborn no app |
+**Entrada** — buckets cumulativos em `fixtures/duration_histogram.json`
+(endpoint `/grayscale`), carregados com:
+
+```python
+samples = fetch_duration_buckets_from_fixture(endpoint="/grayscale")
+payload = payload_from_samples(samples)
+```
+
+**Saída — série cumulativa** (`le` → contagem acumulada), total = 20:
+
+| le (s) | cumulativo |
+| ---: | ---: |
+| 0.005 | 2 |
+| 0.01 | 5 |
+| 0.025 | 12 |
+| 0.05 | 18 |
+| 0.1 | 20 |
+| 0.25 … +Inf | 20 |
+
+**Saída — contagens por bin** (diferença dos cumulativos, só `le` finitos):
+`[2, 3, 7, 6, 2, 0, 0, 0]`.
+
+**Saída — CDF** (sobre essas contagens): `[0.1, 0.25, 0.6, 0.9, 1.0, 1.0, 1.0, 1.0]`.
+
+![Cumulativo versus contagens por bin](illustrations/02_cumulative_to_density.png)
+
+**Saída — quantil p95 em Python** (interpolação no bin `[0.05, 0.1]`):
+
+```text
+value ≈ 0.075 s
+bucket_lo = 0.05
+bucket_hi = 0.1
+bounded = True
+```
+
+Espelho PromQL instantâneo (o app mostra o mesmo texto):
+
+```promql
+histogram_quantile(0.95, sum by (le) (
+  bentoml_service_request_duration_seconds_bucket{endpoint="/grayscale"}
+))
+```
+
+![Histograma, CDF e marcação do p95](illustrations/03_python_vs_promql_quantile.png)
 
 ### Trecho decisivo
 
@@ -41,7 +76,10 @@ compare = compare_quantiles(
 )
 ```
 
-## Utilização
+## Como executar
+
+Na pasta desta lição (`cd 003_prometheus_histcdf_streamlit` a partir da raiz
+do repositório):
 
 ```bash
 just sync
@@ -57,21 +95,53 @@ Prometheus. Para o modo **live**:
 3. No app, escolha **live**, confirme a URL e clique em **Atualizar**.
 
 A comparação numérica usa a forma **instantânea** (contadores cumulativos no
-instante da query), alinhada ao espelho em Python:
-
-```promql
-histogram_quantile(0.95, sum by (le) (
-  bentoml_service_request_duration_seconds_bucket{endpoint="/grayscale"}
-))
-```
-
-A recording rule da raiz usa `rate(...[1m])`; o app também mostra essa variante
-no painel de código, sem a usar por omissão.
+instante da query), alinhada ao espelho em Python. A recording rule da raiz
+usa `rate(...[1m])`; o app também mostra essa variante no painel de código,
+sem a usar por omissão.
 
 Testes (só fixture / mocks, sem scrape):
 
 ```bash
 just test
 ```
+
+## O que acontece por dentro
+
+### Fluxo
+
+```text
+fixture JSON  ou  Prometheus /api/v1/query
+        │
+        ▼
+  buckets (le, cumulativo)
+        │
+        ▼
+ cumulative_to_bins → contagens + edges
+        │
+        ├── tabela / dataframe
+        ├── plot_histogram_cdf
+        └── histogram_quantile_from_cumulative  ↔  PromQL
+```
+
+### Algoritmo
+
+```text
+# Variáveis:
+# les, cumulative — bordas superiores e contagens acumuladas Prometheus
+# per_bin — diferença entre cumulativos consecutivos
+# counts, edges — série finita para plot
+# cdf — cumsum(counts) / sum(counts)
+# q — quantil pedido (ex.: 0.95)
+
+bins ← cumulative_to_bins(les, cumulative)
+cdf ← cdf_from_counts(bins.counts)
+python_p95 ← histogram_quantile_from_cumulative(q, les, cumulative)
+promql ← histogram_quantile(q, sum by (le) (…_bucket{endpoint=…}))
+```
+
+1. Ordenar por `le`; rejeitar série não monótona.
+2. Diferenciar cumulativos → massa por bin; o `+Inf` entra na tabela completa.
+3. CDF e quantil caminham a massa (interpolação linear no bin que contém o
+   rank `q × total`), espelhando a ideia do `histogram_quantile` do Prometheus.
 
 [`010_corpus_histograms_model`](../010_corpus_histograms_model/README.md)

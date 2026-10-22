@@ -13,6 +13,11 @@
   cronometrada** a `/inference-grayscale`.
 - Árvore **autocontida**: cópia independente do serviço base (raiz); **sem pesos neurais**.
 
+As figuras abaixo vivem em `illustrations/` (regeneráveis com
+`just generate-production-hist-illustrations`).
+
+![Pipelines corpus e production](illustrations/01_two_pipelines.png)
+
 ## Comparação com a base
 
 O serviço base não registra pedidos nem expõe monitoramento. Esta lição acrescenta
@@ -47,71 +52,39 @@ def monitor_histogram_production_json(self, channel: str = "L", bins: Positive =
 | `/monitor-histogram-corpus-{json,csv,image}` | não | sim |
 | `/monitor-histogram-production-{json,csv,image}` | não | sim |
 
-## Utilização
+## Entrada e saída
 
-### Finalidade: treino versus produção
-
-Em sistemas de visão (e, por analogia, em qualquer modelo servido), o
-desempenho no laboratório só se mantém se os dados de **produção** se
-parecerem com os de **treino**. Quando a distribuição muda — câmeras
-diferentes, iluminação nocturna, compressão agressiva, outro domínio de
-conteúdo — o serviço continua a responder HTTP 200, mas a qualidade da
-transformação (ou, em outros projetos, da predição) **degrada em silêncio**.
-
-Esta lição não treina uma rede: usa histogramas e CDF de L/R/G/B como
-**proxy observável** dessa distribuição. O corpus (`/monitor-histogram-corpus-*`)
-é a referência do que o sistema “viu” no treino; o log agregado
-(`/monitor-histogram-production-*`) é o que a API está a receber agora. Ao
-colocar os dois relatórios no mesmo formato, o estudante pode:
-
-1. Exercitar o serviço com imagens **outras** que as do corpus (`bentoml-exer-*`).
-2. Reconstruir `request_stats.json` e comparar forma das curvas (picos, caudas,
-   brilho) com `corpus_stats.json`.
-3. Formular a pergunta de monitoramento: *a produção ainda se parece com o
-   treino?* — base da detecção de *data drift* / *covariate shift*, que mais
-   tarde se formaliza com testes estatísticos sobre as mesmas CDF.
-
-Por que isto é importante na prática:
-
-- **Falsos negativos de qualidade:** métricas de *uptime* e latência não
-  detectam imagens “estranhas”; só métricas de **dados** o fazem.
-- **Decisão de re-treino ou de alerta:** se production diverge de forma
-  estável, há de se investigar a origem (cliente, pipeline, domínio) antes de
-  culpar o modelo.
-- **Separação de responsabilidades:** inferência continua a servir o cliente;
-  monitoramento observa o tráfego sem misturar os conjuntos de arquivos
-  (`train_*` versus `exer_*`).
-
-### Conceitos mínimos
+**Conjuntos (não misturar):**
 
 ```text
 samples/train_*.jpg            seeds  bentoml-edu-N    (corpus)
 exerciser_samples/exer_*.jpg   seeds  bentoml-exer-N   (exercitador)
 ```
 
-Não misturar os dois conjuntos. Padrão: `channel="L"`, `bins=256`. Porta: **3333**.
+**Entrada de monitoramento:** `POST` com `channel` (padrão `L`) e `bins`
+(padrão `256`) nas rotas gémeas.
 
-### Por que o PNG do histograma usa Pillow
+**Saída esperada (forma):** JSON/CSV/PNG de histograma + CDF — o mesmo contrato
+para corpus e production; só muda a origem dos dados
+(`corpus_stats.json` versus `request_stats.json`).
 
-As rotas `/monitor-…-image` devolvem um `PIL.Image` — o mesmo tipo que a
-inferência já usa para abrir e filtrar fotos. O desenho em
-`histogram.draw_histogram` usa `ImageDraw`: retângulos para as barras e uma
-polilinha para a CDF, a partir de contagens já calculadas. O endpoint HTTP
-permanece no ecossistema Pillow do serviço: não carrega Matplotlib nem Seaborn
-só para montar essa figura estática. Bibliotecas de gráfico estatístico
-encaixam melhor em notebooks, CLIs ou apps interativos; aqui o contrato é
-«receber/devolver imagem» de ponta a ponta.
+![Sobreposição esquemática corpus vs production](illustrations/02_corpus_vs_production_hist.png)
 
-```text
-download-exerciser-samples  →  exerciser_samples/   (offline, sem servidor)
-exercise-grayscale          →  POST /inference-grayscale  (só submete; imprime tempos)
-build-request-stats         →  request_stats.json
-```
-
-### Preparação
+Exemplo de chamada após exercitar o serviço:
 
 ```bash
-cd /home/lugatj/code/research/bentoML-processamento-imagens/030_request_log_histograms
+just curl-monitor-histogram-production-json
+just curl-monitor-histogram-corpus-json
+```
+
+Porta: **3333**.
+
+## Como executar
+
+A partir da raiz do repositório:
+
+```bash
+cd 030_request_log_histograms
 just sync
 just download-samples
 just download-exerciser-samples
@@ -120,13 +93,15 @@ just build-corpus-stats
 just save-grayscale-model
 ```
 
-### Terminal 1 — servidor
+![Fluxo do exercitador](illustrations/03_exerciser_flow.png)
+
+**Terminal 1 — servidor**
 
 ```bash
 just serve
 ```
 
-### Terminal 2 — cliente
+**Terminal 2 — cliente**
 
 ```bash
 just exercise-grayscale
@@ -149,5 +124,68 @@ Rode `just download-exerciser-samples` (se ainda não tiver), `just serve`,
 (canal L, 256 bins). Em meia página: as curvas coincidem? Onde divergem
 (brilho, caudas, pico)? Por que isso importa para alguém que opera o serviço em
 produção?
+
+## O que acontece por dentro
+
+### Fluxo
+
+```text
+download-exerciser-samples  →  exerciser_samples/   (offline, sem servidor)
+exercise-grayscale          →  POST /inference-grayscale  (só submete; imprime tempos)
+build-request-stats         →  request_stats.json
+monitor-histogram-production-*  ←  lê request_stats.json
+monitor-histogram-corpus-*      ←  lê corpus_stats.json
+```
+
+Em sistemas de visão (e, por analogia, em qualquer modelo servido), o
+desempenho no laboratório só se mantém se os dados de **produção** se
+parecerem com os de **treino**. Quando a distribuição muda — câmeras
+diferentes, iluminação nocturna, compressão agressiva, outro domínio de
+conteúdo — o serviço continua a responder HTTP 200, mas a qualidade da
+transformação (ou, em outros projetos, da predição) **degrada em silêncio**.
+
+Esta lição usa histogramas e CDF de L/R/G/B como **proxy observável** dessa
+distribuição. O corpus é a referência do treino; o log agregado é o que a API
+recebe agora. Ao colocar os dois relatórios no mesmo formato, o estudante pode:
+
+1. Exercitar o serviço com imagens **outras** que as do corpus (`bentoml-exer-*`).
+2. Reconstruir `request_stats.json` e comparar forma das curvas com
+   `corpus_stats.json`.
+3. Formular a pergunta de monitoramento: *a produção ainda se parece com o
+   treino?* — base da detecção de *data drift* / *covariate shift*.
+
+### Algoritmo
+
+```text
+# Variáveis:
+# request_features/*.json — um arquivo por POST /inference-grayscale
+# request_stats.json — agregado do log (espelho de corpus_stats.json)
+# channel, bins — parâmetros das rotas /monitor-histogram-production-*
+
+request_stats ← aggregate(request_features)
+report_production ← same format as report_corpus(channel, bins)
+```
+
+Por que isto é importante na prática:
+
+- **Falsos negativos de qualidade:** métricas de *uptime* e latência não
+  detectam imagens “estranhas”; só métricas de **dados** o fazem.
+- **Decisão de re-treino ou de alerta:** se production diverge de forma
+  estável, há de se investigar a origem (cliente, pipeline, domínio) antes de
+  culpar o modelo.
+- **Separação de responsabilidades:** inferência continua a servir o cliente;
+  monitoramento observa o tráfego sem misturar os conjuntos de arquivos
+  (`train_*` versus `exer_*`).
+
+### Por que o PNG do histograma usa Pillow
+
+As rotas `/monitor-…-image` devolvem um `PIL.Image` — o mesmo tipo que a
+inferência já usa para abrir e filtrar fotos. O desenho em
+`histogram.draw_histogram` usa `ImageDraw`: retângulos para as barras e uma
+polilinha para a CDF, a partir de contagens já calculadas. O endpoint HTTP
+permanece no ecossistema Pillow do serviço: não carrega Matplotlib nem Seaborn
+só para montar essa figura estática. Bibliotecas de gráfico estatístico
+encaixam melhor em notebooks, CLIs ou apps interativos; aqui o contrato é
+«receber/devolver imagem» de ponta a ponta.
 
 [`040_ks_production_vs_corpus`](../040_ks_production_vs_corpus/README.md)

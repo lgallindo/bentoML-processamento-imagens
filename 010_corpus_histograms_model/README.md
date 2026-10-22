@@ -212,7 +212,7 @@ ainda sem passar pelo HTTP.
 #### Passo 1 — Pré-requisitos
 
 ```bash
-cd /home/lugatj/code/research/bentoML-processamento-imagens/010_corpus_histograms_model
+cd 010_corpus_histograms_model
 just sync
 ```
 
@@ -288,7 +288,7 @@ Para incorporar a foto no corpus de referência:
 **Preparação** (uma vez, ou após mudar o treino):
 
 ```bash
-cd /home/lugatj/code/research/bentoML-processamento-imagens/010_corpus_histograms_model
+cd 010_corpus_histograms_model
 just sync
 just download-samples
 just extract-features

@@ -9,3 +9,7 @@ app port="8503":
 
 test:
     uv run --no-active pytest -q
+
+# Ilustrações do tutorial em illustrations/
+generate-prom-illustrations:
+    uv run --no-active --with matplotlib python scripts/generate_prom_illustrations.py

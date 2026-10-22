@@ -263,7 +263,7 @@ interativos; no HTTP o contrato é «receber/devolver imagem» de ponta a ponta.
 ### Preparação
 
 ```bash
-cd /home/lugatj/code/research/bentoML-processamento-imagens/040_ks_production_vs_corpus
+cd 040_ks_production_vs_corpus
 just sync
 just download-samples
 just download-exerciser-samples

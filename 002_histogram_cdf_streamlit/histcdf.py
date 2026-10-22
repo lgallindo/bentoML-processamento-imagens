@@ -1,4 +1,4 @@
-"""API canónica de histograma + CDF (copiar para a lição 001).
+"""API canónica de histograma + CDF (NumPy).
 
 Funções públicas:
   - histogram_from_values

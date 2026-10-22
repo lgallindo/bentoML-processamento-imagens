@@ -115,3 +115,7 @@ list:
 
 test:
     uv run --no-active pytest -q
+
+# Ilustrações do tutorial em illustrations/
+generate-production-hist-illustrations:
+    uv run --no-active --with matplotlib python scripts/generate_production_hist_illustrations.py

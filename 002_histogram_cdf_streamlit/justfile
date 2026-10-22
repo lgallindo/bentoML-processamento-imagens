@@ -9,3 +9,7 @@ app port="8502":
 
 test:
     uv run --no-active pytest -q
+
+# Ilustrações do tutorial em illustrations/
+generate-streamlit-illustrations:
+    uv run --no-active --with matplotlib python scripts/generate_streamlit_illustrations.py

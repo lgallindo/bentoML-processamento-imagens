@@ -2,11 +2,15 @@
 
 ## Objetivo
 
-Ver o mesmo objeto da linha de comando — **histograma + CDF** de uma lista de
-números — num **app Streamlit**: você cola valores (ou carrega um CSV), ajusta
-`bins` e o intervalo, e a página atualiza a **tabela** e o **gráfico** Seaborn.
+Ver **histograma + CDF** de uma lista de números num **app Streamlit**: você
+cola valores (ou carrega um CSV), ajusta `bins` e o intervalo, e a página
+atualiza a **tabela** e o **gráfico** Seaborn.
 
 A matemática está em `histcdf.py` (NumPy); o desenho em `plotting.py` (Seaborn).
+As figuras abaixo vivem em `illustrations/` (regeneráveis com
+`just generate-streamlit-illustrations`).
+
+![Layout do app: entrada → controles → cálculo → saída](illustrations/01_app_layout.png)
 
 ## Entrada e saída
 
@@ -35,12 +39,16 @@ Com **bins = 4** e intervalo automático:
 **Saída — gráfico:** barras das contagens; no eixo direito, a CDF (mesmos
 centros de bin). O botão **Baixar PNG** grava essa figura.
 
+![Histograma e CDF do exemplo 1, 2, 2, 5](illustrations/02_hist_cdf_same_centers.png)
+
 ### Intervalo fixo
 
 Na barra lateral, marque **Fixar intervalo [lo, hi]** e defina, por exemplo,
 `lo = 0`, `hi = 4` com valores `0, 0.5, 1, 2.5, 4`. As contagens passam a
 `[2, 1, 1, 1]`. Se algum valor cair fora de `[lo, hi]`, o app mostra o erro
 em vermelho e não desenha o gráfico.
+
+![Intervalo fixo [0, 4] com contagens [2, 1, 1, 1]](illustrations/03_fixed_range.png)
 
 ### Upload CSV
 
@@ -59,7 +67,8 @@ texto.
 
 ## Como executar
 
-Na pasta desta lição:
+Na pasta desta lição (a partir da raiz do repositório:
+`cd 002_histogram_cdf_streamlit`):
 
 ```bash
 just sync
@@ -99,8 +108,6 @@ textarea / CSV / amostra
 `histcdf.py`.
 
 ### Algoritmo
-
-Igual ao núcleo numérico desta pasta:
 
 1. **Bins de largura igual** em `[lo, hi]` (inferido ou fixo) via
    `numpy.histogram`; valor fora do intervalo → erro explícito.
