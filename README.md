@@ -82,12 +82,12 @@ ocupado sendo um servidor. É assim que tem que ser.
 **Terminal 2 — o cliente.** Aqui você faz os pedidos:
 
 ```bash
-just curl-inference-grayscale samples/cesar-fachada-1.webp
+just curl-inference-grayscale samples/demo/cesar-fachada-1.webp
 ```
 
-Isso manda `samples/cesar-fachada-1.webp` para o servidor e salva a resposta em
+Isso manda `samples/demo/cesar-fachada-1.webp` para o servidor e salva a resposta em
 `grayscale.png`, na pasta do projeto. Abra o arquivo: é a mesma foto em tons de
-cinza. As três imagens de exemplo estão em [`samples/`](samples/).
+cinza. As três imagens de exemplo estão em [`samples/demo/`](samples/demo/).
 
 Para derrubar o servidor, `Ctrl+C` no terminal 1.
 
@@ -142,7 +142,7 @@ resolve o **como**. De graça vieram também `/healthz`, `/livez`, `/readyz` e
 > `Service instance cleanup finalized` e `Service ImageProcessor initialized` — o
 > servidor se reiniciou sozinho, porque `just serve` passa a opção `--reload`.
 > Agora recarregue a Swagger UI e veja o padrão do campo. Depois rode
-> `just curl-inference-resize samples/cesar-fachada-1.webp saida.png` e confira o tamanho
+> `just curl-inference-resize samples/demo/cesar-fachada-1.webp saida.png` e confira o tamanho
 > da imagem gerada. Por fim, desfaça a mudança.
 
 ---
@@ -192,7 +192,7 @@ para reempacotar esse erro como `ValueError`, que o pydantic entende e traduz
 para 400. Foram sete linhas de código para não mentir sobre de quem é a culpa.
 
 > **Experimento.** Peça um redimensionamento com largura zero:
-> `curl -X POST -F "image=@samples/cesar-fachada-1.webp" -F "width=0" -F "height=100" http://localhost:3000/inference-resize`
+> `curl -X POST -F "image=@samples/demo/cesar-fachada-1.webp" -F "width=0" -F "height=100" http://localhost:3000/inference-resize`
 > Antes de rodar, responda: erro seu ou erro do servidor? Qual código você espera?
 > Depois tente também `-F "radius=abc"` no `/inference-blur`, um `GET` em `/inference-grayscale` e um
 > `POST` em `/nope`. São quatro erros diferentes e três códigos diferentes
@@ -228,9 +228,9 @@ just sync               # monta ou atualiza a .venv/
 just serve              # sobe o servidor na porta 3000
 just swagger            # abre a documentação interativa no navegador
 
-just curl-inference-grayscale samples/cesar-fachada-1.webp
-just curl-inference-blur         samples/cesar-fachada-1.webp desfoque.png 8.0
-just curl-inference-resize       samples/cesar-fachada-1.webp reduzida.png 320 200
+just curl-inference-grayscale samples/demo/cesar-fachada-1.webp
+just curl-inference-blur         samples/demo/cesar-fachada-1.webp desfoque.png 8.0
+just curl-inference-resize       samples/demo/cesar-fachada-1.webp reduzida.png 320 200
 
 just curl-erro grayscale lixo.txt                    # mostra o erro, não salva imagem
 just curl-erro resize foto.webp 3000 width=0         # campos extras vão soltos no fim
@@ -264,7 +264,12 @@ Os arquivos gerados (`grayscale.png`, `blur.png`, `resized.png`) estão no
 | [`justfile`](justfile) | as receitas, e o comando de verdade que cada uma esconde |
 | [`pyproject.toml`](pyproject.toml) | as bibliotecas que o projeto usa |
 | [`bentofile.yaml`](bentofile.yaml) | o que entra no pacote; é o que `just build` lê para gerar um *bento* |
-| [`samples/`](samples/) | as três imagens de exemplo |
+| [`samples/demo/`](samples/demo/) | as três imagens de exemplo (CESAR) |
+| [`samples/beaches/`](samples/beaches/) | corpus temático (praias) |
+| [`samples/forests/`](samples/forests/) | lote de produção / shift (florestas) |
+| [`samples/balls/`](samples/balls/) | contaminantes (nem praia nem floresta) |
 
 Vale ler os comentários do `service.py`: eles explicam não só o que o código
 faz, mas por que algumas decisões foram tomadas.
+
+[`001_histogram_cdf_cli`](001_histogram_cdf_cli/README.md)

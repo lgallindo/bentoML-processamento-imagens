@@ -1,0 +1,100 @@
+default:
+    @just --list
+
+sync:
+    uv sync --no-active
+
+# Corpus padrão: samples/beaches/ na raiz (já no git). Picsum opcional abaixo.
+download-samples:
+    @echo "Corpus temático: $(git rev-parse --show-toplevel)/samples/beaches/"
+    @echo "Confirme com: just -f $(git rev-parse --show-toplevel)/justfile verify-themed-samples"
+    @echo "Picsum legado (opcional): uv run --no-active python scripts/download_samples.py 50"
+
+# Legado — Lorem Picsum train_* (tema aleatório). Prefira download-samples acima.
+download-samples-picsum count="50":
+    uv run --no-active python scripts/download_samples.py {{count}}
+
+# Camada 1: extrai features de cada train_* → features/*.json
+extract-features:
+    uv run --no-active python scripts/extract_image_features.py
+
+# Camada 2: agrega features/ → corpus_stats.json
+build-corpus-stats:
+    uv run --no-active python scripts/build_corpus_stats.py
+
+save-grayscale-model:
+    uv run --no-active python scripts/save_grayscale_model.py
+
+# Pré-requisitos de corpus: extract-features + build-corpus-stats
+# Pré-requisito de grayscale: save-grayscale-model
+serve port="3333":
+    uv run --no-active bentoml serve service:ImageProcessor --reload --port {{port}}
+
+swagger port="3333":
+    @url="http://localhost:{{port}}/"; \
+    if command -v xdg-open >/dev/null 2>&1; then \
+        xdg-open "$url" >/dev/null 2>&1 || printf 'Abra a Swagger UI em: %s\n' "$url"; \
+    else \
+        printf 'Abra a Swagger UI em: %s\n' "$url"; \
+    fi
+
+# Camada 3 — relatórios do corpus
+curl-monitor-histogram-corpus-json port="3333" channel="L" bins="256":
+    curl --fail --show-error --request POST \
+        --form "channel={{channel}}" \
+        --form "bins={{bins}}" \
+        "http://localhost:{{port}}/monitor-histogram-corpus-json"
+
+curl-monitor-histogram-corpus-csv port="3333" channel="L" bins="256" output="monitor-histogram-corpus.csv":
+    curl --fail --show-error --request POST \
+        --form "channel={{channel}}" \
+        --form "bins={{bins}}" \
+        "http://localhost:{{port}}/monitor-histogram-corpus-csv" \
+        --output "{{output}}"
+
+curl-monitor-histogram-corpus-image port="3333" channel="L" bins="256" output="monitor-histogram-corpus.png":
+    curl --fail --show-error --request POST \
+        --form "channel={{channel}}" \
+        --form "bins={{bins}}" \
+        "http://localhost:{{port}}/monitor-histogram-corpus-image" \
+        --output "{{output}}"
+
+curl-inference-grayscale image output="grayscale.png" port="3333":
+    curl --fail --show-error --request POST \
+        --form "image=@{{image}}" \
+        "http://localhost:{{port}}/inference-grayscale" \
+        --output "{{output}}"
+
+curl-inference-blur image output="blur.png" radius="4.0" port="3333":
+    curl --fail --show-error --request POST \
+        --form "image=@{{image}}" \
+        --form "radius={{radius}}" \
+        "http://localhost:{{port}}/inference-blur" \
+        --output "{{output}}"
+
+curl-inference-resize image output="resized.png" width="256" height="256" port="3333":
+    curl --fail --show-error --request POST \
+        --form "image=@{{image}}" \
+        --form "width={{width}}" \
+        --form "height={{height}}" \
+        "http://localhost:{{port}}/inference-resize" \
+        --output "{{output}}"
+
+curl-erro endpoint image port="3333" *campos:
+    @extra=""; for campo in {{campos}}; do extra="$extra --form $campo"; done; \
+    curl --silent --show-error --write-out '\nHTTP %{http_code}\n' \
+        --request POST --form "image=@{{image}}" $extra \
+        "http://localhost:{{port}}/{{endpoint}}"
+
+build:
+    uv run --no-active bentoml build
+
+list:
+    uv run --no-active bentoml list
+
+test:
+    uv run --no-active pytest -q
+
+# Ilustrações do tutorial em illustrations/
+generate-request-log-illustrations:
+    uv run --no-active --with matplotlib python scripts/generate_request_log_illustrations.py

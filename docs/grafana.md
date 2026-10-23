@@ -102,7 +102,7 @@ como não editável porque sua fonte da verdade é o YAML do repositório.
 Em outro terminal, escolha uma imagem e envie uma requisição por segundo:
 
 ```bash
-IMAGE=$(find samples -type f \( -name '*.jpg' -o -name '*.webp' \) | head -1)
+IMAGE=$(find samples/demo samples/beaches -type f \( -name '*.jpg' -o -name '*.webp' \) | head -1)
 
 for i in $(seq 1 60); do
   just curl-inference-resize "$IMAGE" /tmp/resized.png 256 256

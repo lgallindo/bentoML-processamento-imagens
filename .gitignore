@@ -18,3 +18,9 @@ bentos/
 
 # Mensagem de commit em elaboração (COMMIT-PIPE)
 LATEST_COMMIT
+
+# Regras locais do agente (não versionar)
+PROJECT_RULES.md
+
+# OpenSpec local working tree (não versionar)
+openspec/

@@ -1,0 +1,16 @@
+default:
+    @just --list
+
+sync:
+    uv sync --no-active
+
+# Ex.: just hist --values='[1,2,2,5]' --bins=4
+hist *cli_args:
+    uv run --no-active python hist_cli.py {{cli_args}}
+
+# Ilustrações didácticas em illustrations/
+generate-illustrations:
+    uv run --no-active python scripts/generate_histcdf_illustrations.py
+
+test:
+    uv run --no-active pytest -q

@@ -1,0 +1,15 @@
+default:
+    @just --list
+
+sync:
+    uv sync --no-active
+
+app port="8503":
+    uv run --no-active streamlit run app.py --server.port {{port}} --server.headless true
+
+test:
+    uv run --no-active pytest -q
+
+# Ilustrações do tutorial em illustrations/
+generate-prom-illustrations:
+    uv run --no-active --with matplotlib python scripts/generate_prom_illustrations.py
