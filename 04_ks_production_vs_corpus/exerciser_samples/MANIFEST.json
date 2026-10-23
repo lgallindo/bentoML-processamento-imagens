@@ -1,0 +1,358 @@
+{
+  "source": "picsum.photos",
+  "seed_prefix": "bentoml-exer",
+  "note": "distinto do corpus samples/train_* (prefixo bentoml-edu)",
+  "count": 50,
+  "images": [
+    {
+      "id": 1,
+      "seed": "bentoml-exer-1",
+      "url": "https://picsum.photos/seed/bentoml-exer-1/640/480",
+      "path": "exerciser_samples/exer_001.jpg",
+      "sha256": "6a28a409e521fd10a3a217d36697b6b01097a778edab791df4208807fcba756f"
+    },
+    {
+      "id": 2,
+      "seed": "bentoml-exer-2",
+      "url": "https://picsum.photos/seed/bentoml-exer-2/640/480",
+      "path": "exerciser_samples/exer_002.jpg",
+      "sha256": "7d954c3539a9c4b181ec5d3a1f01f4d6eaab43ff4a428a1a4f99b8b87b1a4738"
+    },
+    {
+      "id": 3,
+      "seed": "bentoml-exer-3",
+      "url": "https://picsum.photos/seed/bentoml-exer-3/640/480",
+      "path": "exerciser_samples/exer_003.jpg",
+      "sha256": "cfb1c4d0c7cb7c445105295152e3101fb28df23d52528aa52f443b2343e12b27"
+    },
+    {
+      "id": 4,
+      "seed": "bentoml-exer-4",
+      "url": "https://picsum.photos/seed/bentoml-exer-4/640/480",
+      "path": "exerciser_samples/exer_004.jpg",
+      "sha256": "4046716c3113b96ad1284c8acf251944506eadfd1863b7f77b157bc806aec61a"
+    },
+    {
+      "id": 5,
+      "seed": "bentoml-exer-5",
+      "url": "https://picsum.photos/seed/bentoml-exer-5/640/480",
+      "path": "exerciser_samples/exer_005.jpg",
+      "sha256": "59b1d78fa8ff0b52aa048aad3b1f0035d40dc60d1a8d15785f90df2cd4d18881"
+    },
+    {
+      "id": 6,
+      "seed": "bentoml-exer-6",
+      "url": "https://picsum.photos/seed/bentoml-exer-6/640/480",
+      "path": "exerciser_samples/exer_006.jpg",
+      "sha256": "fc414133c6faa0f690b3467e64df096f4c84d5f8310e20a47800297f33da996e"
+    },
+    {
+      "id": 7,
+      "seed": "bentoml-exer-7",
+      "url": "https://picsum.photos/seed/bentoml-exer-7/640/480",
+      "path": "exerciser_samples/exer_007.jpg",
+      "sha256": "3904c6cac2a1f4351f9bca23901cb6d5a562523ba1d53da0bcca282fe945d7a2"
+    },
+    {
+      "id": 8,
+      "seed": "bentoml-exer-8",
+      "url": "https://picsum.photos/seed/bentoml-exer-8/640/480",
+      "path": "exerciser_samples/exer_008.jpg",
+      "sha256": "40b308bdd425f71302669ed871420e4e713a181723b408fbfd5bdf0cdc46ae28"
+    },
+    {
+      "id": 9,
+      "seed": "bentoml-exer-9",
+      "url": "https://picsum.photos/seed/bentoml-exer-9/640/480",
+      "path": "exerciser_samples/exer_009.jpg",
+      "sha256": "b4ee75ce1cbdfef10f25848598f14445c1ac567134495a5ff29f9a9cef793bc2"
+    },
+    {
+      "id": 10,
+      "seed": "bentoml-exer-10",
+      "url": "https://picsum.photos/seed/bentoml-exer-10/640/480",
+      "path": "exerciser_samples/exer_010.jpg",
+      "sha256": "5ea0243c4c65c5ccea7b9ec43c7d0b4f6d29778b15b6b23999a7dda74cfc8207"
+    },
+    {
+      "id": 11,
+      "seed": "bentoml-exer-11",
+      "url": "https://picsum.photos/seed/bentoml-exer-11/640/480",
+      "path": "exerciser_samples/exer_011.jpg",
+      "sha256": "3795c1b4222815f3d2d50c4613c17b8bc3cf00e1a0f81d0cc225b40d01b5f0c6"
+    },
+    {
+      "id": 12,
+      "seed": "bentoml-exer-12",
+      "url": "https://picsum.photos/seed/bentoml-exer-12/640/480",
+      "path": "exerciser_samples/exer_012.jpg",
+      "sha256": "6bf1ea7e39d64dac19e7d82003bf2004e984fcdca7225ec61bb0087d1eb11dd4"
+    },
+    {
+      "id": 13,
+      "seed": "bentoml-exer-13",
+      "url": "https://picsum.photos/seed/bentoml-exer-13/640/480",
+      "path": "exerciser_samples/exer_013.jpg",
+      "sha256": "21d9cbad53d4d012c417a0a116efc5339fd614c79a325ac98ac4586e6aa9976a"
+    },
+    {
+      "id": 14,
+      "seed": "bentoml-exer-14",
+      "url": "https://picsum.photos/seed/bentoml-exer-14/640/480",
+      "path": "exerciser_samples/exer_014.jpg",
+      "sha256": "6df4c1750c696cbfe26423cdd8bed2918a2299b27b47392bfa363ab0431b2e8c"
+    },
+    {
+      "id": 15,
+      "seed": "bentoml-exer-15",
+      "url": "https://picsum.photos/seed/bentoml-exer-15/640/480",
+      "path": "exerciser_samples/exer_015.jpg",
+      "sha256": "11b9790e4b9da8fb7a9d8b94e998d60dcd25ca381465876dd3778e424d09d609"
+    },
+    {
+      "id": 16,
+      "seed": "bentoml-exer-16",
+      "url": "https://picsum.photos/seed/bentoml-exer-16/640/480",
+      "path": "exerciser_samples/exer_016.jpg",
+      "sha256": "0634ae831db9b3be09ede7f94928657a37596b03520680bc333b533a983cca2a"
+    },
+    {
+      "id": 17,
+      "seed": "bentoml-exer-17",
+      "url": "https://picsum.photos/seed/bentoml-exer-17/640/480",
+      "path": "exerciser_samples/exer_017.jpg",
+      "sha256": "b09a16c9cd62e07743df085f60743a4d785e089f197a53cea0be410f140b21c1"
+    },
+    {
+      "id": 18,
+      "seed": "bentoml-exer-18",
+      "url": "https://picsum.photos/seed/bentoml-exer-18/640/480",
+      "path": "exerciser_samples/exer_018.jpg",
+      "sha256": "63ffe230312f4c1ca8beadcb715d3eaeff47eb681e75c30aeed75edb2731c704"
+    },
+    {
+      "id": 19,
+      "seed": "bentoml-exer-19",
+      "url": "https://picsum.photos/seed/bentoml-exer-19/640/480",
+      "path": "exerciser_samples/exer_019.jpg",
+      "sha256": "352722b612630b2c95b20c24a56f4009d515d93639af3c26edde00cbcfddf6d4"
+    },
+    {
+      "id": 20,
+      "seed": "bentoml-exer-20",
+      "url": "https://picsum.photos/seed/bentoml-exer-20/640/480",
+      "path": "exerciser_samples/exer_020.jpg",
+      "sha256": "0d8f5afee160105faf540023e2738ae79bac801ca6cf84a2b851bf9a4e04e503"
+    },
+    {
+      "id": 21,
+      "seed": "bentoml-exer-21",
+      "url": "https://picsum.photos/seed/bentoml-exer-21/640/480",
+      "path": "exerciser_samples/exer_021.jpg",
+      "sha256": "d7546add5d930a7a6ae9a8b6a42d8aa61226b43b1687a19909b4a67cad53b644"
+    },
+    {
+      "id": 22,
+      "seed": "bentoml-exer-22",
+      "url": "https://picsum.photos/seed/bentoml-exer-22/640/480",
+      "path": "exerciser_samples/exer_022.jpg",
+      "sha256": "93095893e041f5519445cd33decfd0c1946a275e08f7ddecf67214813b1a05e7"
+    },
+    {
+      "id": 23,
+      "seed": "bentoml-exer-23",
+      "url": "https://picsum.photos/seed/bentoml-exer-23/640/480",
+      "path": "exerciser_samples/exer_023.jpg",
+      "sha256": "5474cf2c804fabc41591165b19802cecf04dc44b832471d2e7c497167a940d0d"
+    },
+    {
+      "id": 24,
+      "seed": "bentoml-exer-24",
+      "url": "https://picsum.photos/seed/bentoml-exer-24/640/480",
+      "path": "exerciser_samples/exer_024.jpg",
+      "sha256": "552bed2942210acff77a317795b3dc7c72c1fe6b2a049d3e1868c527cf99cdea"
+    },
+    {
+      "id": 25,
+      "seed": "bentoml-exer-25",
+      "url": "https://picsum.photos/seed/bentoml-exer-25/640/480",
+      "path": "exerciser_samples/exer_025.jpg",
+      "sha256": "e65aead5a76bd835910d12a770efa5bf6d81b1ed6131756f76e02d781d4bebed"
+    },
+    {
+      "id": 26,
+      "seed": "bentoml-exer-26",
+      "url": "https://picsum.photos/seed/bentoml-exer-26/640/480",
+      "path": "exerciser_samples/exer_026.jpg",
+      "sha256": "3080bd809b0ec453a4c7632634d53bf0be2f56a8cb10d5470376cf99354708fc"
+    },
+    {
+      "id": 27,
+      "seed": "bentoml-exer-27",
+      "url": "https://picsum.photos/seed/bentoml-exer-27/640/480",
+      "path": "exerciser_samples/exer_027.jpg",
+      "sha256": "f134aec8300af054bb8e6a5367252f51451cd2b3125b96cfacda90c45a76d3e4"
+    },
+    {
+      "id": 28,
+      "seed": "bentoml-exer-28",
+      "url": "https://picsum.photos/seed/bentoml-exer-28/640/480",
+      "path": "exerciser_samples/exer_028.jpg",
+      "sha256": "09f08b842abded9e7d2f441783daaec17a7ebc37ee1661984096250e5d7ef84b"
+    },
+    {
+      "id": 29,
+      "seed": "bentoml-exer-29",
+      "url": "https://picsum.photos/seed/bentoml-exer-29/640/480",
+      "path": "exerciser_samples/exer_029.jpg",
+      "sha256": "d4dbece1291ee744399a953b13e33586ff281340ca91394c749cd7f8dc9a2eff"
+    },
+    {
+      "id": 30,
+      "seed": "bentoml-exer-30",
+      "url": "https://picsum.photos/seed/bentoml-exer-30/640/480",
+      "path": "exerciser_samples/exer_030.jpg",
+      "sha256": "05e8504b191431007676b3893d6fa97bd6e672dce29aa73d5c5deef743169402"
+    },
+    {
+      "id": 31,
+      "seed": "bentoml-exer-31",
+      "url": "https://picsum.photos/seed/bentoml-exer-31/640/480",
+      "path": "exerciser_samples/exer_031.jpg",
+      "sha256": "12d434c3e949926b456801dce61609f6067d0e13d09fbaecf7646ddca143d436"
+    },
+    {
+      "id": 32,
+      "seed": "bentoml-exer-32",
+      "url": "https://picsum.photos/seed/bentoml-exer-32/640/480",
+      "path": "exerciser_samples/exer_032.jpg",
+      "sha256": "f653cfb3f861cb6c7203e91d71d05a315ed8d47ec3ba1bf9c6c55ce4b3391f50"
+    },
+    {
+      "id": 33,
+      "seed": "bentoml-exer-33",
+      "url": "https://picsum.photos/seed/bentoml-exer-33/640/480",
+      "path": "exerciser_samples/exer_033.jpg",
+      "sha256": "03f5583c5283d20b3814eae10df0bb98839ae3e987534458aed0902a4d3405ca"
+    },
+    {
+      "id": 34,
+      "seed": "bentoml-exer-34",
+      "url": "https://picsum.photos/seed/bentoml-exer-34/640/480",
+      "path": "exerciser_samples/exer_034.jpg",
+      "sha256": "b140b4b9cd75f6225c30c498185a9defa02fd9095313bafa2fdf7d0fd9255f6a"
+    },
+    {
+      "id": 35,
+      "seed": "bentoml-exer-35",
+      "url": "https://picsum.photos/seed/bentoml-exer-35/640/480",
+      "path": "exerciser_samples/exer_035.jpg",
+      "sha256": "5b39a72b82ae14381fcc7600e9771079b3dd4828b37238c9b1f04fe8d3d3efcf"
+    },
+    {
+      "id": 36,
+      "seed": "bentoml-exer-36",
+      "url": "https://picsum.photos/seed/bentoml-exer-36/640/480",
+      "path": "exerciser_samples/exer_036.jpg",
+      "sha256": "650e4dca5eb08cd563c7580ae6af4e5660fb5573fa1cfe52267b05e02602e6fc"
+    },
+    {
+      "id": 37,
+      "seed": "bentoml-exer-37",
+      "url": "https://picsum.photos/seed/bentoml-exer-37/640/480",
+      "path": "exerciser_samples/exer_037.jpg",
+      "sha256": "c3f5f47146c76807b9d585ef977b037d7cfbf8afd624cb5b432228249db4f16b"
+    },
+    {
+      "id": 38,
+      "seed": "bentoml-exer-38",
+      "url": "https://picsum.photos/seed/bentoml-exer-38/640/480",
+      "path": "exerciser_samples/exer_038.jpg",
+      "sha256": "3080bd809b0ec453a4c7632634d53bf0be2f56a8cb10d5470376cf99354708fc"
+    },
+    {
+      "id": 39,
+      "seed": "bentoml-exer-39",
+      "url": "https://picsum.photos/seed/bentoml-exer-39/640/480",
+      "path": "exerciser_samples/exer_039.jpg",
+      "sha256": "72181f9c7e595383e6588078932bc1a03ce9cbe1637571ea85b1cf1066307bb1"
+    },
+    {
+      "id": 40,
+      "seed": "bentoml-exer-40",
+      "url": "https://picsum.photos/seed/bentoml-exer-40/640/480",
+      "path": "exerciser_samples/exer_040.jpg",
+      "sha256": "ad25137ae1d3fd067b61316d3bb9521cf91556878ecddd6bbe7cd29b9059be9e"
+    },
+    {
+      "id": 41,
+      "seed": "bentoml-exer-41",
+      "url": "https://picsum.photos/seed/bentoml-exer-41/640/480",
+      "path": "exerciser_samples/exer_041.jpg",
+      "sha256": "6bf1ea7e39d64dac19e7d82003bf2004e984fcdca7225ec61bb0087d1eb11dd4"
+    },
+    {
+      "id": 42,
+      "seed": "bentoml-exer-42",
+      "url": "https://picsum.photos/seed/bentoml-exer-42/640/480",
+      "path": "exerciser_samples/exer_042.jpg",
+      "sha256": "05e8504b191431007676b3893d6fa97bd6e672dce29aa73d5c5deef743169402"
+    },
+    {
+      "id": 43,
+      "seed": "bentoml-exer-43",
+      "url": "https://picsum.photos/seed/bentoml-exer-43/640/480",
+      "path": "exerciser_samples/exer_043.jpg",
+      "sha256": "596c942c7506435a0e32773ab475eb47bf6a9a36958639e4b314b35bc9845931"
+    },
+    {
+      "id": 44,
+      "seed": "bentoml-exer-44",
+      "url": "https://picsum.photos/seed/bentoml-exer-44/640/480",
+      "path": "exerciser_samples/exer_044.jpg",
+      "sha256": "9e2580a9d45957ebe4db8bb0266846cc53c6b3a73be6007c008b5d84d80657d5"
+    },
+    {
+      "id": 45,
+      "seed": "bentoml-exer-45",
+      "url": "https://picsum.photos/seed/bentoml-exer-45/640/480",
+      "path": "exerciser_samples/exer_045.jpg",
+      "sha256": "2fcb13914454c348393f4a5eca50d1ff1e72741ad1de8e04e9178bb436dc1677"
+    },
+    {
+      "id": 46,
+      "seed": "bentoml-exer-46",
+      "url": "https://picsum.photos/seed/bentoml-exer-46/640/480",
+      "path": "exerciser_samples/exer_046.jpg",
+      "sha256": "d2378656bd79c1a7c3850e5d6b342739443241f401c4a07883a1041a8a1b76a2"
+    },
+    {
+      "id": 47,
+      "seed": "bentoml-exer-47",
+      "url": "https://picsum.photos/seed/bentoml-exer-47/640/480",
+      "path": "exerciser_samples/exer_047.jpg",
+      "sha256": "2d36c838142a6dc8cd9bbfe24480b61ef4632e3910236ae71cb4c193b8284ad7"
+    },
+    {
+      "id": 48,
+      "seed": "bentoml-exer-48",
+      "url": "https://picsum.photos/seed/bentoml-exer-48/640/480",
+      "path": "exerciser_samples/exer_048.jpg",
+      "sha256": "f3fd22e5b6b51ed1531dbd77fa8f4701d9b7b5f043004a8cd4305341e9606dd9"
+    },
+    {
+      "id": 49,
+      "seed": "bentoml-exer-49",
+      "url": "https://picsum.photos/seed/bentoml-exer-49/640/480",
+      "path": "exerciser_samples/exer_049.jpg",
+      "sha256": "8a737feb448d711472d06a562a9d5df9fa3cc2fca5337b415ae7511007a25add"
+    },
+    {
+      "id": 50,
+      "seed": "bentoml-exer-50",
+      "url": "https://picsum.photos/seed/bentoml-exer-50/640/480",
+      "path": "exerciser_samples/exer_050.jpg",
+      "sha256": "c66cf532ce001bdeaa87f119da446e48e571ad1e366b08d7b70dca1de2d3cff0"
+    }
+  ]
+}

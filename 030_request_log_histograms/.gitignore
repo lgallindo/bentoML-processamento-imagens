@@ -12,12 +12,6 @@ bentos/
 /training-histograms.csv
 /request-histograms.csv
 
-samples/train_*
-exerciser_samples/
-
-features/
-request_features/
-
 corpus_stats.json
 request_stats.json
 reference_stats.json

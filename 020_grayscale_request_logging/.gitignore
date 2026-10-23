@@ -15,19 +15,11 @@ bentos/
 /resized.png
 /training-histogram.png
 
-# Corpus de treino baixado (restaurável via samples/MANIFEST.json)
-samples/train_*
-
-# Camada 1 — features por imagem do corpus (não são API)
-features/
-
 # Log de submissões a /grayscale (comparação futura com o corpus)
-request_features/
 
 # Camada 2 — agregação do corpus (reconstruível)
 corpus_stats.json
 reference_stats.json
-
 
 # Fixtures locais de teste (se geradas)
 .pytest_train_fixtures/
