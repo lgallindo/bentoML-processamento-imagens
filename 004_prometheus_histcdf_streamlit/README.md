@@ -1,4 +1,4 @@
-# Lição 003 — Histograma e CDF a partir do Prometheus
+# Lição 004 — Histograma e CDF a partir do Prometheus
 
 ## Objetivo
 
@@ -78,7 +78,7 @@ compare = compare_quantiles(
 
 ## Como executar
 
-Na pasta desta lição (`cd 003_prometheus_histcdf_streamlit` a partir da raiz
+Na pasta desta lição (`cd 004_prometheus_histcdf_streamlit` a partir da raiz
 do repositório):
 
 ```bash

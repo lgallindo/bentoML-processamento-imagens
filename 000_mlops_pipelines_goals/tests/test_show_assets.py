@@ -30,7 +30,8 @@ GOAL_WATCH_PHRASES = (
 INDEX_FOLDERS = (
     "001_histogram_cdf_cli",
     "002_histogram_cdf_streamlit",
-    "003_prometheus_histcdf_streamlit",
+    "003_ks_drift_alert_streamlit",
+    "004_prometheus_histcdf_streamlit",
     "010_corpus_histograms_model",
     "020_grayscale_request_logging",
     "030_request_log_histograms",

@@ -222,7 +222,7 @@ def verify(root: Path) -> int:
             errors += 1
     for batch in BATCHES:
         count = sum(1 for e in manifest["images"] if e["batch"] == batch)
-        minimum = 5 if batch == "balls" else 20
+        minimum = 100
         if count < minimum:
             print(
                 f"batch {batch}: {count} imagens (mínimo {minimum})",
