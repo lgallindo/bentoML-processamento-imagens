@@ -83,4 +83,5 @@ Plano de produção:
 [`docs/PLAN_anomaly_production.md`](docs/PLAN_anomaly_production.md).
 
 [`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md) ·
-próximo índice em [`000`](../000_mlops_pipelines_goals/README.md)
+[`006_ks_input_output_streamlit`](../006_ks_input_output_streamlit/README.md) ·
+[`000`](../000_mlops_pipelines_goals/README.md)
