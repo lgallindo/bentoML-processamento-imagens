@@ -1,0 +1,24 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+bentos/
+
+/grayscale.png
+/blur.png
+/resized.png
+
+request_stats.json
+reference_stats.json
+
+.pytest_train_fixtures/
+.bentoml/
+
+# live logs (snapshots live in batch_stats/)
+request_features/*.json
+batches/
+
+# regenerated / copied from root samples (not used by this lesson’s just recipes)
+features/
+samples/
+exerciser_samples/

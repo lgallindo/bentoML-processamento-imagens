@@ -1,0 +1,10 @@
+service: "service:ImageProcessor"
+labels:
+  project: image-demo-08-psi-drift-alert
+include:
+  - "*.py"
+  - "corpus_stats.json"
+python:
+  packages:
+    - bentoml
+    - pillow

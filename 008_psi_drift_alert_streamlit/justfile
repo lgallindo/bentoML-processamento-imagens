@@ -1,0 +1,55 @@
+default:
+    @just --list
+
+sync:
+    uv sync --no-active
+
+download-samples:
+    @echo "Corpus temático: $(git rev-parse --show-toplevel)/samples/beaches/"
+    @echo "Drift: samples/forests/  |  Contingência: samples/balls/"
+    @echo "Confirme: just -f $(git rev-parse --show-toplevel)/justfile verify-themed-samples"
+
+extract-features:
+    uv run --no-active python scripts/extract_image_features.py
+
+build-corpus-stats:
+    uv run --no-active python scripts/build_corpus_stats.py
+
+# Offline: referência praias[:50] + control (51–100) + forests
+build-demo-batches: extract-features build-corpus-stats
+    uv run --no-active python scripts/build_batch_from_theme.py beaches --name control --offset=50 --count=50
+    uv run --no-active python scripts/build_batch_from_theme.py forests --name forests --offset=0 --count=50
+
+build-contingency-batches:
+    uv run --no-active python scripts/build_batch_from_theme.py --themes beaches forests --name landscapes
+    uv run --no-active python scripts/build_batch_from_theme.py balls --name balls --offset=0 --count=50
+
+save-grayscale-model:
+    uv run --no-active python scripts/save_grayscale_model.py
+
+serve port="3338":
+    uv run --no-active bentoml serve service:ImageProcessor --reload --port {{port}}
+
+streamlit port="8508":
+    uv run --no-active streamlit run app.py --server.port {{port}} --server.headless true
+
+clear-request-features:
+    uv run --no-active python -c "from pathlib import Path; p=Path('request_features'); p.mkdir(exist_ok=True); [f.unlink() for f in p.glob('*.json')]; print('limpo request_features/')"
+
+exercise-theme theme="forests" port="3338" offset="0" count="12":
+    uv run --no-active python scripts/exercise_theme.py {{theme}} --port={{port}} --offset={{offset}} --count={{count}}
+
+snapshot-batch name:
+    uv run --no-active python scripts/snapshot_batch.py {{name}} --clear-source
+
+curl-inference-grayscale image output="grayscale.png" port="3338":
+    curl --fail --show-error --request POST \
+        --form "image=@{{image}}" \
+        "http://localhost:{{port}}/inference-grayscale" \
+        --output "{{output}}"
+
+verify-psi batch="forests":
+    uv run --no-active python scripts/verify_psi.py {{batch}}
+
+test:
+    uv run --no-active pytest -q

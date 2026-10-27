@@ -72,6 +72,8 @@ flowchart LR
 | `004_prometheus_histcdf_streamlit` | Buckets de latência do Prometheus → histograma/CDF + PromQL |
 | `005_ks_anomaly_detection_streamlit` | Anomalia KS: candidato ou janela temporal vs referência |
 | `006_ks_input_output_streamlit` | KS na entrada e na saída do serviço (alerta duplo sobre D) |
+| `007_ks_mixed_landscape_streamlit` | Tráfego misto: praias+florestas no lote vs referência KS |
+| `008_psi_drift_alert_streamlit` | Alerta PSI (média de L por imagem; espelho L por pixel) |
 | `010_corpus_histograms_model` | Corpus de treino + modelo picklable de cinza no BentoML |
 | `020_grayscale_request_logging` | Log em disco das features de cada pedido a `/inference-grayscale` |
 | `030_request_log_histograms` | Histogramas de production vs corpus (olhar drift) |
