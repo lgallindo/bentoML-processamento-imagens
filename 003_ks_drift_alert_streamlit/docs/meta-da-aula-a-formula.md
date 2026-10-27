@@ -1,6 +1,6 @@
 # Meta da aula — da intenção à fórmula
 
-Booklet completo (DevOps/MLOps → KS): [`booklet-devops-ate-ks.md`](booklet-devops-ate-ks.md).
+Texto longo da lição: [`../README.md`](../README.md).
 
 ## Intenção
 
