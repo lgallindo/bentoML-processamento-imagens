@@ -1,8 +1,8 @@
-# Lição 005 — Anomalia KS (candidato / janela vs referência)
+# Aula 005 — Anomalia KS (candidato / janela vs referência)
 
 ## Por que esta aula
 
-A [lição 003](../003_ks_drift_alert_streamlit/README.md) compara **dois
+A [aula 003](../003_ks_drift_alert_streamlit/README.md) compara **dois
 lotes** e alerta sobre **D**. Em produção muitas vezes a pergunta é outra:
 *este pedido (ou esta semana de pedidos) ainda parece o treino?*
 
@@ -62,13 +62,13 @@ lote mistura regimes antigos e novos e o **D** perde significado operacional.
 
 ```bash
 cd 005_ks_anomaly_detection_streamlit
-# pasta da lição
+# pasta da aula
 
 just sync
 # ambiente uv
 
 just sync-demo-from-003
-# copia corpus_stats.json + batch_stats/ da lição 003
+# copia corpus_stats.json + batch_stats/ da aula 003
 
 just streamlit
 # http://localhost:8505

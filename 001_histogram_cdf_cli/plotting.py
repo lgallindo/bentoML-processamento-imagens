@@ -1,4 +1,4 @@
-"""Gráfico Seaborn do histograma + CDF (copiar para a lição 001)."""
+"""Gráfico Seaborn do histograma + CDF (copiar para a aula 001)."""
 
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-# Lição 001 — Histograma e CDF na linha de comando
+# Aula 001 — Histograma e CDF na linha de comando
 
 ## Objetivo
 
@@ -217,7 +217,7 @@ just hist --values='[1,9]' --bins=2 --lo=0 --hi=5
 
 ## Como executar
 
-Na pasta desta lição:
+Na pasta desta aula:
 
 ```bash
 just sync

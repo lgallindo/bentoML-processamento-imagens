@@ -1,4 +1,4 @@
-# Lição 000 — Pipelines de MLOps e objetivos de monitoramento
+# Aula 000 — Pipelines de MLOps e objetivos de monitoramento
 
 Este repositório (`bentoML-processamento-imagens`) ensina, pasta a pasta, a
 observar um serviço BentoML de processamento de imagens: do vocabulário de
@@ -62,7 +62,7 @@ flowchart LR
   W -.->|HTTP| R
 ```
 
-## Índice das lições
+## Índice das aulas
 
 | Pasta | O que você leva |
 | :--- | :--- |

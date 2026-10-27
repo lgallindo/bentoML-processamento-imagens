@@ -2,7 +2,7 @@
 
 Esta pasta foi renumerada para liberar a faixa `01`–`09` a uma série introdutória.
 
-O material desta lição está em:
+O material desta aula está em:
 
 **[`010_corpus_histograms_model/`](../010_corpus_histograms_model/)**
 

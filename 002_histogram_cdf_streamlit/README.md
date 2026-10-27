@@ -1,4 +1,4 @@
-# Lição 002 — Histograma e CDF em Streamlit
+# Aula 002 — Histograma e CDF em Streamlit
 
 ## Objetivo
 
@@ -67,7 +67,7 @@ texto.
 
 ## Como executar
 
-Na pasta desta lição (a partir da raiz do repositório:
+Na pasta desta aula (a partir da raiz do repositório:
 `cd 002_histogram_cdf_streamlit`):
 
 ```bash

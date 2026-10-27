@@ -290,7 +290,7 @@ st.markdown(
 )
 st.caption(
     "P1 usa a mesma grade de L dos pixels da aula KS. "
-    "O alerta **operacional** desta lição é o P2; P1 existe para você "
+    "O alerta **operacional** desta aula é o P2; P1 existe para você "
     "comparar a sensibilidade das duas variáveis."
 )
 col_h1, col_h2 = st.columns(2)

@@ -1,4 +1,4 @@
-# Lição 008 — Alerta PSI de drift (BentoML + Streamlit)
+# Aula 008 — Alerta PSI de drift (BentoML + Streamlit)
 
 ## Por que estamos aqui
 
@@ -41,7 +41,7 @@ Cada imagem da referência e do lote cai numa faixa; as massas relativas
 alimentam o PSI.
 
 Em **P1**, usamos o histograma agregado de L nos pixels (mesmo espírito da
-lição KS) e convertemos contagens em massas. O número P1 existe para você
+aula KS) e convertemos contagens em massas. O número P1 existe para você
 comparar sensibilidade com o \(D\) de Kolmogorov–Smirnov; o semáforo
 operacional desta pasta é o **P2**.
 
@@ -164,7 +164,7 @@ Caminho **offline** (lotes já materializados em JSON, sem servidor):
 
 ```bash
 cd 008_psi_drift_alert_streamlit
-# entra na pasta da lição
+# entra na pasta da aula
 
 just sync
 # cria/atualiza .venv e instala dependências do pyproject (uv)

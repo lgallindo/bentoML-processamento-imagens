@@ -40,7 +40,7 @@ st.title("Anomalia KS — candidato vs referência")
 st.header("Meta desta aula")
 st.markdown(
     """
-A lição **003** compara **dois lotes** (treino vs produção) e alerta sobre
+A aula **003** compara **dois lotes** (treino vs produção) e alerta sobre
 **D**. Aqui o mesmo aparelho (L → histograma → CDF → δ → **D**) serve a
 **detecção de anomalia**:
 

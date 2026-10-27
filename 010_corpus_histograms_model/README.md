@@ -1,4 +1,4 @@
-# Lição 010 — Corpus, histogramas e modelo de tons de cinza
+# Aula 010 — Corpus, histogramas e modelo de tons de cinza
 
 ## Objetivo
 
@@ -27,9 +27,9 @@ Comportamento da base:
 Não há corpus, não há estatísticas em disco, não há modelo salvo no armazém
 BentoML: o cinza é uma linha `image.convert("L")` dentro do handler.
 
-### Recursos BentoML — antes (base) versus depois (esta lição)
+### Recursos BentoML — antes (base) versus depois (esta aula)
 
-| Recurso BentoML | Base (raiz) | Esta lição |
+| Recurso BentoML | Base (raiz) | Esta aula |
 | :--- | :--- | :--- |
 | `@bentoml.service` | Sim — declara `ImageProcessor` | Sim — igual |
 | `@bentoml.api` + tipos (`ImageInput`, `Positive`) | Sim — gera `POST` a partir das assinaturas | Sim — iguais + rotas novas |
@@ -40,7 +40,7 @@ BentoML: o cinza é uma linha `image.convert("L")` dentro do handler.
 | Rotas `/monitor-*` (relatórios) | **Não** | **Sim** — só corpus |
 | Pipeline offline de features / stats | **Não** | **Sim** — fora do HTTP |
 
-Em uma frase: a base ensina **API por anotações**; esta lição acrescenta
+Em uma frase: a base ensina **API por anotações**; esta aula acrescenta
 **modelo empacotado** e **monitoramento do corpus**, sem abandonar os três
 filtros de inferência.
 
@@ -54,7 +54,7 @@ def inference_grayscale(self, image: ImageInput) -> PILImage:
     return image.convert("L")
 ```
 
-**TO-BE (esta lição)** — carrega o modelo no arranque; acrescenta relatórios:
+**TO-BE (esta aula)** — carrega o modelo no arranque; acrescenta relatórios:
 
 ```python
 def __init__(self) -> None:
@@ -70,7 +70,7 @@ def monitor_histogram_corpus_json(self, channel: str = "L", bins: Positive = 256
 # + /monitor-histogram-corpus-csv  e  /monitor-histogram-corpus-image
 ```
 
-| Rotas | Base | Esta lição |
+| Rotas | Base | Esta aula |
 | :--- | :---: | :---: |
 | `/inference-blur` | sim | sim |
 | `/inference-grayscale` | sim (inline) | sim (modelo) |
@@ -191,7 +191,7 @@ A agregação **não reabre** as imagens: só lê `features/*.json`.
 
 ### 4. Onde ler o código (nesta pasta)
 
-Ordem sugerida (caminhos relativos a esta lição):
+Ordem sugerida (caminhos relativos a esta aula):
 
 1. `image_extract.py` — comece por `save_image_features` e `extract_image_features`.
 2. `histogram.py` — `compute_histogram`, `rebin_counts`, `cumulative_distribution`.

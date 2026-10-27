@@ -1,10 +1,10 @@
-# Lição 006 — KS na entrada e na saída
+# Aula 006 — KS na entrada e na saída
 
 ## Por que estamos aqui
 
 Um serviço pode responder **rápido** e com **HTTP 200** e, mesmo assim,
 trabalhar sobre um mundo diferente do treino. A
-[lição 003](../003_ks_drift_alert_streamlit/README.md) mede essa combinação
+[aula 003](../003_ks_drift_alert_streamlit/README.md) mede essa combinação
 na luminância **L** das imagens **submetidas** e dispara um alerta sobre a
 estatística **D** (Kolmogorov–Smirnov).
 
@@ -110,7 +110,7 @@ dispara ALERTA — a turma vê o contraste “pedidos ok, emissão estranha”.
 
 ```bash
 cd 006_ks_input_output_streamlit
-# pasta da lição
+# pasta da aula
 
 just sync
 # ambiente uv
@@ -144,7 +144,7 @@ just test
 
 ## Comparação com a 003
 
-A 003 olha só a **entrada**. Esta lição coloca a **saída** no mesmo aparelho
+A 003 olha só a **entrada**. Esta aula coloca a **saída** no mesmo aparelho
 de alerta e mostra quando os dois lados divergem.
 
 [`005_ks_anomaly_detection_streamlit`](../005_ks_anomaly_detection_streamlit/README.md)

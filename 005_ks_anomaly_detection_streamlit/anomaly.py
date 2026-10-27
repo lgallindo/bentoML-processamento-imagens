@@ -11,7 +11,7 @@ from PIL import Image
 from histogram import DEFAULT_BINS, compute_histogram, cumulative_distribution, rebin_counts
 from ks_compare import ks_statistic
 
-# Alerta centrado em D (mesma filosofia da lição 003).
+# Alerta centrado em D (mesma filosofia da aula 003).
 D_ALERT = 0.10
 MIN_WINDOW_IMAGES = 8
 DEFAULT_WINDOW_DAYS = 30

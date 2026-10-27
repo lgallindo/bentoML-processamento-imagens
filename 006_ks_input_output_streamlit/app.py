@@ -96,7 +96,7 @@ st.header("Meta desta aula")
 st.markdown(
     """
 Um serviço pode estar **saudável em HTTP** e mesmo assim trabalhar sobre um
-mundo diferente do treino. A [lição 003](../003_ks_drift_alert_streamlit/README.md)
+mundo diferente do treino. A [aula 003](../003_ks_drift_alert_streamlit/README.md)
 mede isso na luminância **L** das imagens **submetidas**.
 
 Aqui a pergunta se desdobra. O cliente manda uma imagem — **entrada**. O

@@ -1,4 +1,4 @@
-"""Grava os dois modelos picklable da lição 006 no armazém BentoML local."""
+"""Grava os dois modelos picklable da aula 006 no armazém BentoML local."""
 
 from __future__ import annotations
 

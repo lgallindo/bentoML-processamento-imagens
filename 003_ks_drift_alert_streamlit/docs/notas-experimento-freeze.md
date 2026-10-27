@@ -1,6 +1,6 @@
 # Notas de experimento — freeze, pixel vs média
 
-Material de apoio ao handout da lição 003. Não é o caminho principal da aula;
+Material de apoio ao handout da aula 003. Não é o caminho principal da aula;
 serve para quem quiser reproduzir os números e entender por que o eixo é L
 por pixel.
 
@@ -25,4 +25,4 @@ Medido neste host com o freeze `beaches[:50]` contra `forests[:50]` e contra
 A média comprime cada foto a um único número e reage sobretudo ao brilho
 global. No controle (mesmo tema, outro trecho) isso cruza o limiar
 \(D \ge 0{,}10\) e gera **falso alerta**. O histograma agregado de pixels
-mantém o controle em TRANQUILO. Por isso a lição trabalha com L por pixel.
+mantém o controle em TRANQUILO. Por isso a aula trabalha com L por pixel.

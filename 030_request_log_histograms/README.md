@@ -1,4 +1,4 @@
-# Lição 030 — Histogramas do log de pedidos e exercitador
+# Aula 030 — Histogramas do log de pedidos e exercitador
 
 ## Objetivo
 
@@ -20,7 +20,7 @@ As figuras abaixo vivem em `illustrations/` (regeneráveis com
 
 ## Comparação com a base
 
-O serviço base não registra pedidos nem expõe monitoramento. Esta lição acrescenta
+O serviço base não registra pedidos nem expõe monitoramento. Esta aula acrescenta
 o par corpus/production e o exercitador.
 
 **AS-IS (base)** — só inferência:
@@ -32,7 +32,7 @@ def inference_grayscale(self, image: ImageInput) -> PILImage:
 # (sem monitor-*)
 ```
 
-**TO-BE (esta lição)** — log + relatórios production:
+**TO-BE (esta aula)** — log + relatórios production:
 
 ```python
 @bentoml.api(route="/inference-grayscale")
@@ -46,7 +46,7 @@ def monitor_histogram_production_json(self, channel: str = "L", bins: Positive =
 # + csv / image; corpus permanece em /monitor-histogram-corpus-*
 ```
 
-| Rotas | Base | Esta lição |
+| Rotas | Base | Esta aula |
 | :--- | :---: | :---: |
 | `/inference-{blur,grayscale,resize}` | sim | sim |
 | `/monitor-histogram-corpus-{json,csv,image}` | não | sim |
@@ -145,7 +145,7 @@ diferentes, iluminação nocturna, compressão agressiva, outro domínio de
 conteúdo — o serviço continua a responder HTTP 200, mas a qualidade da
 transformação (ou, em outros projetos, da predição) **degrada em silêncio**.
 
-Esta lição usa histogramas e CDF de L/R/G/B como **proxy observável** dessa
+Esta aula usa histogramas e CDF de L/R/G/B como **proxy observável** dessa
 distribuição. O corpus é a referência do treino; o log agregado é o que a API
 recebe agora. Ao colocar os dois relatórios no mesmo formato, o estudante pode:
 

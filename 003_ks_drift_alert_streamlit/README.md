@@ -1,4 +1,4 @@
-# Lição 003 — Alerta KS de drift (BentoML + Streamlit)
+# Aula 003 — Alerta KS de drift (BentoML + Streamlit)
 
 Do serviço em produção ao alerta sobre **D**. O painel vivo está em
 [`app.py`](app.py).
@@ -103,7 +103,7 @@ periodicamente:
     se D ≥ limiar → ALERTA
 ```
 
-Três ideias que esta lição amarra:
+Três ideias que esta aula amarra:
 
 1. **Servir** — BentoML (ou equivalente) expõe o modelo como API.
 2. **Registrar** — cada pedido relevante deixa um vestígio mensurável
@@ -119,21 +119,33 @@ produção.
 
 ## 4. Saúde HTTP versus adequação dos dados
 
-Separar duas camadas evita o falso conforto do “tudo verde”.
+Separar duas perguntas evita o falso conforto do “tudo verde” no painel
+de operações. Uma coisa é o serviço estar **vivo e rápido**. Outra é o
+**conteúdo** que passa por ele ainda parecer o mundo com o qual o modelo
+foi calibrado.
 
-**Saúde do serviço.** Porta aberta, processo vivo, respostas 200 (ou
-códigos esperados), latência dentro do orçamento, sem exceções em cascata.
+A primeira pergunta — **saúde do serviço** — olha a tubulação. O processo
+está no ar? A porta responde? O cliente recebe o código HTTP esperado
+(em geral 200 nas rotas felizes)? A espera (latência) cabe no orçamento
+combinado? Exceções estão sob controle, ou há cascata de falhas? Enquanto
+essas respostas forem boas, a infraestrutura e o runtime parecem em ordem.
 
-**Adequação dos dados.** As imagens de produção ainda se parecem, em
-distribuição, com o treino? A estatística **D** (forma de **L**) está
-abaixo do limiar de alerta? Há imagens suficientes no lote para a
-comparação ser legível?
+A segunda pergunta — **adequação dos dados** — olha o que viaja *dentro*
+dessa tubulação. As fotos que chegam em produção ainda se parecem, na
+distribuição de tons claros e escuros, com as fotos de referência do
+treino? O afastamento entre a forma da luminância no treino e a forma da
+luminância no lote recente ainda está abaixo do limiar que vocês
+combinaram alertar? Há imagens suficientes nesse lote para a comparação
+fazer sentido, ou a amostra ainda é fina demais para decidir?
 
-Um serviço pode estar saudável em HTTP e desalinhado nos dados ao mesmo
-tempo: status 200 rápido sobre fotos de um domínio que o treino quase não
-viu. A latência mede **espera**. A estatística **D** mede **afastamento de
-forma** entre a CDF de luminância da referência e a do lote. O alerta
-responde a **D**.
+As duas respostas são independentes. Um serviço pode devolver status 200
+em milissegundos e, ao mesmo tempo, estar processando um domínio visual
+que o treino quase não viu — por exemplo, o treino foi feito com praias e
+a produção passou a mandar só florestas. A latência mede **quanto se
+espera** pela resposta. O monitoramento de dados mede **quão diferente
+ficou a distribuição de luminância** entre a referência de treino e o
+lote atual. O alerta desta aula dispara sobre esse afastamento de forma,
+não sobre o código HTTP.
 
 ---
 
@@ -142,7 +154,7 @@ responde a **D**.
 BentoML empacota o código de inferência e sobe um servidor HTTP com rotas
 tipadas — o mesmo padrão enxuto que aparece em deployments reais.
 
-Nesta lição, a classe de serviço (`service.py`) registra, entre outras, a
+Nesta aula, a classe de serviço (`service.py`) registra, entre outras, a
 rota `/inference-grayscale`. Em linhas gerais:
 
 1. O cliente envia uma imagem.
@@ -297,7 +309,7 @@ para cada c em contagens:
     acrescentar (acumulado / total) em cdf
 ```
 
-No código da lição, isso corresponde a `cumulative_distribution` em
+No código da aula, isso corresponde a `cumulative_distribution` em
 `histogram.py`, usado por `ks_compare.py` e pelo app.
 
 ---
@@ -548,7 +560,7 @@ Por que 50 imagens (e não as 110 do tema), e por que L por pixel em vez
 da média por imagem: ver
 [`docs/notas-experimento-freeze.md`](docs/notas-experimento-freeze.md).
 
-A base só devolve a imagem filtrada. Esta lição grava o pedido (como a
+A base só devolve a imagem filtrada. Esta aula grava o pedido (como a
 linha `020`) e analisa a distribuição de **L** no Streamlit.
 
 ---
@@ -557,7 +569,7 @@ linha `020`) e analisa a distribuição de **L** no Streamlit.
 
 ```text
 003_ks_drift_alert_streamlit/
-  README.md                 # handout da lição
+  README.md                 # handout da aula
   app.py                    # Streamlit: defs + gráficos + alerta sobre D
   service.py                # BentoML /inference-grayscale + log
   banner.py                 # alert_on_d (D≥0,10) + regra legada com valor-p
@@ -607,7 +619,7 @@ linha `020`) e analisa a distribuição de **L** no Streamlit.
 
 ```bash
 cd 003_ks_drift_alert_streamlit
-# entra na pasta da lição
+# entra na pasta da aula
 
 just sync
 # cria/atualiza .venv e instala dependências do pyproject (uv)

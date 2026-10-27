@@ -11,7 +11,7 @@ import seaborn as sns
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "illustrations"
 
-# Exemplo canónico da lição
+# Exemplo canónico da aula
 VALUES = np.array([1.0, 2.0, 2.0, 5.0])
 BINS = 4
 COUNTS = np.array([1, 2, 0, 1])

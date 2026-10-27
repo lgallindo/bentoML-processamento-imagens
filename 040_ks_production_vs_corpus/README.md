@@ -1,4 +1,4 @@
-# Lição 040 — Kolmogorov–Smirnov: production contra corpus
+# Aula 040 — Kolmogorov–Smirnov: production contra corpus
 
 ## Objetivo
 
@@ -11,7 +11,7 @@
 
 ## Comparação com a base
 
-O serviço base não compara datasets. Esta lição introduz o pipeline `ks` sob o
+O serviço base não compara datasets. Esta aula introduz o pipeline `ks` sob o
 prefixo `monitor-`.
 
 **AS-IS (base)** — apenas filtros:
@@ -22,7 +22,7 @@ def inference_grayscale(self, image: ImageInput) -> PILImage:
     return image.convert("L")
 ```
 
-**TO-BE (esta lição)** — KS sobre CDFs já agregadas:
+**TO-BE (esta aula)** — KS sobre CDFs já agregadas:
 
 ```python
 @bentoml.api(route="/monitor-ks-production-corpus-json")
@@ -35,7 +35,7 @@ def monitor_ks_production_corpus_json(
 `ks_compare`: **D** = max |F_corpus − F_production|; **n_eff** a partir do número
 de **imagens**; **p_value** pela aproximação assintótica clássica de KS.
 
-| Rotas | Base | Esta lição |
+| Rotas | Base | Esta aula |
 | :--- | :---: | :---: |
 | `/inference-{blur,grayscale,resize}` | sim | sim |
 | `/monitor-histogram-corpus-{json,csv,image}` | não | sim |
@@ -142,7 +142,7 @@ return max(abs(a - b) for a, b in zip(cdf_a, cdf_b))
 
 Total de cada histograma = 20. **D = 0,50** (atingido nos bins 1 e 3).
 
-Confirmação rápida em Python (na pasta desta lição):
+Confirmação rápida em Python (na pasta desta aula):
 
 ```bash
 uv run --no-active python -c "
@@ -168,7 +168,7 @@ print('D', ks_statistic(F, G))
 O teste **não** diz *por que* diferem (câmeras, domínio, bug de pré-processamento);
 só quantifica se o afastamento máximo das CDF é compatível com o acaso sob H₀.
 
-Nesta lição, corpus = referência de treino e production = pedidos servidos: um
+Nesta aula, corpus = referência de treino e production = pedidos servidos: um
 D grande (e p-valor pequeno) é o alarme didático de *data drift* nas
 intensidades.
 

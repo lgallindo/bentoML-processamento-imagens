@@ -1,4 +1,4 @@
-# Lição 007 — KS no tráfego misto de paisagem (BentoML + Streamlit)
+# Aula 007 — KS no tráfego misto de paisagem (BentoML + Streamlit)
 
 ## Por que estamos aqui
 
@@ -272,7 +272,7 @@ Caminho **offline** (lotes já materializados em JSON, sem servidor):
 
 ```bash
 cd 007_ks_mixed_landscape_streamlit
-# entra na pasta da lição
+# entra na pasta da aula
 
 just sync
 # cria/atualiza .venv e instala dependências do pyproject (uv)
@@ -341,7 +341,7 @@ callout: D_control ≤ D_landscapes ≤ D_forests (ordem típica)
 
 ## Comparação com a base
 
-A base só devolve a imagem filtrada. Esta lição grava o pedido e analisa a
+A base só devolve a imagem filtrada. Esta aula grava o pedido e analisa a
 distribuição de **L** no Streamlit, com ênfase no lote **misto** de paisagem.
 
 ## Testes
