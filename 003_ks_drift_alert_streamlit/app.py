@@ -62,8 +62,10 @@ LOTE_ROTULO = {
     "forests": "Florestas",
     "beaches": "Praias",
     "balls": "Bolas",
-    "landscapes": "Mistura praias e florestas",
 }
+
+# Lotes mistos ficam na aula opcional 007_ks_mixed_landscape_streamlit
+LOTES_EXCLUIDOS = frozenset({"landscapes"})
 
 POC_L = '''from PIL import Image
 
@@ -84,14 +86,16 @@ def repo_root() -> Path:
 def list_batches() -> list[str]:
     if not BATCH_STATS_DIR.is_dir():
         return []
-    return sorted(p.stem for p in BATCH_STATS_DIR.glob("*.json"))
+    return sorted(
+        p.stem
+        for p in BATCH_STATS_DIR.glob("*.json")
+        if p.stem not in LOTES_EXCLUIDOS and "+" not in p.stem
+    )
 
 
 def rotulo_lote(name: str) -> str:
     if name in LOTE_ROTULO:
         return LOTE_ROTULO[name]
-    if name.startswith("beaches+"):
-        return "Mistura de temas"
     return name
 
 
@@ -102,12 +106,7 @@ def theme_paths_for_batch(name: str) -> list[Path]:
         "control": root / "beaches",
         "beaches": root / "beaches",
         "balls": root / "balls",
-        "landscapes": None,
     }
-    if name == "landscapes" or name.startswith("beaches+"):
-        return sorted((root / "beaches").glob("*.jpg"))[:4] + sorted(
-            (root / "forests").glob("*.jpg")
-        )[:4]
     folder = mapping.get(name, root / name)
     if folder is None or not folder.is_dir():
         return []
@@ -248,10 +247,35 @@ if not batches:
 
 with st.sidebar:
     st.header("Parâmetros")
+    st.markdown(
+        """
+**Lote atual.** Escolha qual conjunto de produção comparar com a referência
+de treino (primeiras 50 praias em `corpus_stats.json`). Cada opção é um
+JSON em `batch_stats/`:
+
+- **Mesmo tema (outro trecho de praias)** — controle: espera-se **TRANQUILO**
+  ($D$ baixo).
+- **Florestas** — tema divergente: espera-se **ALERTA**.
+- **Bolas** (se existir no disco) — contingência visual.
+
+O lote misto praias+florestas não aparece aqui; ele é a aula opcional
+`007_ks_mixed_landscape_streamlit`.
+
+**Número de faixas.** Quantos baldes usar ao reagrupar o histograma de L
+antes de montar a CDF e calcular **D**. O freeze padrão usa **256** (um
+balde por nível de cinza). Valores menores (64, 32, …) suavizam a forma e
+podem mudar um pouco o **D**, mas a regra de alerta continua a mesma.
+Comece em 256; só reduza se quiser ver o efeito da resolução.
+"""
+    )
     batch_name = st.selectbox(
         "Lote atual",
         batches,
         format_func=rotulo_lote,
+        help=(
+            "Referência fixa = praias de treino. O lote é o lado “produção” "
+            "da comparação KS."
+        ),
     )
     n_intervalos = st.slider(
         "Número de faixas do histograma de L",
@@ -259,6 +283,10 @@ with st.sidebar:
         max_value=256,
         value=256,
         step=16,
+        help=(
+            "256 = resolução nativa de L. Menos faixas = histograma mais "
+            "grosso na mesma comparação."
+        ),
     )
 
 referencia = load_default_corpus_stats()

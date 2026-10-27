@@ -197,7 +197,11 @@ snapshot-batch
 ```
 
 O painel em [`app.py`](app.py) compara `corpus_stats.json` (referência de
-treino) com o JSON do lote escolhido na barra lateral.
+treino) com o JSON do lote escolhido na barra lateral. Use o seletor
+**Lote atual** para trocar controle (praias) / florestas / bolas; use o
+controle de **faixas** para reagrupar o histograma de L (256 no freeze).
+O lote misto praias+florestas fica na aula opcional
+[`007_ks_mixed_landscape_streamlit`](../007_ks_mixed_landscape_streamlit/README.md).
 
 Há também um caminho **offline**: `just build-demo-batches` materializa
 lotes de demonstração sem precisar do servidor no ar. Serve para estudar

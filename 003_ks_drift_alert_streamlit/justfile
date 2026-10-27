@@ -20,9 +20,8 @@ build-demo-batches:
     uv run --no-active python scripts/build_batch_from_theme.py beaches --name control --offset=50 --count=50
     uv run --no-active python scripts/build_batch_from_theme.py forests --name forests --offset=0 --count=50
 
-# Contingência: landscapes fundidos vs balls
+# Contingência visual (bolas). Lote misto praias+florestas → aula 007.
 build-contingency-batches:
-    uv run --no-active python scripts/build_batch_from_theme.py --themes beaches forests --name landscapes
     uv run --no-active python scripts/build_batch_from_theme.py balls --name balls --offset=0 --count=50
 
 save-grayscale-model:
