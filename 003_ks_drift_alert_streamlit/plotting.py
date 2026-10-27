@@ -68,6 +68,18 @@ def plot_cdf(
     return fig
 
 
+def abs_diff_cdfs(
+    cdf_a: Sequence[float],
+    cdf_b: Sequence[float],
+) -> tuple[np.ndarray, float, int]:
+    """δ(i) = |F_a(i) − F_b(i)|; devolve (δ, D, índice do máximo)."""
+    a = np.asarray(cdf_a, dtype=float)
+    b = np.asarray(cdf_b, dtype=float)
+    delta = np.abs(a - b)
+    idx = int(np.argmax(delta))
+    return delta, float(delta[idx]), idx
+
+
 def plot_dual_cdf(
     cdf_referencia: Sequence[float],
     cdf_lote: Sequence[float],
@@ -75,27 +87,53 @@ def plot_dual_cdf(
     title: str = "Duas CDFs da variável L",
     label_referencia: str = "referência",
     label_lote: str = "lote",
+    mark_ks: bool = True,
 ) -> Figure:
-    x = _series_x(len(cdf_referencia))
+    ref = np.asarray(cdf_referencia, dtype=float)
+    lote = np.asarray(cdf_lote, dtype=float)
+    x = _series_x(len(ref))
+    _, d_ks, idx = abs_diff_cdfs(ref, lote)
     sns.set_theme(style="whitegrid")
     fig, ax = plt.subplots(figsize=(8, 4.5))
-    sns.lineplot(
-        x=x,
-        y=np.asarray(cdf_referencia, dtype=float),
-        ax=ax,
-        label=label_referencia,
-    )
-    sns.lineplot(
-        x=x,
-        y=np.asarray(cdf_lote, dtype=float),
-        ax=ax,
-        label=label_lote,
-    )
+    sns.lineplot(x=x, y=ref, ax=ax, label=label_referencia)
+    sns.lineplot(x=x, y=lote, ax=ax, label=label_lote)
+    if mark_ks:
+        ax.vlines(
+            idx,
+            ymin=min(ref[idx], lote[idx]),
+            ymax=max(ref[idx], lote[idx]),
+            colors="#c62828",
+            linewidths=2.5,
+            label=f"D = {d_ks:.4f}",
+        )
     ax.set_xlabel("valor de L do pixel (0 … 255)")
     ax.set_ylabel("F(L)")
     ax.set_ylim(0.0, 1.05)
     ax.set_title(title)
     ax.legend()
+    fig.tight_layout()
+    return fig
+
+
+def plot_cdf_abs_diff(
+    cdf_referencia: Sequence[float],
+    cdf_lote: Sequence[float],
+    *,
+    title: str = "Diferença absoluta entre as CDFs",
+) -> Figure:
+    """Gráfico de δ(L) = |F_ref(L) − F_lote(L)| com D = max δ."""
+    delta, d_ks, idx = abs_diff_cdfs(cdf_referencia, cdf_lote)
+    x = _series_x(len(delta))
+    sns.set_theme(style="whitegrid")
+    fig, ax = plt.subplots(figsize=(8, 4.0))
+    sns.lineplot(x=x, y=delta, ax=ax, color="#6a1b9a", label="δ(L) = |F_ref − F_lote|")
+    ax.axhline(d_ks, color="#c62828", linestyle="--", linewidth=1.5, label=f"D = {d_ks:.4f}")
+    ax.scatter([idx], [d_ks], color="#c62828", zorder=5, s=40)
+    ax.set_xlabel("valor de L do pixel (0 … 255)")
+    ax.set_ylabel("δ(L)")
+    ax.set_ylim(0.0, max(1.05 * d_ks, 0.05))
+    ax.set_title(title)
+    ax.legend(loc="upper right")
     fig.tight_layout()
     return fig
 

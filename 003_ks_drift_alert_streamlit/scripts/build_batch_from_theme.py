@@ -34,7 +34,7 @@ def main(argv: list[str] | None = None) -> int:
         choices=("beaches", "forests", "balls"),
         help="tema único (omitir se usar --themes)",
     )
-    parser.add_argument("--name", help="nome do ficheiro em batch_stats/ (default=tema)")
+    parser.add_argument("--name", help="nome do arquivo em batch_stats/ (default=tema)")
     parser.add_argument("--offset", type=int, default=0)
     parser.add_argument("--count", type=int, default=12)
     parser.add_argument(

@@ -1,8 +1,8 @@
 """Kolmogorov–Smirnov entre histogramas agregados (corpus × production).
 
 Compara as CDFs empíricas derivadas das contagens de um canal. A forma da
-distribuição vem dos pixéis agregados; o tamanho efectivo da amostra para o
-p-valor é o número de **imagens** de cada conjunto.
+distribuição vem dos pixels agregados; o tamanho efetivo da amostra para o
+valor-p é o número de **imagens** de cada conjunto.
 """
 
 from __future__ import annotations
@@ -86,7 +86,7 @@ def compare_production_to_corpus(
     production_stats: dict | None = None,
     production_stats_path: str | Path | None = None,
 ) -> dict:
-    """Compatível com testes: corpus default + production dict ou ficheiro."""
+    """Compatível com testes: corpus default + production dict ou arquivo."""
     corpus = corpus_stats if corpus_stats is not None else load_default_corpus_stats()
     if production_stats is None:
         if production_stats_path is None:

@@ -1,20 +1,38 @@
 # Lição 003 — Alerta KS de drift (BentoML + Streamlit)
 
+## Por que estamos aqui
+
+O servidor pode estar “saudável” (responde 200, latência ok) e mesmo assim
+estar **recebendo um mundo diferente** daquele em que o fluxo foi pensado:
+outro tema de foto, outro jeito de usar o modelo, um lote que já não combina
+com a referência de treino. Essa inadequação não grita no `/metrics` de
+latência. Ela aparece na **forma dos dados**.
+
+Nesta aula medimos essa forma com uma variável só — a luminância **L** de
+cada pixel — e transformamos o afastamento entre duas curvas numa estatística
+**D** (Kolmogorov–Smirnov). Com limiares em **D** e no valor-p, montamos um
+**alerta**: o mesmo tipo de sinal que, num sistema real, poderia acionar
+página, ticket ou rule de monitoramento. Em uma frase: **monitoramos se o
+servidor ainda é adequado aos dados que chegam (ou a um uso distinto do
+modelo) alertando sobre a variável KS.**
+
+Como chegamos lá, passo a passo no Streamlit: histograma de L → CDF de L →
+diferença absoluta δ entre as CDFs → **D = max δ** → banner.
+
 ## Variável: **L** (luminância de cada pixel)
 
-Tudo o que o Streamlit desenha (histograma, CDF, estatística de
-Kolmogorov–Smirnov) é a **distribuição de L sobre os pixels** de cada
-conjunto de imagens.
+**Não** usamos a luminância média da imagem como eixo X. O eixo das
+distribuições é **L de cada pixel**: cinza 0…255 depois de
+`Image.convert("L")`. Histograma, CDF e KS agregam **pixels** de todas as
+imagens do conjunto.
 
 | Símbolo | O que é |
 | :--- | :--- |
-| **L** | Valor de cinza do pixel após `Image.convert("L")`: inteiro **0** (preto) … **255** (branco) |
-| Unidade da amostra | **Pixel** (não a imagem inteira; RGB por canal fica de fora deste KS) |
+| **L** | Valor de cinza do **pixel** (0 = preto … 255 = branco) |
+| Unidade da amostra | **Pixel** (não a média por imagem; RGB por canal fica de fora deste KS) |
 | Comparação | distribuição de L na **referência** vs distribuição de L no **lote** |
 
 ### Como extrair L de uma imagem (prova de conceito)
-
-Mínimo com Pillow — sem defensiva:
 
 ```python
 from PIL import Image
@@ -25,55 +43,92 @@ contagens = img.histogram()               # 256 faixas: quantos pixels têm cada
 ```
 
 No serviço da lição, o mesmo L entra no JSON de `request_features/` a cada
-`/inference-grayscale`; o Streamlit só agrega e compara.
+`/inference-grayscale`; o Streamlit agrega e compara.
 
-## Objetivo
+## Objetivo operacional
 
-Tratar um tema de imagens como referência de «treino» (sem rede neural),
-enviar outro tema por `/inference-grayscale` com log em `request_features/`,
-e no **Streamlit** montar histograma de **L** → CDF de **L** → KS, com banner
-ALERTA / ATENÇÃO / TRANQUILO / INCONCLUSIVO.
+1. Fixar um tema como referência de «treino» (sem rede neural).
+2. Enviar outro tema (ou o mesmo) por `/inference-grayscale` com log.
+3. No Streamlit, ver se **D** e o valor-p disparam o banner — ensaio de
+   alerta sobre adequação dados↔serviço.
 
-A árvore é autocontida (padrão BentoML + log); o KS vive só no Streamlit.
+Banner: ALERTA / SINAL PARCIAL / TRANQUILO / INCONCLUSIVO.
 
 ## Entrada e saída
 
 **Referência:** as primeiras 50 imagens de `samples/beaches/` (110 no tema)
-viram `corpus_stats.json` (`just extract-features && just build-corpus-stats`).
+viram `corpus_stats.json`.
 
 **Lotes de demonstração (offline):** `just build-demo-batches` grava
 
 - `batch_stats/control.json` — praias 51–100 (mesmo tema, outro trecho)
 - `batch_stats/forests.json` — 50 florestas (tema divergente)
 
-No Streamlit: amostra de imagem acima de cada histograma; construção do
-histograma e da CDF de **L** em cada lado; as duas CDFs juntas; **D**,
-valor-p, n efectivo.
+No Streamlit: amostra acima de cada histograma; CDF; δ; **D** e valor-p.
 
-**Leituras típicas com n = 50 imagens por lado:**
+**Leituras típicas (50 imagens por lado):**
 
 | Lote | D (aprox.) | Banner |
 | :--- | ---: | :--- |
-| florestas | ~0,23 | **ATENÇÃO** (D ≥ 0,10; valor-p ≈ 0,12 com n efectivo por imagens) |
+| florestas | ~0,23 | **SINAL PARCIAL** (D ≥ 0,10; valor-p ainda alto com amostra por imagens) |
 | controle | ~0,05 | **TRANQUILO** |
-
-O valor-p usa n efectivo pelas **contagens de imagens**; **D** e as curvas
-de L carregam a leitura visual. Prometheus / Grafana ficam para lições
-posteriores.
 
 **Regra do banner (v1):**
 
-- **INCONCLUSIVO** se `n_images` &lt; 8 de qualquer lado
+- **INCONCLUSIVO** se poucas imagens de qualquer lado
 - **ALERTA** se valor-p &lt; 0,05 **e** D ≥ 0,10
-- **ATENÇÃO** se exactamente um dos dois dispara
+- **SINAL PARCIAL** se exatamente um dos dois dispara
 - **TRANQUILO** se nenhum dispara
+
+### Do histograma à CDF (rascunho)
+
+```text
+# Variáveis:
+# contagens — lista de inteiros do histograma de L
+# total — soma(contagens) = número de pixels no conjunto
+# acumulado — soma parcial ao percorrer as faixas
+# cdf — lista de F(L) em [0, 1]
+# c — contagem da faixa corrente
+
+total ← soma(contagens)
+acumulado ← 0
+cdf ← lista vazia
+para cada c em contagens:
+    acumulado ← acumulado + c
+    acrescentar (acumulado / total) em cdf
+```
+
+### Das duas CDFs a δ e a D
+
+```text
+# Variáveis:
+# F_ref, F_lote — CDFs de L na mesma grade
+# delta — δ(i) = |F_ref[i] − F_lote[i]|
+# D — máximo de delta (estatística KS)
+# i_star — faixa do máximo
+
+delta ← lista vazia
+para i de 0 até comprimento(F_ref) − 1:
+    acrescentar |F_ref[i] − F_lote[i]| em delta
+D ← máximo(delta)
+i_star ← argmáximo(delta)
+```
+
+## Ramos planejados (rascunho)
+
+Detalhe em
+[`docs/designs/ks-003-ramos-planejados.md`](../docs/designs/ks-003-ramos-planejados.md).
+
+1. **Produção mista praias + paisagem** — mesmo KS, mas o lote junta
+   `beaches/` e `forests/` num único batch (tráfego misturado).
+2. **Segundo ramo** — a definir; aguardando a próxima instrução.
 
 ## Como executar
 
 ```bash
 cd 003_ks_drift_alert_streamlit
 just sync
-just download-samples          # aponta para samples/ na raiz
+just download-samples
 just extract-features
 just build-corpus-stats
 just build-demo-batches
@@ -86,7 +141,7 @@ Caminho **com servidor** (log real):
 just serve                     # terminal 1
 just clear-request-features
 just exercise-theme forests
-just snapshot-batch forests    # → batch_stats/forests.json
+just snapshot-batch forests
 just clear-request-features
 just exercise-theme beaches --offset=12 --count=12
 just snapshot-batch control
@@ -99,17 +154,13 @@ just streamlit
 imagem → convert("L") → histograma de L (pixels)
 beaches[:50] → soma dos histogramas → corpus_stats.json
 lote → /inference-grayscale → request_features/ → batch_stats/
-Streamlit: histograma de L → CDF de L → D, valor-p → banner
+Streamlit: histograma → CDF → δ=|F_ref−F_lote| → D=max δ → banner (alerta)
 ```
-
-`n_eff = n_c × n_p / (n_c + n_p)` com **n = número de imagens** (só no
-valor-p; a forma da distribuição continua sendo a dos **pixels** via L).
 
 ## Comparação com a base
 
 A base só devolve a imagem filtrada. Esta lição grava o pedido (como a linha
-`020`) e analisa a distribuição de **L** no Streamlit (sem rotas
-`/monitor-ks-*`).
+`020`) e analisa a distribuição de **L** no Streamlit.
 
 ## Testes
 
