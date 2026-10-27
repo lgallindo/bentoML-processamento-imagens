@@ -200,7 +200,7 @@ para 400. Foram sete linhas de código para não mentir sobre de quem é a culpa
 
 ---
 
-## A lição
+## A aula
 
 > O BentoML não te poupou de escrever um filtro de imagem — o Pillow já fazia
 > isso. Ele te poupou de escrever a **camada de transporte**: rota, parsing,

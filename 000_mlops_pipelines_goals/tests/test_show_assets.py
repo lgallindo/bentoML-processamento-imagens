@@ -30,7 +30,9 @@ GOAL_WATCH_PHRASES = (
 INDEX_FOLDERS = (
     "001_histogram_cdf_cli",
     "002_histogram_cdf_streamlit",
-    "003_prometheus_histcdf_streamlit",
+    "003_ks_drift_alert_streamlit",
+    "004_prometheus_histcdf_streamlit",
+    "005_ks_anomaly_detection_streamlit",
     "010_corpus_histograms_model",
     "020_grayscale_request_logging",
     "030_request_log_histograms",
@@ -84,7 +86,7 @@ def test_readme_goals_path_and_runtime_label() -> None:
     assert "BentoML" in text and "Prometheus" in text and "Grafana" in text
     assert "Runtime (BentoML)" in text
     assert "## Comparação com a base" not in text
-    assert "## Por que esta lição existe" not in text
+    assert "## Por que esta aula existe" not in text
     assert "../docs/prometheus.md" in text
     assert "../docs/grafana.md" in text
 

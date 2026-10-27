@@ -1,0 +1,25 @@
+[project]
+name = "ks-drift-alert-streamlit"
+version = "0.1.0"
+description = "BentoML grayscale + request log; Streamlit KS drift alert"
+readme = "README.md"
+authors = [
+    { name = "Lucas Gallindo", email = "15238731+lgallindo@users.noreply.github.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "bentoml>=1.4.39",
+    "pillow>=10.0.0",
+    "numpy>=2.0.0",
+    "seaborn>=0.13.0",
+    "streamlit>=1.40.0",
+    "httpx>=0.28.1",
+]
+
+[tool.uv]
+package = false
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]

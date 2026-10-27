@@ -1,4 +1,4 @@
-# Lição 020 — Registro de estatísticas em `/inference-grayscale`
+# Aula 020 — Registro de estatísticas em `/inference-grayscale`
 
 ## Objetivo
 
@@ -25,7 +25,7 @@ def inference_grayscale(self, image: ImageInput) -> PILImage:
     return image.convert("L")
 ```
 
-**TO-BE (esta lição)** — log offline, depois modelo:
+**TO-BE (esta aula)** — log offline, depois modelo:
 
 ```python
 @bentoml.api(route="/inference-grayscale")
@@ -35,10 +35,10 @@ def inference_grayscale(self, image: ImageInput) -> PILImage:
 ```
 
 O módulo `request_log` escreve JSON com a mesma forma do corpus (`luminance_mean`,
-histogramas L/R/G/B), mais `logged_at`. Nesta lição o log **não** tem API de
+histogramas L/R/G/B), mais `logged_at`. Nesta aula o log **não** tem API de
 relatório de production.
 
-| Rotas | Base | Esta lição |
+| Rotas | Base | Esta aula |
 | :--- | :---: | :---: |
 | `/inference-{blur,grayscale,resize}` | sim | sim (grayscale com log) |
 | `/monitor-histogram-corpus-{json,csv,image}` | não | sim |
@@ -67,7 +67,7 @@ exemplo:
 
 O JSON de pedido tem a **mesma forma** que `features/*.json` do corpus
 (`bins`, `luminance_mean`, `histograms`), mais `logged_at` e `endpoint`.
-Não há rota HTTP que devolva esse JSON avulso nesta lição — só o efeito em
+Não há rota HTTP que devolva esse JSON avulso nesta aula — só o efeito em
 disco.
 
 **Blur / resize:** a mesma imagem em `/inference-blur` (ou resize) **não** cria

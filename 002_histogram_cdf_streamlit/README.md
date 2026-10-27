@@ -1,4 +1,4 @@
-# Lição 002 — Histograma e CDF em Streamlit
+# Aula 002 — Histograma e CDF em Streamlit
 
 ## Objetivo
 
@@ -67,7 +67,7 @@ texto.
 
 ## Como executar
 
-Na pasta desta lição (a partir da raiz do repositório:
+Na pasta desta aula (a partir da raiz do repositório:
 `cd 002_histogram_cdf_streamlit`):
 
 ```bash
@@ -128,4 +128,4 @@ cdf ← cdf_from_counts(counts)
 O gráfico usa os **centros** `(edges[i]+edges[i+1])/2` para alinhar barras e
 pontos da CDF.
 
-[`003_prometheus_histcdf_streamlit`](../003_prometheus_histcdf_streamlit/README.md)
+[`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md)

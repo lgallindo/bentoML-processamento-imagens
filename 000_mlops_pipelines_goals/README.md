@@ -1,4 +1,4 @@
-# Lição 000 — Pipelines de MLOps e objetivos de monitoramento
+# Aula 000 — Pipelines de MLOps e objetivos de monitoramento
 
 Este repositório (`bentoML-processamento-imagens`) ensina, pasta a pasta, a
 observar um serviço BentoML de processamento de imagens: do vocabulário de
@@ -62,13 +62,18 @@ flowchart LR
   W -.->|HTTP| R
 ```
 
-## Índice das lições
+## Índice das aulas
 
 | Pasta | O que você leva |
 | :--- | :--- |
 | `001_histogram_cdf_cli` | Histograma e CDF de uma lista de números na CLI (JSON/CSV/PNG) |
 | `002_histogram_cdf_streamlit` | O mesmo objeto histograma+CDF num app Streamlit |
-| `003_prometheus_histcdf_streamlit` | Buckets de latência do Prometheus → histograma/CDF + PromQL |
+| `003_ks_drift_alert_streamlit` | Referência vs lote: KS + alerta sobre D no Streamlit |
+| `004_prometheus_histcdf_streamlit` | Buckets de latência do Prometheus → histograma/CDF + PromQL |
+| `005_ks_anomaly_detection_streamlit` | Anomalia KS: candidato ou janela temporal vs referência |
+| `006_ks_input_output_streamlit` | KS na entrada e na saída do serviço (alerta duplo sobre D) |
+| `007_ks_mixed_landscape_streamlit` | Tráfego misto: praias+florestas no lote vs referência KS |
+| `008_psi_drift_alert_streamlit` | Alerta PSI (média de L por imagem; espelho L por pixel) |
 | `010_corpus_histograms_model` | Corpus de treino + modelo picklable de cinza no BentoML |
 | `020_grayscale_request_logging` | Log em disco das features de cada pedido a `/inference-grayscale` |
 | `030_request_log_histograms` | Histogramas de production vs corpus (olhar drift) |

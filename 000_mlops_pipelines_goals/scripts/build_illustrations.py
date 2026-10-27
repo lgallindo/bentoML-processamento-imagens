@@ -16,11 +16,12 @@ RUNTIME_LABEL = "Runtime (BentoML)"
 GOAL_COLUMNS: tuple[tuple[str, tuple[str, ...]], ...] = (
     (
         "Saúde do servidor",
-        ("raiz /metrics", "003_prometheus_histcdf_streamlit"),
+        ("raiz /metrics", "004_prometheus_histcdf_streamlit"),
     ),
     (
         "Drift de dados",
         (
+            "003_ks_drift_alert_streamlit",
             "010_corpus_histograms_model",
             "020_grayscale_request_logging",
             "030_request_log_histograms",
@@ -29,11 +30,14 @@ GOAL_COLUMNS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ),
     (
         "Detecção de anomalias",
-        ("003_prometheus_histcdf_streamlit (prévia)", "detector: backlog"),
+        (
+            "005_ks_anomaly_detection_streamlit",
+            "004_prometheus_histcdf_streamlit (métricas)",
+        ),
     ),
 )
 
-ANOMALY_BACKLOG_CHIP = "detector: backlog"
+ANOMALY_BACKLOG_CHIP = "005_ks_anomaly_detection_streamlit"
 
 REMASTER = ILLUSTRATIONS / "src" / "pipelines-remaster.jpg"
 MUNDO_VEIO = Path.home() / "Downloads" / "monitoramento" / "mundo-veio.png"

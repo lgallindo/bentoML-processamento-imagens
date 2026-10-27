@@ -1,0 +1,10 @@
+service: "service:ImageProcessor"
+labels:
+  project: image-demo-03-request-log-histograms
+include:
+  - "*.py"
+  - "reference_stats.json"
+python:
+  packages:
+    - bentoml
+    - pillow

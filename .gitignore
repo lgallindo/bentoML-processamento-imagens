@@ -22,5 +22,14 @@ LATEST_COMMIT
 # Regras locais do agente (não versionar)
 PROJECT_RULES.md
 
-# OpenSpec local working tree (não versionar)
+# Local agent / review tooling (not part of the student clone)
+.gstack/
+
+# Agent/SDD working trees — local only (EDU-001 in bureaucracy STACK_EDU.md)
 openspec/
+.kiro/
+.specify/
+.openspec/
+
+# Agent sausage / local planning (never ship to turma)
+.local/

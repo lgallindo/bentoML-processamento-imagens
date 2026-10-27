@@ -1,0 +1,34 @@
+default:
+    @just --list
+
+sync:
+    uv sync --no-active
+
+download-samples:
+    @echo "Corpus temático: $(git rev-parse --show-toplevel)/samples/beaches/"
+    @echo "Drift: samples/forests/  |  Contingência: samples/balls/"
+    @echo "Confirme: just -f $(git rev-parse --show-toplevel)/justfile verify-themed-samples"
+
+extract-io-features theme="beaches" offset="0" count="50":
+    uv run --no-active python scripts/extract_io_features.py {{theme}} --offset={{offset}} --count={{count}}
+
+build-corpus-io:
+    uv run --no-active python scripts/build_corpus_io.py
+
+build-demo-batches-io:
+    uv run --no-active python scripts/build_demo_batches_io.py
+
+verify-io-alerts:
+    uv run --no-active python scripts/verify_io_alerts.py
+
+save-models:
+    uv run --no-active python scripts/save_grayscale_models.py
+
+streamlit port="8506":
+    uv run --no-active streamlit run app.py --server.port {{port}} --server.headless true
+
+serve port="3336":
+    uv run --no-active bentoml serve service:ImageProcessor --reload --port {{port}}
+
+test:
+    uv run --no-active pytest -q
