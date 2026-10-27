@@ -1,4 +1,4 @@
-"""Classroom banner for KS drift alert (v1 design locks)."""
+"""Regras de alerta sobre a estatística KS (D)."""
 
 from __future__ import annotations
 
@@ -6,7 +6,24 @@ MIN_IMAGES = 8
 P_ALERT = 0.05
 D_ALERT = 0.10
 
-Banner = str  # ALERT | WATCH | QUIET | INCONCLUSIVE
+Alert = str  # ALERT | QUIET | INCONCLUSIVE
+Banner = Alert  # compatível com testes legados
+
+
+def alert_on_d(
+    statistic: float,
+    n_images_corpus: int,
+    n_images_production: int,
+    *,
+    min_images: int = MIN_IMAGES,
+    d_threshold: float = D_ALERT,
+) -> Alert:
+    """Alerta didático centrado em D (a estatística monitorada)."""
+    if n_images_corpus < min_images or n_images_production < min_images:
+        return "INCONCLUSIVE"
+    if statistic >= d_threshold:
+        return "ALERT"
+    return "QUIET"
 
 
 def banner_rule(
@@ -19,7 +36,7 @@ def banner_rule(
     p_threshold: float = P_ALERT,
     d_threshold: float = D_ALERT,
 ) -> Banner:
-    """Four-outcome classroom banner from KS D, p-value, and image counts."""
+    """Legado: quatro saídas com valor-p (testes / scripts antigos)."""
     if n_images_corpus < min_images or n_images_production < min_images:
         return "INCONCLUSIVE"
     p_fire = p_value < p_threshold

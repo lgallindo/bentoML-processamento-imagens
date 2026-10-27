@@ -56,5 +56,8 @@ curl-inference-grayscale image output="grayscale.png" port="3333":
 verify-ks-banner batch="forests":
     uv run --no-active python scripts/verify_ks_banner.py {{batch}}
 
+generate-illustrations:
+    uv run --no-active python scripts/generate_illustrations.py
+
 test:
     uv run --no-active pytest -q

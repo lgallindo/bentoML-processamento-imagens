@@ -1,4 +1,4 @@
-"""Streamlit: histograma → CDF → KS da luminância L entre referência e lote."""
+"""Streamlit: histograma → CDF → KS da luminância L; alerta sobre D."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from pathlib import Path
 import streamlit as st
 from PIL import Image
 
-from banner import banner_rule
+from banner import alert_on_d
 from corpus_stats import load_default_corpus_stats
 from ks_compare import compare_stats
 from plotting import (
@@ -23,21 +23,19 @@ from request_stats import load_request_stats
 
 ROOT = Path(__file__).resolve().parent
 BATCH_STATS_DIR = ROOT / "batch_stats"
+ILLUSTRATIONS = ROOT / "illustrations"
 
-BANNER_PT = {
+ALERTA_PT = {
     "ALERT": "ALERTA",
-    "WATCH": "SINAL PARCIAL",
     "QUIET": "TRANQUILO",
     "INCONCLUSIVE": "INCONCLUSIVO",
 }
 
 ALGORITMO_CDF = """\
 # Variáveis:
-# contagens — lista de inteiros do histograma de L (passo 1)
-# total — soma(contagens) = número de pixels no conjunto
-# acumulado — soma parcial ao percorrer as faixas
-# cdf — lista de F(L) em [0, 1], uma entrada por faixa
-# c — contagem da faixa corrente
+# contagens — histograma de L
+# total — soma(contagens) = número de pixels
+# acumulado, cdf, c
 
 total ← soma(contagens)
 acumulado ← 0
@@ -45,24 +43,18 @@ cdf ← lista vazia
 para cada c em contagens:
     acumulado ← acumulado + c
     acrescentar (acumulado / total) em cdf
-# cdf[i] = fração dos pixels com L na faixa i ou mais escura
 """
 
 ALGORITMO_DELTA = """\
 # Variáveis:
-# F_ref — CDF de L do conjunto de referência (passo 2)
-# F_lote — CDF de L do lote atual (passo 2)
-# i — índice da faixa (mesmo eixo de L nas duas CDFs)
-# delta — lista δ(i) = |F_ref[i] − F_lote[i]|
-# D — estatística de Kolmogorov–Smirnov (= máximo de delta)
-# i_star — faixa onde delta atinge o máximo
+# F_ref, F_lote — CDFs na mesma grade de L
+# delta, D, i_star
 
 delta ← lista vazia
 para i de 0 até comprimento(F_ref) − 1:
     acrescentar |F_ref[i] − F_lote[i]| em delta
 D ← máximo(delta)
 i_star ← argmáximo(delta)
-# O gráfico abaixo é delta; a linha tracejada é D.
 """
 
 LOTE_ROTULO = {
@@ -75,9 +67,8 @@ LOTE_ROTULO = {
 
 POC_L = '''from PIL import Image
 
-img = Image.open("foto.jpg").convert("L")  # cada pixel → L ∈ {0, …, 255}
-contagens = img.histogram()               # 256 faixas: quantos pixels têm cada L
-# A distribuição nesta aula é a de L sobre os pixels (somando várias imagens).
+img = Image.open("foto.jpg").convert("L")  # L ∈ {0, …, 255} por pixel
+contagens = img.histogram()
 '''
 
 
@@ -135,40 +126,99 @@ def mostrar_amostra(caminho: Path | None, legenda: str) -> None:
     st.image(Image.open(caminho), caption=legenda, width=220)
 
 
+def fig(name: str) -> Path | None:
+    path = ILLUSTRATIONS / name
+    return path if path.is_file() else None
+
+
 st.set_page_config(page_title="Alerta KS de drift", layout="wide")
 st.title("Alerta KS de drift")
 
+st.header("Meta desta aula")
 st.markdown(
     """
-### Meta desta aula
+Este serviço pode responder **rápido** e com **HTTP 200** e, mesmo assim,
+trabalhar sobre um mundo diferente do treino: outro tema de foto, outro
+padrão de uso do modelo. A latência mede espera. Ela não mede se os
+**dados** ainda combinam com a referência.
 
-O serviço pode responder bem e mesmo assim estar **descasado dos dados** que
-chegam — outro tema de imagem, outro uso do modelo. Latência sozinha não
-conta essa história. Aqui medimos o afastamento na **forma** dos dados e
-ligamos isso a um **alerta** sobre a estatística de Kolmogorov–Smirnov (**D**):
-o mesmo gesto que, em produção, alimentaria uma rule de monitoramento.
+Aqui você mede essa combinação na **forma** da distribuição de luminância
+**L**, resume o afastamento numa estatística **D** (Kolmogorov–Smirnov) e
+produz um **alerta** quando **D** cruza um limiar.
+"""
+)
+fluxo = fig("01_workflow_l_to_alert.png")
+if fluxo:
+    st.image(str(fluxo), caption="Fluxo: L → histograma → CDF → δ → D → alerta")
 
-**Como:** comparamos a distribuição de luminância **L** da referência com a
-do lote; montamos as CDFs; calculamos **δ = |F_ref − F_lote|**; tomamos
-**D = max δ**; o banner reage a **D** e ao valor-p.
+st.header("Definições")
 
-### Variável sob estudo: **L** (luminância de **cada pixel**)
+st.subheader("L — luminância do pixel")
+st.markdown(
+    r"""
+**Didática.** Cada pixel vira um tom de cinza: 0 = preto, 255 = branco.
 
-O eixo X **não** é a luminância média da imagem. É o valor de cinza de
-**cada pixel** após `Image.convert("L")`: inteiro **0** (preto) … **255**
-(branco). Histograma, CDF e KS agregam **pixels** do conjunto — não médias
-por foto, nem RGB canal a canal.
+**Formal.** Após `Image.convert("L")`, \(L(u,v) \in \{0,\ldots,255\}\).
+O eixo das distribuições é **L por pixel**, não a média de L por imagem
+(médias geram falso alerta no controle de mesmo tema).
+"""
+)
+st.code(POC_L, language="python")
+
+st.subheader("Histograma")
+st.markdown(
+    r"""
+**Didática.** Conta quantos pixels caíram em cada faixa de L.
+
+**Formal.** \(h_k\) = número de pixels na faixa \(k\),
+\(N = \sum_k h_k\). Para um conjunto de imagens, some os histogramas.
 """
 )
 
-st.code(POC_L, language="python")
+st.subheader("CDF")
+st.markdown(
+    r"""
+**Didática.** Em cada faixa: *até aqui, que fração dos pixels já passou?*
+A curva sobe de 0 a 1.
+
+**Formal.**
+$$
+F_k = \frac{1}{N}\sum_{i=0}^{k} h_i.
+$$
+
+**Exemplo mínimo** — contagens `[2, 1, 3]` (\(N=6\)) →
+CDF `[2/6, 3/6, 6/6]`.
+"""
+)
+toy = fig("02_hist_to_cdf_toy.png")
+if toy:
+    st.image(str(toy), caption="Do histograma à CDF — exemplo mínimo")
+st.code(ALGORITMO_CDF, language="text")
+
+st.subheader("δ e D")
+st.markdown(
+    r"""
+**Didática.** Compare a CDF da referência \(F\) com a do lote \(G\). Em cada
+faixa, a distância vertical é \(\delta\). **D** é a maior dessas distâncias.
+
+**Formal.**
+$$
+\delta_k = |F_k - G_k|,
+\qquad
+D = \max_k \delta_k.
+$$
+
+**Alerta sobre D** (regra desta aula): INCONCLUSIVO se poucas imagens;
+**ALERTA** se \(D \ge 0{,}10\); **TRANQUILO** se \(D < 0{,}10\).
+"""
+)
 
 batches = list_batches()
 if not batches:
     st.warning(
         "Não há arquivos em `batch_stats/`. "
-        "Rode `just build-demo-batches` (offline) ou "
-        "`just exercise-theme` + `just snapshot-batch` com o servidor no ar."
+        "Rode `just build-demo-batches` ou "
+        "`just exercise-theme` + `just snapshot-batch`."
     )
     st.stop()
 
@@ -185,34 +235,36 @@ with st.sidebar:
         max_value=256,
         value=256,
         step=16,
-        help="Quantas faixas usamos ao agrupar os valores de L dos pixels.",
     )
 
 referencia = load_default_corpus_stats()
 lote = load_request_stats(BATCH_STATS_DIR / f"{batch_name}.json")
 payload = compare_stats(referencia, lote, channel="L", bins=n_intervalos)
-estado = banner_rule(
-    payload["p_value"],
+estado = alert_on_d(
     payload["statistic"],
     payload["n_images_corpus"],
     payload["n_images_production"],
 )
 
+st.header("Alerta sobre D neste lote")
 cores = {
     "ALERT": "#c62828",
-    "WATCH": "#ef6c00",
     "QUIET": "#2e7d32",
     "INCONCLUSIVE": "#546e7a",
 }
 st.markdown(
     f"<div style='padding:1rem;border-radius:8px;background:{cores[estado]};"
-    f"color:white;font-size:1.4rem;font-weight:600'>{BANNER_PT[estado]}</div>",
+    f"color:white;font-size:1.4rem;font-weight:600'>"
+    f"{ALERTA_PT[estado]} — D = {payload['statistic']:.4f}</div>",
     unsafe_allow_html=True,
 )
-
-m1, m2 = st.columns(2)
-m1.metric("D (KS sobre L)", f"{payload['statistic']:.4f}")
-m2.metric("valor-p", f"{payload['p_value']:.4g}")
+st.metric("D (Kolmogorov–Smirnov sobre L)", f"{payload['statistic']:.4f}")
+st.caption(
+    f"Nota: valor-p assintótico ≈ {payload['p_value']:.4g} "
+    f"(n efetivo por imagens ≈ {payload['n_eff']:.2f}). "
+    "Há complexidades de graus de liberdade / dependência entre pixels da "
+    "mesma foto; o alerta desta aula responde só a **D**, não ao valor-p."
+)
 
 label_ref = "referência (praias de treino)"
 label_lote = rotulo_lote(batch_name)
@@ -220,14 +272,6 @@ amostra_ref = caminhos_referencia()[:1]
 amostra_lote = theme_paths_for_batch(batch_name)[:1]
 
 st.header("1. Histograma de L em cada conjunto")
-st.markdown(
-    """
-Para cada imagem, `convert("L")` + `histogram()` conta quantos pixels caem
-em cada valor de **L**. Somamos essas contagens em todas as imagens do
-conjunto. As barras abaixo são essa soma: a forma da distribuição de
-**L** (brilho dos pixels) na referência e no lote.
-"""
-)
 col_h1, col_h2 = st.columns(2)
 with col_h1:
     mostrar_amostra(
@@ -257,16 +301,7 @@ with col_h2:
     )
 
 st.header("2. CDF de L em cada conjunto")
-st.markdown(
-    """
-Do histograma do passo 1 para a CDF: percorra as faixas da esquerda para a
-direita, some as contagens e normalize pelo total de pixels. Em cada faixa,
-**F(L)** = fração dos pixels com luminância ≤ aquela faixa. Duas CDFs iguais
-⇒ mesma distribuição de L; o máximo de |F_ref − F_lote| é **D** do KS.
-"""
-)
-st.markdown("**Algoritmo (rascunho) — histograma → CDF**")
-st.code(ALGORITMO_CDF, language="text")
+st.markdown(r"Aplicamos \(F_k = (1/N)\sum_{i\le k} h_i\) a cada lado.")
 col_c1, col_c2 = st.columns(2)
 with col_c1:
     st.pyplot(
@@ -287,14 +322,9 @@ with col_c2:
         )
     )
 
-st.header("3. As duas CDFs de L no mesmo gráfico")
+st.header("3. As duas CDFs e o segmento D")
 st.markdown(
-    """
-Sobrepondo as curvas de **L**, o segmento vermelho vertical marca o ponto em
-que |F_ref − F_lote| é máximo — esse comprimento é a estatística **D** do KS.
-O banner resume **D** e o valor-p (ALERTA / SINAL PARCIAL / TRANQUILO /
-INCONCLUSIVO).
-"""
+    "O segmento vermelho vertical é **D** = máximo de |F_ref − F_lote|."
 )
 st.pyplot(
     plot_dual_cdf(
@@ -306,15 +336,7 @@ st.pyplot(
     )
 )
 
-st.header("4. Diferença absoluta entre as CDFs")
-st.markdown(
-    """
-Definimos a função **δ(L) = |F_ref(L) − F_lote(L)|** na mesma grade de faixas.
-O gráfico é δ; a linha tracejada e o ponto vermelho são
-**D = max δ(L)** — a estatística de Kolmogorov–Smirnov usada no banner.
-"""
-)
-st.markdown("**Algoritmo (rascunho) — duas CDFs → δ → D**")
+st.header("4. Função δ e D = max δ")
 st.code(ALGORITMO_DELTA, language="text")
 st.pyplot(
     plot_cdf_abs_diff(
@@ -324,26 +346,22 @@ st.pyplot(
     )
 )
 
-st.subheader("Miniaturas")
+st.header("Miniaturas")
 box_treino, box_lote = st.columns(2)
 with box_treino:
     with st.container(border=True):
         st.markdown("**Conjunto de treino (referência)**")
-        thumbs_treino = load_thumbnails(caminhos_referencia())
-        if thumbs_treino:
-            st.image(thumbs_treino, width=96)
-        else:
-            st.caption("Sem imagens de treino.")
+        thumbs = load_thumbnails(caminhos_referencia())
+        if thumbs:
+            st.image(thumbs, width=96)
 with box_lote:
     with st.container(border=True):
         st.markdown(f"**Lote atual — {label_lote}**")
-        thumbs_lote = load_thumbnails(theme_paths_for_batch(batch_name))
-        if thumbs_lote:
-            st.image(thumbs_lote, width=96)
-        else:
-            st.caption("Sem imagens neste lote.")
+        thumbs = load_thumbnails(theme_paths_for_batch(batch_name))
+        if thumbs:
+            st.image(thumbs, width=96)
 
-with st.expander("Detalhe numérico do KS"):
+with st.expander("Detalhe numérico"):
     visivel = {
         k: v
         for k, v in payload.items()
