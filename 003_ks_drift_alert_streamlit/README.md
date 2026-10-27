@@ -13,18 +13,16 @@ Do serviço em produção ao alerta sobre **D**. O painel vivo está em
 6. [Registro de pedidos](#6-registro-de-pedidos)
 7. [Imagens, pixels e luminância L](#7-imagens-pixels-e-luminância-l)
 8. [Histograma](#8-histograma)
-9. [Função de distribuição acumulada (CDF)](#9-função-de-distribuição-acumulada-cdf)
-10. [Exemplo numérico mínimo](#10-exemplo-numérico-mínimo)
-11. [Kolmogorov–Smirnov: de δ a D](#11-kolmogorovsmirnov-de-δ-a-d)
-12. [Alerta sobre D](#12-alerta-sobre-d)
-13. [Janela temporal no monitoramento](#13-janela-temporal-no-monitoramento)
-14. [Limiares de D / KS em outros contextos](#14-limiares-de-d--ks-em-outros-contextos)
-15. [O experimento desta aula](#15-o-experimento-desta-aula)
-16. [Estrutura da pasta](#16-estrutura-da-pasta)
-17. [Como executar](#17-como-executar)
-18. [Glossário](#18-glossário)
-19. [Testes](#19-testes)
-20. [Bibliografia](#20-bibliografia)
+9. [Cálculo passo a passo — CDF e KS (como no Streamlit)](#9-cálculo-passo-a-passo--cdf-e-ks-como-no-streamlit)
+10. [Alerta sobre D](#10-alerta-sobre-d)
+11. [Janela temporal no monitoramento](#11-janela-temporal-no-monitoramento)
+12. [Limiares de D / KS em outros contextos](#12-limiares-de-d--ks-em-outros-contextos)
+13. [O experimento desta aula](#13-o-experimento-desta-aula)
+14. [Estrutura da pasta](#14-estrutura-da-pasta)
+15. [Como executar](#15-como-executar)
+16. [Glossário](#16-glossário)
+17. [Testes](#17-testes)
+18. [Bibliografia](#18-bibliografia)
 
 ---
 
@@ -273,33 +271,65 @@ mesma na grade escolhida.
 
 ---
 
-## 9. Função de distribuição acumulada (CDF)
+## 9. Cálculo passo a passo — CDF e KS (como no Streamlit)
+
+Depois das definições, o painel em [`app.py`](app.py) percorre **quatro
+estágios numerados**: histograma de cada lado → CDF de cada lado → as duas
+CDFs com o segmento **D** → a função $\delta$ e $D = \max \delta$. Abaixo
+está a mesma conta, na mesma ordem. No código,
+`histogram.cumulative_distribution` faz o passo 2;
+`ks_compare.ks_statistic` faz o passo 4.
+
+### Passo 1 — Histograma de L em cada conjunto
+
+Monte o histograma agregado da **referência** (treino) e o do **lote**
+atual, na mesma grade de faixas de L (no freeze, $B = 256$; no Streamlit
+você pode reagrupar). Cada lado tem a sua lista de contagens
+$h^{\mathrm{ref}}_k$ e $h^{\mathrm{lote}}_k$, com totais
+
+$$
+N_{\mathrm{ref}} = \sum_k h^{\mathrm{ref}}_k,
+\qquad
+N_{\mathrm{lote}} = \sum_k h^{\mathrm{lote}}_k.
+$$
+
+No app isso aparece como “1. Histograma de L em cada conjunto”, com uma
+amostra de imagem acima de cada gráfico.
+
+### Passo 2 — CDF de L em cada conjunto
 
 O histograma ainda fala em “quantos”. A **função de distribuição
 acumulada** (CDF) fala em “até aqui, que fração do total?”. Você caminha
 dos baldes escuros para os claros, vai somando as contagens e divide pelo
-total $N$. A curva começa perto de zero e termina em um: nunca desce.
+total do **mesmo** lado. A curva começa perto de zero e termina em um:
+nunca desce.
+
+Para um histograma genérico com contagens $h_0,\ldots,h_{B-1}$ e
+$N = \sum_k h_k$,
 
 $$
 F_k = \frac{1}{N}\sum_{i=0}^{k} h_i
 \qquad (k = 0,\ldots,B-1).
 $$
 
+No Streamlit a legenda diz exatamente isso: aplicamos
+$F_k = (1/N)\sum_{i\le k} h_i$ a cada lado — uma CDF $F$ na referência e
+uma CDF $G$ no lote.
+
 Propriedades úteis:
 
 - $F_{-1}$ conceitualmente 0; $F_{B-1} = 1$ (se $N > 0$).
 - $F$ é não decrescente.
-- Dois conjuntos com o mesmo $N$ e as mesmas contagens têm a mesma
-  $F$; o que interessa na comparação é a **forma** de $F$ versus
-  $G$ (CDF do lote).
+- O que interessa na comparação é a **forma** de $F$ versus $G$, não o
+  número absoluto de pixels.
+
+Algoritmo (o mesmo bloco de texto que o app mostra em “CDF”):
 
 ```text
 # Variáveis:
-# contagens — histograma de L (lista de inteiros ≥ 0)
+# contagens — histograma de L
 # total — soma(contagens) = número de pixels
-# acumulado — soma parcial até a faixa atual
-# cdf — lista de frações em [0, 1]
-# c — contagem da faixa corrente
+# acumulado, cdf, c
 
 total ← soma(contagens)
 acumulado ← 0
@@ -309,39 +339,93 @@ para cada c em contagens:
     acrescentar (acumulado / total) em cdf
 ```
 
-No código da aula, isso corresponde a `cumulative_distribution` em
-`histogram.py`, usado por `ks_compare.py` e pelo app.
+Rode esse laço **duas vezes**: uma com as contagens da referência → $F$;
+outra com as do lote → $G$. As duas listas devem ter o mesmo comprimento
+(mesma grade de L).
 
----
+### Passo 3 — As duas CDFs e o segmento D
 
-## 10. Exemplo numérico mínimo
-
-Considere um histograma de brinquedo com **três** faixas e contagens
+Sobreponha $F$ e $G$ no mesmo eixo de L. Em cada faixa, a distância
+vertical entre as curvas é
 
 $$
-\mathbf{h} = [2,\ 1,\ 3].
+\delta_k = \lvert F_k - G_k \rvert.
 $$
 
-Então $N = 2+1+3 = 6$ e
+A estatística de Kolmogorov–Smirnov de duas amostras é o **maior** desses
+afastamentos:
+
+$$
+D = \max_k \delta_k
+= \sup_{x} \lvert F(x) - G(x) \rvert.
+$$
+
+No app, o estágio “3. As duas CDFs e o segmento D” desenha as duas curvas
+e marca em vermelho o segmento vertical cujo comprimento é **D** — o
+máximo de $\lvert F_{\mathrm{ref}} - F_{\mathrm{lote}} \rvert$. Se as
+formas de luminância forem parecidas, $D$ fica pequeno. Se o lote trouxer
+outro mundo visual, $D$ sobe.
+
+![Duas CDFs com segmento em D](illustrations/05_dual_cdf.png)
+
+### Passo 4 — Função δ e D = max δ
+
+O estágio “4. Função δ e D = max δ” do Streamlit materializa a lista
+completa de $\delta_k$ e destaca o máximo. Algoritmo (o mesmo bloco do
+app):
+
+```text
+# Variáveis:
+# F_ref, F_lote — CDFs na mesma grade de L
+# delta, D, i_star
+
+delta ← lista vazia
+para i de 0 até comprimento(F_ref) − 1:
+    acrescentar |F_ref[i] − F_lote[i]| em delta
+D ← máximo(delta)
+i_star ← argmáximo(delta)
+```
+
+![δ(L) e D = max δ](illustrations/06_delta_d.png)
+
+Em `ks_compare.py`, `ks_statistic` é exatamente
+$D = \max_i \lvert F_a[i] - F_b[i] \rvert$.
+
+### Exemplo numérico mínimo (os quatro passos em números)
+
+**Passo 1.** Histograma de brinquedo na referência, três faixas:
+
+$$
+\mathbf{h}^{\mathrm{ref}} = [2,\ 1,\ 3],
+\qquad
+N_{\mathrm{ref}} = 6.
+$$
+
+No lote:
+
+$$
+\mathbf{h}^{\mathrm{lote}} = [1,\ 1,\ 4],
+\qquad
+N_{\mathrm{lote}} = 6.
+$$
+
+**Passo 2.** CDF da referência (mesmo algoritmo do app):
 
 $$
 \begin{aligned}
 F_0 &= \frac{2}{6} = \frac{1}{3}, \\
-F_1 &= \frac{2+1}{6} = \frac{3}{6} = \frac{1}{2}, \\
-F_2 &= \frac{2+1+3}{6} = \frac{6}{6} = 1.
+F_1 &= \frac{2+1}{6} = \frac{1}{2}, \\
+F_2 &= \frac{2+1+3}{6} = 1.
 \end{aligned}
 $$
 
-Em lista: CDF = `[2/6, 3/6, 6/6]` — cerca de $0{,}33$, $0{,}50$ e $1$.
-
-Agora compare com um segundo histograma $\mathbf{g} = [1,\ 1,\ 4]$
-($N'=6$):
+CDF do lote:
 
 $$
 G = \Bigl[\tfrac{1}{6},\ \tfrac{2}{6},\ 1\Bigr].
 $$
 
-As distâncias verticais:
+**Passos 3 e 4.** Distâncias verticais e máximo:
 
 $$
 \begin{aligned}
@@ -351,8 +435,6 @@ $$
 \end{aligned}
 $$
 
-Logo
-
 $$
 D = \max_k \delta_k = \frac{1}{6} \approx 0{,}1667.
 $$
@@ -360,48 +442,6 @@ $$
 Com a regra $D \ge 0{,}10$, este brinquedo já cairia em **ALERTA**
 (supondo amostras grandes o bastante para sair de INCONCLUSIVO — ver o
 capítulo do alerta).
-
----
-
-## 11. Kolmogorov–Smirnov: de δ a D
-
-Queremos um único número que resuma “quão longe estão as duas formas de
-luminância”.
-
-Sejam $F$ a CDF da referência (treino) e $G$ a CDF do lote
-(produção), ambas na mesma grade de faixas. Defina
-
-$$
-\delta_k = \lvert F_k - G_k \rvert,
-\qquad
-D = \max_{k} \delta_k
-= \sup_{x} \lvert F(x) - G(x) \rvert.
-$$
-
-Interpretação geométrica: sobreponha as duas curvas CDF; em cada abscissa
-de L meça a distância vertical; **D** é o maior desses segmentos. Se as
-formas de luminância forem parecidas, $D$ fica pequeno. Se o lote
-trouxer outro mundo visual, $D$ sobe — e é sobre **esse** número que a
-aula dispara o alerta.
-
-![δ(L) e D = max δ](illustrations/06_delta_d.png)
-
-```text
-# Variáveis:
-# F_ref, F_lote — CDFs na mesma grade de L
-# delta — lista de |F_ref − F_lote|
-# D — máximo de delta
-# i_star — índice onde o máximo ocorre
-
-delta ← lista vazia
-para i de 0 até comprimento(F_ref) − 1:
-    acrescentar |F_ref[i] − F_lote[i]| em delta
-D ← máximo(delta)
-i_star ← argmáximo(delta)
-```
-
-No repositório, `ks_statistic` em `ks_compare.py` implementa exatamente
-$D = \max |F_a - F_b|$.
 
 ### Nota: valor-p
 
@@ -414,7 +454,7 @@ como motor do alarme. O alerta responde a **D**.
 
 ---
 
-## 12. Alerta sobre D
+## 10. Alerta sobre D
 
 Transformar a estatística contínua **D** numa decisão operacional legível
 no painel.
@@ -434,7 +474,7 @@ aula: **o alarme dispara sobre D**.
 
 ---
 
-## 13. Janela temporal no monitoramento
+## 11. Janela temporal no monitoramento
 
 Em produção, “o lote” quase nunca é “todas as imagens desde o início dos
 tempos”. Monitoramento de dados trabalha com **janelas**.
@@ -479,7 +519,7 @@ domínio de propósito (novo produto visual, nova câmera, novo mercado).
 
 ---
 
-## 14. Limiares de D / KS em outros contextos
+## 12. Limiares de D / KS em outros contextos
 
 Não existe um único “D mágico” para o planeta. Em estatística clássica, o
 teste de duas amostras pergunta se duas amostras podem ter vindo da mesma
@@ -529,7 +569,7 @@ estão bem afastadas?”.
 
 ---
 
-## 15. O experimento desta aula
+## 13. O experimento desta aula
 
 **Objetivo operacional.**
 
@@ -565,7 +605,7 @@ linha `020`) e analisa a distribuição de **L** no Streamlit.
 
 ---
 
-## 16. Estrutura da pasta
+## 14. Estrutura da pasta
 
 ```text
 003_ks_drift_alert_streamlit/
@@ -613,7 +653,7 @@ linha `020`) e analisa a distribuição de **L** no Streamlit.
 
 ---
 
-## 17. Como executar
+## 15. Como executar
 
 ### Caminho offline (lotes já materializados, sem servidor)
 
@@ -685,7 +725,7 @@ app: histograma → CDF → δ → D → alerta se D ≥ 0,10
 
 ---
 
-## 18. Glossário
+## 16. Glossário
 
 | Termo | Significado nesta aula |
 | :--- | :--- |
@@ -704,7 +744,7 @@ Cartão-resumo ainda mais curto:
 
 ---
 
-## 19. Testes
+## 17. Testes
 
 ```bash
 just test
@@ -712,7 +752,7 @@ just test
 
 ---
 
-## 20. Bibliografia
+## 18. Bibliografia
 
 1. [Kolmogorov–Smirnov (Wikipédia)](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test)
 2. Gama et al., *A survey on concept drift adaptation*, ACM CSUR 2014 —
@@ -721,6 +761,6 @@ just test
 4. Taplin & Hunt, Risks 2019 — [MDPI](https://www.mdpi.com/2227-9091/7/2/53)
 5. [Pillow — Image](https://pillow.readthedocs.io/en/stable/reference/Image.html)
 6. Limiares FRTB / crédito: ver links na
-   [seção 14](#14-limiares-de-d--ks-em-outros-contextos)
+   [seção 12](#12-limiares-de-d--ks-em-outros-contextos)
 
 [`004_prometheus_histcdf_streamlit`](../004_prometheus_histcdf_streamlit/README.md)
