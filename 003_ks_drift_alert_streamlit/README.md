@@ -246,7 +246,7 @@ com $B = 256$ no freeze padrão (o Streamlit deixa variar o número de
 faixas). Em notação de conjunto,
 
 $$
-h_k = \#\{\text{pixels com } L \text{ na faixa } k\}.
+h_k = \lvert\{\text{pixels com } L \text{ na faixa } k\}\rvert.
 $$
 
 Para várias imagens, some os histogramas imagem a imagem: o resultado é o
