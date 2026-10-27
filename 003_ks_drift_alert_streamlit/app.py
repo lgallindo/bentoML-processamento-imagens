@@ -156,11 +156,20 @@ st.header("Definições")
 st.subheader("L — luminância do pixel")
 st.markdown(
     r"""
-**Didática.** Cada pixel vira um tom de cinza: 0 = preto, 255 = branco.
+Uma fotografia digital é uma grade de pontos — os **pixels**. Em cores, cada
+pixel costuma carregar três canais. Para falar de “quão claro ou escuro” é o
+ponto, convertemos a imagem para tons de cinza: preto num extremo, branco no
+outro, e uma escada de cinzas no meio.
 
-**Formal.** Após `Image.convert("L")`, \(L(u,v) \in \{0,\ldots,255\}\).
-O eixo das distribuições é **L por pixel**, não a média de L por imagem
-(médias geram falso alerta no controle de mesmo tema).
+Na prática isso é `Image.convert("L")` no Pillow. Cada pixel passa a um
+inteiro de **0** (preto) a **255** (branco). Chamamos esse valor de
+**luminância** e o denotamos por **L**. Se \(I\) é a imagem e \((u,v)\) um
+sítio na grade, \(L(u,v) \in \{0,1,\ldots,255\}\).
+
+Tudo o que este app desenha e compara descreve a **distribuição de L sobre
+os pixels** do conjunto. O eixo não é a média de L por foto: uma média por
+imagem comprime demais a forma e, no controle de mesmo tema, pode disparar
+alerta à toa (ver `docs/notas-experimento-freeze.md` no handout).
 """
 )
 st.code(POC_L, language="python")
@@ -168,26 +177,30 @@ st.code(POC_L, language="python")
 st.subheader("Histograma")
 st.markdown(
     r"""
-**Didática.** Conta quantos pixels caíram em cada faixa de L.
+Com L em mão, a pergunta seguinte é: *em cada degrau de cinza, quantos
+pixels caíram?* Essa contagem, faixa a faixa, é o **histograma**.
 
-**Formal.** \(h_k\) = número de pixels na faixa \(k\),
-\(N = \sum_k h_k\). Para um conjunto de imagens, some os histogramas.
+Imagine baldes alinhados do preto ao branco. Cada pixel do conjunto cai num
+balde. A altura do balde \(k\) é a contagem \(h_k\). O total de pixels é
+\(N = \sum_k h_k\). Para várias imagens, some os histogramas imagem a
+imagem: o resultado é o histograma do **conjunto**.
 """
 )
 
 st.subheader("CDF")
 st.markdown(
     r"""
-**Didática.** Em cada faixa: *até aqui, que fração dos pixels já passou?*
-A curva sobe de 0 a 1.
+O histograma ainda fala em “quantos”. A **função de distribuição acumulada**
+(CDF) fala em “até aqui, que fração do total?”. Você caminha dos baldes
+escuros para os claros, vai somando as contagens e divide pelo total \(N\).
+A curva começa perto de zero e termina em um: nunca desce.
 
-**Formal.**
 $$
 F_k = \frac{1}{N}\sum_{i=0}^{k} h_i.
 $$
 
-**Exemplo mínimo** — contagens `[2, 1, 3]` (\(N=6\)) →
-CDF `[2/6, 3/6, 6/6]`.
+**Exemplo mínimo.** Contagens `[2, 1, 3]` (\(N=6\)) → CDF
+`[2/6, 3/6, 6/6]` — cerca de \(0{,}33\), \(0{,}50\) e \(1\).
 """
 )
 toy = fig("02_hist_to_cdf_toy.png")
@@ -198,26 +211,29 @@ st.code(ALGORITMO_CDF, language="text")
 st.subheader("δ e D")
 st.markdown(
     r"""
-**Didática.** Compare a CDF da referência \(F\) com a do lote \(G\). Em cada
-faixa, a distância vertical é \(\delta\). **D** é a maior dessas distâncias.
+Agora você tem duas curvas na mesma grade de L: \(F\) na referência
+(treino) e \(G\) no lote atual. Em cada faixa, a distância vertical entre
+elas é \(\delta_k = \lvert F_k - G_k \rvert\). A estatística de
+Kolmogorov–Smirnov de duas amostras é o **maior** desses afastamentos:
 
-**Formal.**
 $$
-\delta_k = |F_k - G_k|,
-\qquad
-D = \max_k \delta_k.
+D = \max_k \delta_k = \sup_x \lvert F(x) - G(x) \rvert.
 $$
 
-**Alerta sobre D** (regra desta aula + time boxing):
+Se as formas de luminância forem parecidas, \(D\) fica pequeno. Se o lote
+trouxer outro mundo visual, \(D\) sobe — e é sobre **esse** número que o
+alerta dispara.
 
 | Estado | Condição | Leitura |
 | :--- | :--- | :--- |
-| INCONCLUSIVO | n &lt; 8 em qualquer lado | Janela / lote ainda fino |
-| ALERTA | n ≥ 8 e D ≥ 0,10 | Formas de L divergem |
-| TRANQUILO | n ≥ 8 e D &lt; 0,10 | Compatível com a referência |
+| INCONCLUSIVO | \(n &lt; 8\) em qualquer lado | Janela / lote ainda fino |
+| ALERTA | \(n \ge 8\) e \(D \ge 0{,}10\) | Formas de L divergem |
+| TRANQUILO | \(n \ge 8\) e \(D &lt; 0{,}10\) | Compatível com a referência |
 
-Em produção o lote é uma **caixa de tempo** (ex.: pedidos dos **últimos
-30 dias**), não o histórico inteiro.
+Em produção o lote é uma **caixa de tempo** (por exemplo pedidos dos
+**últimos 30 dias**), não o histórico desde o dia zero. Sem esse fechamento
+temporal, misturam-se regimes antigos e novos e o **D** deixa de responder
+à pergunta *“o serviço ainda está adequado ao tráfego recente?”*.
 """
 )
 
@@ -270,8 +286,8 @@ st.metric("D (Kolmogorov–Smirnov sobre L)", f"{payload['statistic']:.4f}")
 st.caption(
     f"Nota: valor-p assintótico ≈ {payload['p_value']:.4g} "
     f"(n efetivo por imagens ≈ {payload['n_eff']:.2f}). "
-    "Há complexidades de graus de liberdade / dependência entre pixels da "
-    "mesma foto; o alerta desta aula responde só a **D**, não ao valor-p."
+    "Pixels da mesma foto não são independentes; o alerta responde só a "
+    "**D**, não ao valor-p."
 )
 
 label_ref = "referência (praias de treino)"

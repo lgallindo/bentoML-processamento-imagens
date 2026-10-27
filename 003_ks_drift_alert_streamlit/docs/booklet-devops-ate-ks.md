@@ -212,34 +212,25 @@ histograma → CDF → **D** com números estáveis.
 
 ## 7. Imagens, pixels e luminância L
 
-**Razão de ser.** Precisamos de um eixo numérico comum entre fotos
-diferentes. Nesta aula, esse eixo é a luminância por pixel.
+Precisamos de um eixo numérico comum entre fotos diferentes. Uma
+fotografia digital é uma grade de pontos — os **pixels**. Em cores, cada
+pixel costuma carregar três canais. Para falar de “quão claro ou escuro”
+é o ponto, convertemos a imagem para tons de cinza: preto num extremo,
+branco no outro, e uma escada de cinzas no meio.
 
-### Formal
-
-Seja \(I\) uma imagem. Após a conversão Pillow `Image.convert("L")`,
+Na prática isso é `Image.convert("L")` no Pillow. Cada pixel passa a um
+inteiro de **0** (preto) a **255** (branco). Chamamos esse valor de
+**luminância** e o denotamos por **L**. Se \(I\) é a imagem e \((u,v)\)
+um sítio na grade,
 
 \[
-L(u,v) \in \{0,1,\ldots,255\}
+L(u,v) \in \{0,1,\ldots,255\}.
 \]
 
-é a intensidade no sítio \((u,v)\): **0** = preto, **255** = branco.
-
-### Por que L por pixel (e não a média por imagem)
-
-O handout fixa a distribuição de **L por pixel** porque ela descreve a
-*textura tonal* do conjunto: céu claro, sombra densa, folhagem média,
-etc. A **média de L por imagem** comprime cada foto a um único número;
-no controle de mesmo tema (outro trecho de praias), essa compressão
-infla **D** e gera **falso alerta**, enquanto L por pixel permanece
-tranquilo.
-
-| Lente | praias[:50] vs florestas[:50] | praias[:50] vs praias[50:100] |
-| :--- | :--- | :--- |
-| **L por pixel** | \(D \approx 0{,}23\) → ALERTA | \(D \approx 0{,}05\) → TRANQUILO |
-| **Média de L** | \(D \approx 0{,}54\) → ALERTA | \(D \approx 0{,}18\) → ALERTA (falso no controle) |
-
-Trecho típico:
+A comparação desta lição descreve a **distribuição de L sobre os
+pixels** do conjunto. A média de L por foto comprime demais a forma;
+números e o contraste com o controle estão em
+[`notas-experimento-freeze.md`](notas-experimento-freeze.md).
 
 ```python
 from PIL import Image
@@ -252,10 +243,12 @@ contagens = img.histogram()  # 256 faixas
 
 ## 8. Histograma
 
-**Didática.** Conta quantos pixels caíram em cada faixa de luminância.
+Com L em mão, a pergunta seguinte é: *em cada degrau de cinza, quantos
+pixels caíram?* Essa contagem, faixa a faixa, é o **histograma**.
 
-**Formal.** Com \(B\) faixas (nesta aula, tipicamente \(B = 256\)) e
-contagens \(h_0,\ldots,h_{B-1}\),
+Imagine baldes alinhados do preto ao branco. Cada pixel do conjunto cai
+num balde. A altura do balde \(k\) é a contagem \(h_k\). Com \(B\)
+faixas (tipicamente \(B = 256\)) e contagens \(h_0,\ldots,h_{B-1}\),
 
 \[
 h_k = \#\{\text{pixels com } L \text{ na faixa } k\},
@@ -271,17 +264,18 @@ O Streamlit permite reagrupar faixas (16 a 256) para visualizar a mesma
 comparação em resoluções diferentes; a definição de **D** permanece a
 mesma na grade escolhida.
 
-Figura didática:
+Figura:
 [`../illustrations/02_hist_to_cdf_toy.png`](../illustrations/02_hist_to_cdf_toy.png).
 
 ---
 
 ## 9. Função de distribuição acumulada (CDF)
 
-**Didática.** Em cada faixa: *até aqui, que fração dos pixels já
-passou?* A curva sobe de 0 a 1.
-
-**Formal.** A CDF empírica discreta na grade do histograma é
+O histograma ainda fala em “quantos”. A **função de distribuição
+acumulada** (CDF) fala em “até aqui, que fração do total?”. Você caminha
+dos baldes escuros para os claros, vai somando as contagens e divide
+pelo total \(N\). A curva começa perto de zero e termina em um: nunca
+desce. Na grade do histograma,
 
 \[
 F_k = \frac{1}{N}\sum_{i=0}^{k} h_i
@@ -526,9 +520,9 @@ Figuras:
 CDF sobreposta:
 [`../illustrations/05_dual_cdf.png`](../illustrations/05_dual_cdf.png).
 
-Por que 50 imagens se há 110 por tema? Desenho do experimento: 50
-treino + 50 controle + 50 florestas, tamanhos pareados — clareza
-didática, não escassez de dados.
+Por que 50 imagens (e não as 110 do tema), e por que L por pixel em
+vez da média por imagem: ver
+[`notas-experimento-freeze.md`](notas-experimento-freeze.md).
 
 ---
 
