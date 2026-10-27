@@ -8,7 +8,7 @@ Fluxo::
 
     imagem ──► extract_image_features ──► JSON em request_features/
 
-Saídas principais: log_grayscale_submission → Path do ficheiro gravado.
+Saídas principais: log_grayscale_submission → Path do arquivo gravado.
 """
 
 from __future__ import annotations

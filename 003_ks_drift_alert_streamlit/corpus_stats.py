@@ -3,7 +3,7 @@
 Lê apenas JSON já extraídos. Não abre imagens. Não serve HTTP.
 
 Pré-condições:
-  - features_dir com ≥ min_images ficheiros JSON no formato de image_extract;
+  - features_dir com ≥ min_images arquivos JSON no formato de image_extract;
   - para load_default_corpus_stats, corpus_stats.json na pasta da aula.
 
 Fluxo::

@@ -21,7 +21,6 @@ Saídas principais: UI Streamlit (sem API); estado do alerta em português.
 from __future__ import annotations
 
 import json
-import subprocess
 from pathlib import Path
 
 import streamlit as st
@@ -38,6 +37,12 @@ from plotting import (
     plot_histogram,
 )
 from request_stats import load_request_stats
+from sample_sets import (
+    caminhos_referencia,
+    list_batch_names,
+    rotulo_lote,
+    theme_paths_for_batch,
+)
 
 ROOT = Path(__file__).resolve().parent
 BATCH_STATS_DIR = ROOT / "batch_stats"
@@ -75,72 +80,11 @@ D ← máximo(delta)
 i_star ← argmáximo(delta)
 """
 
-LOTE_ROTULO = {
-    "control": "Mesmo tema (outro trecho de praias)",
-    "forests": "Florestas",
-    "beaches": "Praias",
-    "balls": "Bolas",
-}
-
-# Lotes mistos ficam na aula opcional 007_ks_mixed_landscape_streamlit
-LOTES_EXCLUIDOS = frozenset({"landscapes"})
-
 POC_L = '''from PIL import Image
 
 img = Image.open("foto.jpg").convert("L")  # L ∈ {0, …, 255} por pixel
 contagens = img.histogram()
 '''
-
-
-def repo_root() -> Path:
-    return Path(
-        subprocess.check_output(
-            ["git", "rev-parse", "--show-toplevel"],
-            text=True,
-        ).strip()
-    )
-
-
-def list_batches() -> list[str]:
-    if not BATCH_STATS_DIR.is_dir():
-        raise FileNotFoundError(
-            f"pasta de lotes ausente: {BATCH_STATS_DIR} "
-            "(rode just build-demo-batches nesta aula)"
-        )
-    return sorted(
-        p.stem
-        for p in BATCH_STATS_DIR.glob("*.json")
-        if p.stem not in LOTES_EXCLUIDOS and "+" not in p.stem
-    )
-
-
-def rotulo_lote(name: str) -> str:
-    if name in LOTE_ROTULO:
-        return LOTE_ROTULO[name]
-    return name
-
-
-def theme_paths_for_batch(name: str) -> list[Path]:
-    root = repo_root() / "samples"
-    mapping = {
-        "forests": root / "forests",
-        "control": root / "beaches",
-        "beaches": root / "beaches",
-        "balls": root / "balls",
-    }
-    folder = mapping.get(name, root / name)
-    if not folder.is_dir():
-        raise FileNotFoundError(
-            f"tema de amostras ausente para o lote {name!r}: {folder}"
-        )
-    return sorted(folder.glob("*.jpg")) + sorted(folder.glob("*.jpeg"))
-
-
-def caminhos_referencia() -> list[Path]:
-    root = repo_root() / "samples" / "beaches"
-    if not root.is_dir():
-        raise FileNotFoundError(f"amostras de referência ausentes: {root}")
-    return sorted(root.glob("*.jpg")) + sorted(root.glob("*.jpeg"))
 
 
 def mostrar_amostra(caminho: Path | None, legenda: str) -> None:
@@ -174,6 +118,50 @@ produz um **alerta** quando **D** cruza um limiar.
 fluxo = fig("01_workflow_l_to_alert.png")
 if fluxo:
     st.image(str(fluxo), caption="Fluxo: L → histograma → CDF → δ → D → alerta")
+
+st.header("Como usar este painel")
+st.markdown(
+    r"""
+Siga a ordem abaixo. A **barra lateral** só escolhe parâmetros; a leitura
+e o ritual ficam neste corpo da página.
+
+**Passo 1 — Controles (barra lateral).** Escolha o **Lote atual** (lado
+produção da comparação KS). A referência de treino é **fixa**: as primeiras
+50 praias em `corpus_stats.json`. Opcionalmente ajuste o **número de faixas**
+do histograma de L (padrão **256** = um balde por nível de cinza; valores
+menores suavizam a forma e podem alterar um pouco **D**, sem mudar a regra
+de alerta).
+
+**Passo 2 — O que cada lote significa.** Cada opção é um JSON em
+`batch_stats/`:
+
+- **Mesmo tema (outro trecho de praias)** — controle: praias
+  `[50:100]`, **disjuntas** do treino `[:50]`. Espera-se **TRANQUILO**
+  ($D$ baixo).
+- **Florestas** — tema divergente: espera-se **ALERTA**.
+- **Bolas** (se existir no disco) — contingência visual: tipicamente
+  **ALERTA**.
+
+O lote misto praias+florestas **não** aparece aqui; ele é a aula opcional
+`007_ks_mixed_landscape_streamlit`. Um JSON chamado `beaches` (mesma fatia
+do treino) também fica de fora, para não comparar o corpus consigo mesmo.
+
+**Passo 3 — Cartão de alerta.** Logo abaixo das definições, leia
+**ALERTA** / **TRANQUILO** / **INCONCLUSIVO** e o valor de **D**. O alerta
+responde só a **D** (e ao mínimo de imagens); o valor-p é nota de rodapé.
+
+**Passo 4 — Ritual gráfico (seções 1→4).** Desça na página:
+
+1. histograma de L em cada conjunto;
+2. CDF de cada lado;
+3. as duas CDFs com o segmento **D**;
+4. a função $\delta$ e $D = \max \delta$.
+
+**Passo 5 — Miniaturas.** No fim, confira as grades: à esquerda o treino;
+à direita o lote. No controle, as fotos **não** devem ser as mesmas do
+treino.
+"""
+)
 
 st.header("Definições")
 
@@ -261,45 +249,18 @@ temporal, misturam-se regimes antigos e novos e o **D** deixa de responder
 """
 )
 
-batches = list_batches()
-if not batches:
-    st.warning(
-        "Não há arquivos em `batch_stats/`. "
-        "Rode `just build-demo-batches` ou "
-        "`just exercise-theme` + `just snapshot-batch`."
-    )
-    st.stop()
+batches = list_batch_names(BATCH_STATS_DIR)
 
 with st.sidebar:
-    st.header("Parâmetros")
-    st.markdown(
-        """
-**Lote atual.** Escolha qual conjunto de produção comparar com a referência
-de treino (primeiras 50 praias em `corpus_stats.json`). Cada opção é um
-JSON em `batch_stats/`:
-
-- **Mesmo tema (outro trecho de praias)** — controle: espera-se **TRANQUILO**
-  ($D$ baixo).
-- **Florestas** — tema divergente: espera-se **ALERTA**.
-- **Bolas** (se existir no disco) — contingência visual.
-
-O lote misto praias+florestas não aparece aqui; ele é a aula opcional
-`007_ks_mixed_landscape_streamlit`.
-
-**Número de faixas.** Quantos baldes usar ao reagrupar o histograma de L
-antes de montar a CDF e calcular **D**. O freeze padrão usa **256** (um
-balde por nível de cinza). Valores menores (64, 32, …) suavizam a forma e
-podem mudar um pouco o **D**, mas a regra de alerta continua a mesma.
-Comece em 256; só reduza se quiser ver o efeito da resolução.
-"""
-    )
+    st.header("Controles")
+    st.caption("Explicação dos lotes e das faixas: «Como usar este painel».")
     batch_name = st.selectbox(
         "Lote atual",
         batches,
         format_func=rotulo_lote,
         help=(
-            "Referência fixa = praias de treino. O lote é o lado “produção” "
-            "da comparação KS."
+            "Referência fixa = praias de treino[:50]. O lote é o lado "
+            "produção da comparação KS."
         ),
     )
     n_intervalos = st.slider(
@@ -308,10 +269,7 @@ Comece em 256; só reduza se quiser ver o efeito da resolução.
         max_value=256,
         value=256,
         step=16,
-        help=(
-            "256 = resolução nativa de L. Menos faixas = histograma mais "
-            "grosso na mesma comparação."
-        ),
+        help="256 = resolução nativa de L. Menos faixas = histograma mais grosso.",
     )
 
 referencia = load_default_corpus_stats()

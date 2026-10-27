@@ -97,7 +97,7 @@ perde significado operacional.
 
 No exercício de sala, `batch_stats/*.json` é um **proxy** de janela já
 agregada (`control`, `forests`, …). Em produção, `anomaly.py` filtra
-`request_features/` pelo timestamp no nome do ficheiro.
+`request_features/` pelo timestamp no nome do arquivo.
 
 ---
 

@@ -708,8 +708,8 @@ just snapshot-batch forests
 just clear-request-features
 # prepara a pasta de log para o lote de controle
 
-just exercise-theme beaches --offset=12 --count=12
-# envia 12 praias (a partir da 13ª) como “produção” de mesmo tema
+just exercise-theme beaches --offset=50 --count=50
+# envia praias[50:100] como “produção” de mesmo tema (disjunto do treino[:50])
 
 just snapshot-batch control
 # agrega esse log → batch_stats/control.json

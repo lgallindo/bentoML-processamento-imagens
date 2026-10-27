@@ -3,7 +3,7 @@
 Lê apenas JSON já extraídos. Não abre imagens. Não serve HTTP.
 
 Pré-condições:
-  - features_dir com ≥ min_images ficheiros JSON;
+  - features_dir com ≥ min_images arquivos JSON;
   - para load_*, o path do freeze deve existir.
 
 Fluxo::
