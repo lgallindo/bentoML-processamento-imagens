@@ -42,7 +42,7 @@ exercise-theme theme="forests" port="3333" offset="0" count="12":
 snapshot-batch name:
     uv run --no-active python scripts/snapshot_batch.py {{name}} --clear-source
 
-# Contingência landscapes:
+# Contingência bolas:
 #   just build-contingency-batches && just verify-ks-banner balls
 
 curl-inference-grayscale image output="grayscale.png" port="3333":
