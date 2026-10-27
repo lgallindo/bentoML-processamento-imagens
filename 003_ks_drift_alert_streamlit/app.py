@@ -208,8 +208,16 @@ $$
 D = \max_k \delta_k.
 $$
 
-**Alerta sobre D** (regra desta aula): INCONCLUSIVO se poucas imagens;
-**ALERTA** se \(D \ge 0{,}10\); **TRANQUILO** se \(D < 0{,}10\).
+**Alerta sobre D** (regra desta aula + time boxing):
+
+| Estado | Condição | Leitura |
+| :--- | :--- | :--- |
+| INCONCLUSIVO | n &lt; 8 em qualquer lado | Janela / lote ainda fino |
+| ALERTA | n ≥ 8 e D ≥ 0,10 | Formas de L divergem |
+| TRANQUILO | n ≥ 8 e D &lt; 0,10 | Compatível com a referência |
+
+Em produção o lote é uma **caixa de tempo** (ex.: pedidos dos **últimos
+30 dias**), não o histórico inteiro.
 """
 )
 

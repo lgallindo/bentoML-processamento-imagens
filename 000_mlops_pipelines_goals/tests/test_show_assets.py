@@ -32,6 +32,7 @@ INDEX_FOLDERS = (
     "002_histogram_cdf_streamlit",
     "003_ks_drift_alert_streamlit",
     "004_prometheus_histcdf_streamlit",
+    "005_ks_anomaly_detection_streamlit",
     "010_corpus_histograms_model",
     "020_grayscale_request_logging",
     "030_request_log_histograms",

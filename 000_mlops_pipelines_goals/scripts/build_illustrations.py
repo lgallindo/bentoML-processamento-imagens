@@ -30,11 +30,14 @@ GOAL_COLUMNS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ),
     (
         "Detecção de anomalias",
-        ("004_prometheus_histcdf_streamlit (prévia)", "detector: backlog"),
+        (
+            "005_ks_anomaly_detection_streamlit",
+            "004_prometheus_histcdf_streamlit (métricas)",
+        ),
     ),
 )
 
-ANOMALY_BACKLOG_CHIP = "detector: backlog"
+ANOMALY_BACKLOG_CHIP = "005_ks_anomaly_detection_streamlit"
 
 REMASTER = ILLUSTRATIONS / "src" / "pipelines-remaster.jpg"
 MUNDO_VEIO = Path.home() / "Downloads" / "monitoramento" / "mundo-veio.png"

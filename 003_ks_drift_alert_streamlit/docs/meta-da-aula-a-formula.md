@@ -1,5 +1,7 @@
 # Meta da aula — da intenção à fórmula
 
+Booklet completo (DevOps/MLOps → KS): [`booklet-devops-ate-ks.md`](booklet-devops-ate-ks.md).
+
 ## Intenção
 
 Este serviço pode responder rápido e com HTTP 200 e, mesmo assim, trabalhar

@@ -97,13 +97,20 @@ D = \max_{k} \delta_k
 
 ![δ(L) e D = max δ](illustrations/06_delta_d.png)
 
-### Alerta sobre D
+### Alerta sobre D (tabela + time boxing)
 
-Regra didática desta aula (centrada na estatística **D**):
+| Estado | Condição | O que significa | Ação típica |
+| :--- | :--- | :--- | :--- |
+| **INCONCLUSIVO** | \(n_{\mathrm{ref}} &lt; 8\) **ou** \(n_{\mathrm{lote}} &lt; 8\) | Amostra demais pequena para fechar o alarme | Esperar mais pedidos **na janela** |
+| **ALERTA** | ambos \(n \ge 8\) e \(D \ge 0{,}10\) | Formas de L divergem além do limiar didático | Investigar tema/uso; abrir ticket / rule |
+| **TRANQUILO** | ambos \(n \ge 8\) e \(D &lt; 0{,}10\) | Lote compatível com a referência nesta métrica | Seguir monitorando a janela |
 
-- **INCONCLUSIVO** — poucas imagens de qualquer lado (&lt; 8)
-- **ALERTA** — \(D \ge 0{,}10\)
-- **TRANQUILO** — \(D < 0{,}10\)
+**Time boxing.** Em produção o “lote” não é o histórico eterno: é a caixa de
+tempo vigente — por exemplo **pedidos / imagens dos últimos 30 dias** (ou
+última semana, último turno). Sem time box, misturam-se regimes antigos e
+novos e o **D** deixa de responder à pergunta operacional *“o serviço ainda
+está adequado ao tráfego recente?”*. Nesta aula os JSON em `batch_stats/`
+fazem o papel de uma janela já agregada.
 
 [^pvalue]
 
@@ -174,6 +181,42 @@ Por isso o handout fixa L por pixel. Ramo D:
 
 [`docs/designs/ks-003-ramos-planejados.md`](../docs/designs/ks-003-ramos-planejados.md):
 produção mista; PSI; KS entrada×saída; pixel vs média no controle.
+
+## Estrutura da pasta (ficheiros principais)
+
+```text
+003_ks_drift_alert_streamlit/
+  README.md                 # este handout
+  app.py                    # Streamlit: defs + gráficos + alerta sobre D
+  service.py                # BentoML /inference-grayscale + log
+  banner.py                 # alert_on_d (D≥0,10) + regra legada com valor-p
+  ks_compare.py             # D, CDFs, contagens entre referência e lote
+  histogram.py              # L, histograma, CDF
+  corpus_stats.py           # agrega features/ → estatística de treino
+  request_stats.py          # agrega request_features/ → lote
+  plotting.py               # histograma, CDF, δ, dual CDF
+  corpus_stats.json         # freeze: praias[:50]
+  batch_stats/              # control.json, forests.json, …
+  request_features/         # log vivo (gitkeep; JSON ignorados)
+  features/                 # saídas de extract (gitignored se configurado)
+  illustrations/            # PNGs do handout (just generate-illustrations)
+  scripts/
+    extract_image_features.py   # praias[:50] → features/
+    build_corpus_stats.py       # features/ → corpus_stats.json
+    build_batch_from_theme.py   # tema → batch_stats/<nome>.json (offline)
+    exercise_theme.py           # POST tema no serviço → request_features/
+    snapshot_batch.py           # request_features/ → batch_stats/
+    generate_illustrations.py   # regenera illustrations/
+    verify_ks_banner.py         # imprime D/alerta sem UI
+  tests/                    # pytest
+  docs/
+    meta-da-aula-a-formula.md   # resumo intenção → fórmula
+    booklet-devops-ate-ks.md    # caderno longo (agente em background)
+  justfile                  # receitas sync / serve / streamlit / …
+```
+
+Anomalia (candidato / janela temporal):
+[`005_ks_anomaly_detection_streamlit`](../005_ks_anomaly_detection_streamlit/README.md).
 
 ## Como executar
 
@@ -266,6 +309,11 @@ just test
 5. [Pillow — Image](https://pillow.readthedocs.io/en/stable/reference/Image.html)
 
 Mais detalhe em prosa:
-[`docs/meta-da-aula-a-formula.md`](docs/meta-da-aula-a-formula.md).
+[`docs/meta-da-aula-a-formula.md`](docs/meta-da-aula-a-formula.md) ·
+booklet DevOps→KS:
+[`docs/booklet-devops-ate-ks.md`](docs/booklet-devops-ate-ks.md).
+
+Anomalia (candidato / janela):
+[`005_ks_anomaly_detection_streamlit`](../005_ks_anomaly_detection_streamlit/README.md).
 
 [`004_prometheus_histcdf_streamlit`](../004_prometheus_histcdf_streamlit/README.md)

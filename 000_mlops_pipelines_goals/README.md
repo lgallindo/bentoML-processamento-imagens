@@ -68,8 +68,9 @@ flowchart LR
 | :--- | :--- |
 | `001_histogram_cdf_cli` | Histograma e CDF de uma lista de números na CLI (JSON/CSV/PNG) |
 | `002_histogram_cdf_streamlit` | O mesmo objeto histograma+CDF num app Streamlit |
-| `003_ks_drift_alert_streamlit` | Referência vs lote: KS + banner de drift no Streamlit |
+| `003_ks_drift_alert_streamlit` | Referência vs lote: KS + alerta sobre D no Streamlit |
 | `004_prometheus_histcdf_streamlit` | Buckets de latência do Prometheus → histograma/CDF + PromQL |
+| `005_ks_anomaly_detection_streamlit` | Anomalia KS: candidato ou janela temporal vs referência |
 | `010_corpus_histograms_model` | Corpus de treino + modelo picklable de cinza no BentoML |
 | `020_grayscale_request_logging` | Log em disco das features de cada pedido a `/inference-grayscale` |
 | `030_request_log_histograms` | Histogramas de production vs corpus (olhar drift) |

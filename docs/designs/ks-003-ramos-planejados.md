@@ -133,3 +133,10 @@ controle de mesmo tema, e 50 florestas como lote divergente — tamanhos
 pareados para a turma comparar. Não é limite do corpus; é desenho do
 experimento. Expandir para 110×110 é um experimento à parte (ver números no
 README).
+
+---
+
+## Ramo E — Anomalia (implementado como lição 005)
+
+Ver `005_ks_anomaly_detection_streamlit/`: candidato ou janela temporal vs
+referência; time boxing; reuso de L/CDF/D.

@@ -1,0 +1,24 @@
+default:
+    @just --list
+
+sync:
+    uv sync --no-active
+
+# Reusa corpus/lotes da 003 se existirem; senão aponta para a pasta irmã
+sync-demo-from-003:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    SRC="../003_ks_drift_alert_streamlit"
+    cp -f "$SRC/corpus_stats.json" .
+    mkdir -p batch_stats
+    cp -f "$SRC/batch_stats/"*.json batch_stats/
+    echo "corpus + batch_stats copiados de 003"
+
+streamlit port="8505":
+    uv run --no-active streamlit run app.py --server.port {{port}} --server.headless true
+
+serve port="3335":
+    uv run --no-active bentoml serve service:ImageProcessor --reload --port {{port}}
+
+test:
+    uv run --no-active pytest -q
