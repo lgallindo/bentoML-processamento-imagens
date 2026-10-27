@@ -71,6 +71,8 @@ def compare_stats(
         "n_pixels_production": int(sum(production_counts)),
         "n_images_corpus": n_images_corpus,
         "n_images_production": n_images_production,
+        "counts_corpus": corpus_counts,
+        "counts_production": production_counts,
         "cdf_corpus": cdf_corpus,
         "cdf_production": cdf_production,
     }
