@@ -1,6 +1,6 @@
 # Meta da aula — da intenção à fórmula
 
-Texto longo da lição: [`../README.md`](../README.md).
+Texto completo da lição: [`../README.md`](../README.md).
 
 ## Intenção
 
