@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from banner import alert_on_d  # noqa: E402
+from alert_rule import alert_on_d  # noqa: E402
 from corpus_stats import load_corpus_stats  # noqa: E402
 from ks_compare import compare_stats  # noqa: E402
 from request_stats import load_request_stats  # noqa: E402

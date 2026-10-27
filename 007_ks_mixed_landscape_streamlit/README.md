@@ -241,7 +241,7 @@ estão bem afastadas?”.
   README.md                 # este handout
   app.py                    # Streamlit: defs + gráficos + alerta + callout 25+25
   service.py                # BentoML /inference-grayscale + log
-  banner.py                 # alert_on_d (D≥0,10) + regra legada com valor-p
+  alert_rule.py             # alert_on_d (D≥0,10) + regra legada D+p
   ks_compare.py             # D, CDFs, contagens entre referência e lote
   histogram.py              # L, histograma, CDF
   corpus_stats.py           # agrega features/ → estatística de treino
@@ -259,7 +259,7 @@ estão bem afastadas?”.
     exercise_theme.py           # POST tema no serviço → request_features/
     snapshot_batch.py           # request_features/ → batch_stats/
     generate_illustrations.py   # regenera illustrations/
-    verify_ks_banner.py         # imprime D/alerta sem UI
+    verify_ks_alert.py          # imprime D/alerta sem UI
   tests/                    # pytest
   docs/
     notas-experimento-freeze.md

@@ -11,7 +11,7 @@ from pathlib import Path
 from histogram import DEFAULT_BINS, cumulative_distribution, rebin_counts
 from image_extract import CHANNELS, FEATURES_DIR, list_feature_files, load_image_features
 
-MIN_TRAINING_IMAGES = 8  # classroom freeze uses 12 beaches; banner needs ≥8
+MIN_TRAINING_IMAGES = 8  # classroom freeze uses 12 beaches; alerta exige ≥8
 CORPUS_STATS_PATH = Path("corpus_stats.json")
 CHANNEL_KEYS = {"L": "luminance", "R": "r", "G": "g", "B": "b"}
 

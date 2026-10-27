@@ -616,7 +616,7 @@ linha `020`) e analisa a distribuição de **L** no Streamlit.
   README.md                 # handout da aula
   app.py                    # Streamlit: defs + gráficos + alerta sobre D
   service.py                # BentoML /inference-grayscale + log
-  banner.py                 # alert_on_d (D≥0,10) + regra legada com valor-p
+  alert_rule.py             # alert_on_d (D≥0,10) + regra legada D+p
   ks_compare.py             # D, CDFs, contagens entre referência e lote
   histogram.py              # L, histograma, CDF
   corpus_stats.py           # agrega features/ → estatística de treino
@@ -635,7 +635,7 @@ linha `020`) e analisa a distribuição de **L** no Streamlit.
     exercise_theme.py           # POST tema no serviço → request_features/
     snapshot_batch.py           # request_features/ → batch_stats/
     generate_illustrations.py   # regenera illustrations/
-    verify_ks_banner.py         # imprime D/alerta sem UI
+    verify_ks_alert.py          # imprime D/alerta sem UI
   tests/                    # pytest
   docs/
     meta-da-aula-a-formula.md   # cartão-resumo da fórmula
@@ -649,7 +649,7 @@ linha `020`) e analisa a distribuição de **L** no Streamlit.
 | `request_log.py` | grava JSON em `request_features/` |
 | `histogram.py` | histograma e CDF |
 | `ks_compare.py` | $D$ (e valor-p assintótico, nota de rodapé) |
-| `banner.py` | regra INCONCLUSIVO / ALERTA / TRANQUILO sobre **D** |
+| `alert_rule.py` | regra INCONCLUSIVO / ALERTA / TRANQUILO sobre **D** |
 | `app.py` | painel Streamlit |
 | `corpus_stats.json` | referência agregada de treino |
 | `batch_stats/*.json` | lotes agregados |

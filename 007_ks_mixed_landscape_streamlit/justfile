@@ -46,8 +46,8 @@ curl-inference-grayscale image output="grayscale.png" port="3337":
         --output "{{output}}"
 
 # Verifica D/alerta nos lotes em batch_stats/ (sem UI)
-verify-ks-banner batch="landscapes":
-    uv run --no-active python scripts/verify_ks_banner.py {{batch}}
+verify-ks-alert batch="landscapes":
+    uv run --no-active python scripts/verify_ks_alert.py {{batch}}
 
 generate-illustrations:
     uv run --no-active python scripts/generate_illustrations.py

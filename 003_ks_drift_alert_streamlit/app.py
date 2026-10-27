@@ -1,4 +1,22 @@
-"""Streamlit: histograma → CDF → KS da luminância L; alerta sobre D."""
+"""Painel Streamlit da aula 003: L → histograma → CDF → D → alerta.
+
+Orquestra o ritual didático (defs, amostras, gráficos e estado do alerta)
+sobre lotes offline em batch_stats/ comparados ao corpus de referência.
+
+Pré-condições:
+  - pasta batch_stats/ existe e contém JSON de lotes;
+  - corpus_stats.json carregável via load_default_corpus_stats();
+  - samples/beaches (e temas dos lotes) existem na raiz do repositório Git.
+
+Fluxo::
+
+    lote JSON ──► compare_stats ──► D, CDFs, contagens
+         │                              │
+         └─► thumbs / plots ◄───────────┤
+                                        └─► alert_on_d → ALERTA|TRANQUILO|INCONCLUSIVO
+
+Saídas principais: UI Streamlit (sem API); estado do alerta em português.
+"""
 
 from __future__ import annotations
 
@@ -9,7 +27,7 @@ from pathlib import Path
 import streamlit as st
 from PIL import Image
 
-from banner import alert_on_d
+from alert_rule import alert_on_d
 from corpus_stats import load_default_corpus_stats
 from ks_compare import compare_stats
 from plotting import (
@@ -85,7 +103,10 @@ def repo_root() -> Path:
 
 def list_batches() -> list[str]:
     if not BATCH_STATS_DIR.is_dir():
-        return []
+        raise FileNotFoundError(
+            f"pasta de lotes ausente: {BATCH_STATS_DIR} "
+            "(rode just build-demo-batches nesta aula)"
+        )
     return sorted(
         p.stem
         for p in BATCH_STATS_DIR.glob("*.json")
@@ -108,13 +129,17 @@ def theme_paths_for_batch(name: str) -> list[Path]:
         "balls": root / "balls",
     }
     folder = mapping.get(name, root / name)
-    if folder is None or not folder.is_dir():
-        return []
+    if not folder.is_dir():
+        raise FileNotFoundError(
+            f"tema de amostras ausente para o lote {name!r}: {folder}"
+        )
     return sorted(folder.glob("*.jpg")) + sorted(folder.glob("*.jpeg"))
 
 
 def caminhos_referencia() -> list[Path]:
     root = repo_root() / "samples" / "beaches"
+    if not root.is_dir():
+        raise FileNotFoundError(f"amostras de referência ausentes: {root}")
     return sorted(root.glob("*.jpg")) + sorted(root.glob("*.jpeg"))
 
 

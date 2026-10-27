@@ -54,7 +54,7 @@ lote mistura regimes antigos e novos e o **D** perde significado operacional.
   corpus_stats.json   # referência (mesmo freeze da 003)
   batch_stats/        # proxies de janela (control, forests, …)
   service.py          # BentoML grayscale + log (igual espírito 003)
-  docs/PLAN_anomaly_production.md
+  docs/PLAN_anomaly_production.md  # ponteiro → .local/plans/005/ (instructor)
   tests/test_anomaly.py
 ```
 
@@ -79,8 +79,9 @@ just test
 # pytest da regra de anomalia e do time box
 ```
 
-Plano de produção:
-[`docs/PLAN_anomaly_production.md`](docs/PLAN_anomaly_production.md).
+Plano de produção (instructor / gitignored):
+[`.local/plans/005/PLAN_anomaly_production.md`](../../.local/plans/005/PLAN_anomaly_production.md)
+(ponteiro na pasta: [`docs/PLAN_anomaly_production.md`](docs/PLAN_anomaly_production.md)).
 
 [`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md) ·
 [`006_ks_input_output_streamlit`](../006_ks_input_output_streamlit/README.md) ·

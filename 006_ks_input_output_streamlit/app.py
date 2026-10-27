@@ -9,7 +9,7 @@ from pathlib import Path
 import streamlit as st
 from PIL import Image
 
-from banner import alert_on_d
+from alert_rule import alert_on_d
 from corpus_stats import load_corpus_stats
 from ks_compare import compare_stats
 from plotting import load_thumbnails, plot_dual_cdf, plot_histogram
@@ -52,7 +52,7 @@ def caminhos_tema(tema: str, offset: int = 0, count: int = 8) -> list[Path]:
     return paths[offset : offset + count]
 
 
-def banner_html(titulo: str, estado: str, d: float) -> str:
+def alert_html(titulo: str, estado: str, d: float) -> str:
     return (
         f"<div style='padding:1rem;border-radius:8px;background:{CORES[estado]};"
         f"color:white;font-size:1.15rem;font-weight:600'>"
@@ -185,12 +185,12 @@ st.header("Alertas lado a lado")
 col_a, col_b = st.columns(2)
 with col_a:
     st.markdown(
-        banner_html("Entrada (pedidos)", estado_in, payload_in["statistic"]),
+        alert_html("Entrada (pedidos)", estado_in, payload_in["statistic"]),
         unsafe_allow_html=True,
     )
 with col_b:
     st.markdown(
-        banner_html(
+        alert_html(
             f"Saída ({modo})",
             estado_out,
             payload_out["statistic"],

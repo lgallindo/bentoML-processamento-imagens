@@ -1,8 +1,21 @@
 """Kolmogorov–Smirnov entre histogramas agregados (corpus × production).
 
-Compara as CDFs empíricas derivadas das contagens de um canal. A forma da
-distribuição vem dos pixels agregados; o tamanho efetivo da amostra para o
-valor-p é o número de **imagens** de cada conjunto.
+Transforma dois histogramas (referência e lote) na estatística D e no valor-p
+assintótico usados pelo painel Streamlit e pelos testes. A forma da distribuição
+vem dos pixels agregados; o tamanho efetivo da amostra para o valor-p é o
+número de **imagens** de cada conjunto.
+
+Pré-condições:
+  - corpus_stats e production_stats trazem histograms[<canal>].counts e n_images;
+  - após rebin, ambos os lados têm o mesmo número de bins.
+
+Fluxo::
+
+    counts_ref ──► rebin ──► CDF_ref ──┐
+                                       ├──► D = max|ΔF| ──► (opcional) p-valor
+    counts_lote ─► rebin ──► CDF_lote ─┘
+
+Saídas principais: dict de compare_stats (statistic, p_value, cdf_*, counts_*).
 """
 
 from __future__ import annotations

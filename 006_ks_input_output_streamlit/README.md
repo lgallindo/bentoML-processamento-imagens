@@ -86,7 +86,7 @@ dispara ALERTA — a turma vê o contraste “pedidos ok, emissão estranha”.
   grayscale_model.py             # saudável + deslocado (+40)
   request_log.py                 # log entrada e saída (pair_id)
   io_pipeline.py                 # espelho offline do filtro
-  banner.py / ks_compare.py / histogram.py / …
+  alert_rule.py / ks_compare.py / histogram.py / …
   corpus_stats_input.json
   corpus_stats_output.json
   corpus_stats_output_shifted.json

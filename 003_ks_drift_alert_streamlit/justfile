@@ -43,7 +43,7 @@ snapshot-batch name:
     uv run --no-active python scripts/snapshot_batch.py {{name}} --clear-source
 
 # Contingência bolas:
-#   just build-contingency-batches && just verify-ks-banner balls
+#   just build-contingency-batches && just verify-ks-alert balls
 
 curl-inference-grayscale image output="grayscale.png" port="3333":
     curl --fail --show-error --request POST \
@@ -51,9 +51,9 @@ curl-inference-grayscale image output="grayscale.png" port="3333":
         "http://localhost:{{port}}/inference-grayscale" \
         --output "{{output}}"
 
-# Verifica D/p/banner nos lotes em batch_stats/ (sem UI)
-verify-ks-banner batch="forests":
-    uv run --no-active python scripts/verify_ks_banner.py {{batch}}
+# Verifica D/p/alerta nos lotes em batch_stats/ (sem UI)
+verify-ks-alert batch="forests":
+    uv run --no-active python scripts/verify_ks_alert.py {{batch}}
 
 generate-illustrations:
     uv run --no-active python scripts/generate_illustrations.py

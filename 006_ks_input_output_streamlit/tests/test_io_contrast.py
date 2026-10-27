@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from PIL import Image
 
-from banner import alert_on_d
+from alert_rule import alert_on_d
 from grayscale_model import GrayscaleModel, GrayscaleShiftedModel
 from histogram import DEFAULT_BINS, compute_histogram, cumulative_distribution
 from image_extract import extract_image_features

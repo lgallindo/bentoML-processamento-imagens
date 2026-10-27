@@ -9,7 +9,7 @@ from pathlib import Path
 import streamlit as st
 from PIL import Image
 
-from banner import alert_on_d
+from alert_rule import alert_on_d
 from corpus_stats import load_default_corpus_stats
 from ks_compare import compare_stats
 from plotting import (
