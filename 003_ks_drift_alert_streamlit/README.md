@@ -177,25 +177,63 @@ produção mista; PSI; KS entrada×saída; pixel vs média no controle.
 
 ## Como executar
 
+Caminho **offline** (lotes já materializados em JSON, sem servidor):
+
 ```bash
 cd 003_ks_drift_alert_streamlit
+# entra na pasta da lição
+
 just sync
+# cria/atualiza .venv e instala dependências do pyproject (uv)
+
 just download-samples
+# aponta para samples/{beaches,forests,balls}/ na raiz do repositório
+# (não baixa de novo se o corpus temático já estiver lá)
+
 just extract-features
+# extrai histograma L (e canais) das primeiras 50 praias → features/*.json
+
 just build-corpus-stats
+# agrega features/ → corpus_stats.json (referência de treino)
+
 just build-demo-batches
-just generate-illustrations   # opcional: regenera illustrations/*.png
-just streamlit                # http://localhost:8503
+# grava batch_stats/control.json (praias 51–100) e batch_stats/forests.json
+# (50 florestas), sem precisar do BentoML no ar
+
+just generate-illustrations
+# opcional: regenera illustrations/*.png usadas neste README
+
+just streamlit
+# sobe o app em http://localhost:8503
 ```
 
-Com servidor:
+Caminho **com servidor** (log real em `request_features/`):
 
 ```bash
 just serve
+# terminal 1: BentoML com /inference-grayscale na porta 3333
+
 just clear-request-features
+# apaga JSON antigos em request_features/ para o próximo exercício
+
 just exercise-theme forests
+# POST de imagens de samples/forests/ no serviço; cada pedido vira um JSON
+# de features em request_features/
+
 just snapshot-batch forests
+# agrega request_features/ → batch_stats/forests.json e limpa a pasta de log
+
+just clear-request-features
+# prepara a pasta de log para o lote de controle
+
+just exercise-theme beaches --offset=12 --count=12
+# envia 12 praias (a partir da 13ª) como “produção” de mesmo tema
+
+just snapshot-batch control
+# agrega esse log → batch_stats/control.json
+
 just streamlit
+# compara corpus_stats.json com o lote escolhido na barra lateral
 ```
 
 ## O que acontece por dentro
