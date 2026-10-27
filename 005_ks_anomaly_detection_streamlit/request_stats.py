@@ -71,6 +71,11 @@ def write_request_stats(stats: dict, path: Path = REQUEST_STATS_PATH) -> Path:
 
 
 def load_request_stats(path: Path = REQUEST_STATS_PATH) -> dict:
+    if not path.is_file():
+        raise FileNotFoundError(
+            f"estatística de lote ausente: {path} "
+            "(rode `just sync-demo-from-003` ou `just build-demo-batches` na 003)"
+        )
     return json.loads(path.read_text(encoding="utf-8"))
 
 

@@ -1,4 +1,15 @@
-"""Agrega features gravadas em request_features/ (log de /inference-grayscale)."""
+"""Agrega request_features/ (log de /inference-grayscale) em estatística de lote.
+
+Pré-condições:
+  - features_dir com ≥ min_images JSON no formato do request_log;
+  - path de load_request_stats deve existir.
+
+Fluxo::
+
+    request_features/*.json ──► acumula ──► histograms + n_images ──► dict/JSON
+
+Saídas principais: build_request_stats, load_request_stats.
+"""
 
 from __future__ import annotations
 
@@ -71,6 +82,11 @@ def write_request_stats(stats: dict, path: Path = REQUEST_STATS_PATH) -> Path:
 
 
 def load_request_stats(path: Path = REQUEST_STATS_PATH) -> dict:
+    if not path.is_file():
+        raise FileNotFoundError(
+            f"estatística de lote ausente: {path} "
+            "(grave pedidos via just serve + exercise-theme, ou use batch_stats/)"
+        )
     return json.loads(path.read_text(encoding="utf-8"))
 
 

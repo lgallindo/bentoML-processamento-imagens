@@ -67,6 +67,11 @@ def write_corpus_stats(stats: dict, path: Path = CORPUS_STATS_PATH) -> Path:
 
 
 def load_corpus_stats(path: Path = CORPUS_STATS_PATH) -> dict:
+    if not path.is_file():
+        raise FileNotFoundError(
+            f"corpus ausente: {path} "
+            "(rode `just build-demo-batches-io` nesta pasta)"
+        )
     return json.loads(path.read_text(encoding="utf-8"))
 
 

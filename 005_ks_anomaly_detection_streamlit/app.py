@@ -1,4 +1,17 @@
-"""Streamlit: anomalia KS — candidato ou janela temporal vs referência."""
+"""Painel Streamlit da aula 005: anomalia KS (candidato / janela vs ref).
+
+Pré-condições:
+  - corpus_stats.json carregável;
+  - modo lote: batch_stats/*.json (via `just sync-demo-from-003`);
+  - modo candidato: samples/<tema>/ na raiz do repositório Git.
+
+Fluxo::
+
+    modo candidato ──► score_path_vs_reference ──► alert_on_d(n=1) → INCONCLUSIVO
+    modo lote ──► compare_stats ──► window_alert(n, D) → ALERTA|TRANQUILO|…
+
+Saídas principais: UI Streamlit (sem API).
+"""
 
 from __future__ import annotations
 
@@ -82,10 +95,18 @@ if modo.startswith("Uma imagem"):
     st.header("Candidato único")
     samples = repo_root() / "samples"
     tema = st.selectbox("Pasta de amostras", ["balls", "forests", "beaches"])
-    paths = sorted((samples / tema).glob("*.jpg"))
+    tema_dir = samples / tema
+    if not tema_dir.is_dir():
+        raise FileNotFoundError(
+            f"amostras ausentes: {tema_dir} "
+            "(confirme samples/<tema>/ na raiz do repositório)"
+        )
+    paths = sorted(tema_dir.glob("*.jpg"))
     if not paths:
-        st.warning("Sem imagens nesse tema.")
-        st.stop()
+        raise FileNotFoundError(
+            f"nenhum JPG em {tema_dir} "
+            "(confirme samples/<tema>/ na raiz do repositório)"
+        )
     escolha = st.selectbox("Arquivo", paths, format_func=lambda p: p.name)
     payload = score_path_vs_reference(escolha, ref_counts, bins=n_intervalos)
     # Uma imagem: n=1 → INCONCLUSIVO na regra operacional
@@ -145,10 +166,17 @@ Na sala usamos `batch_stats/*.json` como **proxy** de uma janela temporal
 já agregada. Em produção, a janela seriam os pedidos dos últimos N dias.
 """
     )
+    if not BATCH_STATS_DIR.is_dir():
+        raise FileNotFoundError(
+            f"batch_stats ausente: {BATCH_STATS_DIR} "
+            "(rode `just sync-demo-from-003` ou `just build-demo-batches` na 003)"
+        )
     batches = sorted(p.stem for p in BATCH_STATS_DIR.glob("*.json"))
     if not batches:
-        st.warning("Rode na 003: `just build-demo-batches` e copie, ou gere aqui.")
-        st.stop()
+        raise FileNotFoundError(
+            f"nenhum JSON em {BATCH_STATS_DIR} "
+            "(rode `just sync-demo-from-003` ou `just build-demo-batches` na 003)"
+        )
     nome = st.selectbox("Lote", batches)
     lote = load_request_stats(BATCH_STATS_DIR / f"{nome}.json")
     cmp = compare_stats(referencia, lote, channel="L", bins=n_intervalos)

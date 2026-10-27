@@ -1,6 +1,14 @@
-"""Camada 1 — extrai dados de UMA imagem e grava para uso posterior no corpus.
+"""Camada 1 — extrai L/R/G/B de UMA imagem e grava em features/.
 
-Não é API. Nenhum endpoint deve expor isto.
+Não é API HTTP. Nenhum endpoint deve expor isto ao cliente.
+
+Pré-condições: path de imagem legível pelo Pillow.
+
+Fluxo::
+
+    foto ──► histogramas L/R/G/B + média L ──► features/<stem>.json
+
+Saídas principais: extract_image_features, save_image_features, list_feature_files.
 """
 
 from __future__ import annotations

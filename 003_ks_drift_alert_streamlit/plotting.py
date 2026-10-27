@@ -1,4 +1,13 @@
-"""Gráficos Seaborn: histograma, CDF e comparação lado a lado."""
+"""Gráficos Seaborn do ritual L → histograma → CDF → δ → D.
+
+Pré-condições: contagens/CDFs com o mesmo comprimento quando dual.
+
+Fluxo::
+
+    counts/CDF ──► plot_histogram / plot_cdf / plot_dual_cdf / plot_cdf_abs_diff
+
+Saídas principais: Figure matplotlib; load_thumbnails para amostras.
+"""
 
 from __future__ import annotations
 

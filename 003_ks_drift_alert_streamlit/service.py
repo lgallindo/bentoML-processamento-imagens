@@ -1,3 +1,15 @@
+"""Serviço BentoML da aula 003: blur, cinza (com log) e resize.
+
+Pré-condições: modelo grayscale gravado (`just save-grayscale-model`).
+
+Fluxo::
+
+    POST /inference-grayscale ──► log_grayscale_submission ──► convert L
+    POST /inference-blur|resize ──► Pillow (sem log KS)
+
+Saídas principais: ImageProcessor (rotas BentoML).
+"""
+
 import bentoml
 from PIL import ImageFilter
 from PIL.Image import Image as PILImage

@@ -1,6 +1,26 @@
 # Aula 006 — KS na entrada e na saída
 
-## Por que estamos aqui
+Do serviço em produção a **dois** alertas sobre **D**: um na luminância das
+imagens **submetidas** (entrada) e outro na luminância das imagens
+**devolvidas** (saída). O painel vivo está em [`app.py`](app.py).
+
+## Sumário
+
+1. [Por que estamos aqui](#1-por-que-estamos-aqui)
+2. [HTTP verde ≠ dados adequados](#2-http-verde--dados-adequados)
+3. [L, histograma, CDF e D](#3-l-histograma-cdf-e-d)
+4. [Dois alertas, uma regra](#4-dois-alertas-uma-regra)
+5. [Modo saudável e modo deslocado](#5-modo-saudável-e-modo-deslocado)
+6. [Passo a passo — UI ≡ fórmula](#6-passo-a-passo--ui--fórmula)
+7. [O experimento desta aula](#7-o-experimento-desta-aula)
+8. [Estrutura da pasta](#8-estrutura-da-pasta)
+9. [Como executar](#9-como-executar)
+10. [Testes](#10-testes)
+11. [Comparação com a 003](#11-comparação-com-a-003)
+
+---
+
+## 1. Por que estamos aqui
 
 Um serviço pode responder **rápido** e com **HTTP 200** e, mesmo assim,
 trabalhar sobre um mundo diferente do treino. A
@@ -16,7 +36,19 @@ Quando entrada e saída contam a mesma história, o filtro está **espelhando**
 o uso. Quando a entrada parece estável e a saída não, algo no caminho de
 inferência mudou (modelo trocado, pré-processamento, bug).
 
-## L, histograma, CDF e D
+![Fluxo L → histograma → CDF → δ → D → alerta](../003_ks_drift_alert_streamlit/illustrations/01_workflow_l_to_alert.png)
+
+---
+
+## 2. HTTP verde ≠ dados adequados
+
+Saúde da tubulação (processo, HTTP, latência) e adequação da distribuição
+de **L** são perguntas independentes — ver o handout da 003. Nesta aula
+medimos adequação **duas vezes**: no que entra e no que sai.
+
+---
+
+## 3. L, histograma, CDF e D
 
 Uma fotografia digital é uma grade de **pixels**. Em cores, cada pixel
 carrega canais; para falar de claro/escuro, convertemos com
@@ -40,7 +72,13 @@ D = \max_k \delta_k.
 
 Nesta aula o eixo é **L por pixel** nos dois lados (entrada e saída).
 
-## Dois alertas, uma regra
+![CDFs dual](../003_ks_drift_alert_streamlit/illustrations/05_dual_cdf.png)
+
+![δ e D](../003_ks_drift_alert_streamlit/illustrations/06_delta_d.png)
+
+---
+
+## 4. Dois alertas, uma regra
 
 | Estado | Condição | Leitura |
 | :--- | :--- | :--- |
@@ -48,13 +86,16 @@ Nesta aula o eixo é **L por pixel** nos dois lados (entrada e saída).
 | **ALERTA** | \(n \ge 8\) e \(D \ge 0{,}10\) | Formas de L divergem naquele lado |
 | **TRANQUILO** | \(n \ge 8\) e \(D &lt; 0{,}10\) | Compatível com a referência naquele lado |
 
-O valor-p assintótico pode ser calculado; **não** entra na regra de alerta.
+O valor-p assintótico pode ser calculado; **não** entra na regra de alerta
+(`alert_rule.py`).
 
 Em produção o lote é uma **caixa de tempo** (por exemplo pedidos dos
 últimos 30 dias). Aqui os JSON em `batch_stats/` fazem o papel de uma
 janela já agregada.
 
-## Modo saudável e modo deslocado
+---
+
+## 5. Modo saudável e modo deslocado
 
 No caminho **saudável**, a saída é só `convert("L")`. Entrada e saída
 tendem a contar a mesma história:
@@ -68,7 +109,28 @@ No caminho **deslocado**, a saída soma **+40** em cada pixel de L (teto
 255). Com o lote de **controle**, a entrada fica TRANQUILO e a saída
 dispara ALERTA — a turma vê o contraste “pedidos ok, emissão estranha”.
 
-## Objetivo operacional
+---
+
+## 6. Passo a passo — UI ≡ fórmula
+
+```text
+# Variáveis:
+# ref_in / ref_out — freeze de entrada e de saída (treino saudável)
+# lote_in / lote_out — agregação da janela (ou batch_stats)
+
+D_in  ← KS(ref_in, lote_in)
+D_out ← KS(ref_out, lote_out)
+alerta_in  ← regra(D_in,  n_lote)
+alerta_out ← regra(D_out, n_lote)
+# leitura conjunta: espelha? só saída? só entrada?
+```
+
+No Streamlit: escolha o lote e o modo (saudável / deslocado); leia os dois
+estados do alerta e as CDFs de cada lado.
+
+---
+
+## 7. O experimento desta aula
 
 1. Fixar referência de entrada e de saída a partir das mesmas 50 praias de
    treino (saída = filtro saudável).
@@ -76,7 +138,9 @@ dispara ALERTA — a turma vê o contraste “pedidos ok, emissão estranha”.
 3. No Streamlit, ler os dois alertas e a leitura conjunta; experimentar o
    modo deslocado no controle.
 
-## Estrutura da pasta
+---
+
+## 8. Estrutura da pasta
 
 ```text
 006_ks_input_output_streamlit/
@@ -106,7 +170,9 @@ dispara ALERTA — a turma vê o contraste “pedidos ok, emissão estranha”.
   justfile
 ```
 
-## Como executar
+---
+
+## 9. Como executar
 
 ```bash
 cd 006_ks_input_output_streamlit
@@ -136,16 +202,21 @@ just serve
 # porta 3336 — /inference-grayscale e /inference-grayscale-shifted
 ```
 
-## Testes
+---
+
+## 10. Testes
 
 ```bash
 just test
 ```
 
-## Comparação com a 003
+---
+
+## 11. Comparação com a 003
 
 A 003 olha só a **entrada**. Esta aula coloca a **saída** no mesmo aparelho
 de alerta e mostra quando os dois lados divergem.
 
 [`005_ks_anomaly_detection_streamlit`](../005_ks_anomaly_detection_streamlit/README.md)
 · [`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md)
+· [`008_psi_drift_alert_streamlit`](../008_psi_drift_alert_streamlit/README.md)

@@ -1,4 +1,17 @@
-"""Histograma e CDF universais; desenho com Pillow."""
+"""Histograma e CDF de um canal de imagem (L/R/G/B) com Pillow.
+
+Converte a imagem, conta pixels por faixa e acumula a CDF usada pelo KS.
+
+Pré-condições:
+  - imagem Pillow carregável; canal em {L, R, G, B};
+  - bins ≥ 1.
+
+Fluxo::
+
+    imagem ──► extract_channel ──► histogram ──► rebin? ──► CDF
+
+Saídas principais: compute_histogram, cumulative_distribution, draw helpers.
+"""
 
 from __future__ import annotations
 

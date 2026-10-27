@@ -1,5 +1,20 @@
 # Aula 008 — Alerta PSI de drift (BentoML + Streamlit)
 
+Do serviço em produção ao alerta sobre **PSI** (irmão da aula KS / **D**).
+O painel vivo está em [`app.py`](app.py).
+
+## Sumário
+
+1. [Por que estamos aqui](#por-que-estamos-aqui)
+2. [Luminância L](#luminância-l)
+3. [Duas variáveis monitoradas](#duas-variáveis-monitoradas)
+4. [Fórmula do PSI](#fórmula-do-psi)
+5. [Faixas de alerta](#faixas-de-alerta-crédito--scorecards)
+6. [Números do freeze](#números-do-freeze-praias--florestas)
+7. [Estrutura / execução / testes](#estrutura-da-pasta-arquivos-principais)
+
+---
+
 ## Por que estamos aqui
 
 Este serviço pode responder **rápido** e com **HTTP 200** e, mesmo assim,
@@ -10,6 +25,10 @@ ainda combinam com a referência.
 Nesta aula você resume o afastamento entre a distribuição de referência e a
 do lote atual no **Population Stability Index (PSI)** e produz um **alerta**
 quando o índice cruza faixas clássicas de monitoramento de scorecards.
+
+O ritual visual L → histograma (irmão KS) está nas figuras da
+[aula 003](../003_ks_drift_alert_streamlit/illustrations/01_workflow_l_to_alert.png);
+aqui o semáforo operacional é **PSI P2**, não **D**.
 
 ## Luminância L
 

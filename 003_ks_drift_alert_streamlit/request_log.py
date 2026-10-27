@@ -1,8 +1,14 @@
-"""Registo offline das features da imagem submetida a /inference-grayscale.
+"""Registo offline das features da imagem em /inference-grayscale.
 
-Reutiliza a mesma extração da camada 1 do corpus (`image_extract`), mas grava
-noutro diretório — o log de pedidos — para agregação/comparação futuras.
-Não é um endpoint de histograma de imagem avulsa para o cliente.
+Reutiliza `image_extract`, mas grava em request_features/ (log de pedidos).
+
+Pré-condições: imagem Pillow já carregada no handler BentoML.
+
+Fluxo::
+
+    imagem ──► extract_image_features ──► JSON em request_features/
+
+Saídas principais: log_grayscale_submission → Path do ficheiro gravado.
 """
 
 from __future__ import annotations

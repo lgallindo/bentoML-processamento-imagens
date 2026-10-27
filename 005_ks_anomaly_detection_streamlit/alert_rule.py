@@ -1,4 +1,15 @@
-"""Alerta sobre D com time boxing (janela mínima de imagens)."""
+"""Alerta operacional sobre D com mínimo de imagens na janela.
+
+Pré-condições: statistic = D ∈ [0, 1]; n_images conta imagens da janela.
+
+Fluxo::
+
+    n < min? ──► INCONCLUSIVO
+         │
+         └─► D ≥ limiar? ──► ALERTA / TRANQUILO
+
+Saídas principais: alert_on_d(...); rótulos em ALERT_PT.
+"""
 
 from __future__ import annotations
 

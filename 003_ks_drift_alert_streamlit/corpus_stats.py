@@ -1,6 +1,16 @@
-"""Camada 2 — agrega features por imagem já gravadas em estatísticas do corpus.
+"""Camada 2 — agrega features/*.json no freeze estatístico do corpus.
 
-Lê apenas `features/*.json`. Não abre imagens. Não serve HTTP.
+Lê apenas JSON já extraídos. Não abre imagens. Não serve HTTP.
+
+Pré-condições:
+  - features_dir com ≥ min_images ficheiros JSON no formato de image_extract;
+  - para load_default_corpus_stats, corpus_stats.json na pasta da aula.
+
+Fluxo::
+
+    features/*.json ──► rebin/acumula ──► histograms + brightness ──► JSON
+
+Saídas principais: build_corpus_stats, load_default_corpus_stats.
 """
 
 from __future__ import annotations
@@ -67,6 +77,11 @@ def write_corpus_stats(stats: dict, path: Path = CORPUS_STATS_PATH) -> Path:
 
 
 def load_corpus_stats(path: Path = CORPUS_STATS_PATH) -> dict:
+    if not path.is_file():
+        raise FileNotFoundError(
+            f"estatística de corpus ausente: {path} "
+            "(rode just build-corpus-stats ou just build-demo-batches)"
+        )
     return json.loads(path.read_text(encoding="utf-8"))
 
 

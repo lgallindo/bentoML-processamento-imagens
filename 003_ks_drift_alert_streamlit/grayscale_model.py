@@ -1,4 +1,14 @@
-"""Empacotamento clássico de tons de cinza como modelo BentoML."""
+"""Modelo BentoML picklable: Pillow convert(\"L\") sem pesos neurais.
+
+Pré-condições: BentoML model store acessível para save/load.
+
+Fluxo::
+
+    GrayscaleModel.__call__ ──► image.convert(\"L\")
+    save_grayscale_model ──► tag ──► load_grayscale_model
+
+Saídas principais: save_grayscale_model, load_grayscale_model.
+"""
 
 from __future__ import annotations
 

@@ -1,6 +1,16 @@
-"""Camada 2 — agrega features por imagem já gravadas em estatísticas do corpus.
+"""Camada 2 — agrega features/*.json no freeze estatístico do corpus.
 
-Lê apenas `features/*.json`. Não abre imagens. Não serve HTTP.
+Lê apenas JSON já extraídos. Não abre imagens. Não serve HTTP.
+
+Pré-condições:
+  - features_dir com ≥ min_images ficheiros JSON;
+  - para load_*, o path do freeze deve existir.
+
+Fluxo::
+
+    features/*.json ──► rebin/acumula ──► histograms + brightness ──► JSON
+
+Saídas principais: build_corpus_stats, load_corpus_stats, load_default_corpus_stats.
 """
 
 from __future__ import annotations
@@ -11,7 +21,7 @@ from pathlib import Path
 from histogram import DEFAULT_BINS, cumulative_distribution, rebin_counts
 from image_extract import CHANNELS, FEATURES_DIR, list_feature_files, load_image_features
 
-MIN_TRAINING_IMAGES = 8  # classroom freeze uses 12 beaches; banner needs ≥8
+MIN_TRAINING_IMAGES = 8  # freeze de sala; alerta exige ≥8 imagens
 CORPUS_STATS_PATH = Path("corpus_stats.json")
 CHANNEL_KEYS = {"L": "luminance", "R": "r", "G": "g", "B": "b"}
 
@@ -67,6 +77,11 @@ def write_corpus_stats(stats: dict, path: Path = CORPUS_STATS_PATH) -> Path:
 
 
 def load_corpus_stats(path: Path = CORPUS_STATS_PATH) -> dict:
+    if not path.is_file():
+        raise FileNotFoundError(
+            f"corpus ausente: {path} "
+            "(rode `just sync-demo-from-003` ou copie o freeze da aula 003)"
+        )
     return json.loads(path.read_text(encoding="utf-8"))
 
 

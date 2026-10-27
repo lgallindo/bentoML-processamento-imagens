@@ -1,4 +1,16 @@
-"""Detecção de anomalia: uma imagem (ou janela) vs referência via KS em L."""
+"""Detecção de anomalia: candidato ou janela temporal vs referência (KS em L).
+
+Pré-condições:
+  - contagens de referência e candidato com bins compatíveis após rebin;
+  - para janela, paths em request_features/ com timestamp no stem.
+
+Fluxo::
+
+    imagem/counts ──► hist L ──► CDF ──► D vs ref
+    request_features/ ──► filtro N dias ──► agrega ──► window_alert(n, D)
+
+Saídas principais: score_*_vs_reference, filter_paths_in_window, window_alert.
+"""
 
 from __future__ import annotations
 
