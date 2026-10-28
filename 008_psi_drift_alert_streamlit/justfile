@@ -51,5 +51,8 @@ curl-inference-grayscale image output="grayscale.png" port="3338":
 verify-psi batch="forests":
     uv run --no-active python scripts/verify_psi.py {{batch}}
 
+generate-illustrations:
+    uv run --no-active python scripts/generate_illustrations.py
+
 test:
     uv run --no-active pytest -q
