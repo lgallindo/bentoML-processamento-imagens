@@ -16,7 +16,7 @@ def faixa_alerta_psi(
     n_ref: int,
     n_lote: int,
     stable: float = 0.10,
-    shift: float = 0.25,
+    shift: float = 0.50,
     min_n: int = 8,
 ) -> str:
     """INCONCLUSIVO / ESTÁVEL / INVESTIGAR / MUDANÇA FORTE."""

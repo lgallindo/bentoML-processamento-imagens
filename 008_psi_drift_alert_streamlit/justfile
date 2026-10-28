@@ -20,6 +20,7 @@ build-demo-batches: extract-features build-corpus-stats
     uv run --no-active python scripts/build_batch_from_theme.py beaches --name control --offset=50 --count=50
     uv run --no-active python scripts/build_batch_from_theme.py forests --name forests --offset=0 --count=50
 
+# Contingência visual (bolas), espelhando a aula 003. Lote misto → aula 007.
 build-contingency-batches:
     uv run --no-active python scripts/build_batch_from_theme.py --themes beaches forests --name landscapes
     uv run --no-active python scripts/build_batch_from_theme.py balls --name balls --offset=0 --count=50

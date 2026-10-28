@@ -15,11 +15,11 @@ def test_stable_below_010() -> None:
 
 def test_watch_band() -> None:
     assert alert_on_psi(0.10, 12, 12) == "WATCH"
-    assert alert_on_psi(0.25, 12, 12) == "WATCH"
+    assert alert_on_psi(0.50, 12, 12) == "WATCH"
     assert label_pt("WATCH") == "INVESTIGAR"
 
 
-def test_strong_shift_above_025() -> None:
-    assert alert_on_psi(0.2500001, 12, 12) == "ALERT"
-    assert alert_on_psi(0.40, 12, 12) == "ALERT"
+def test_strong_shift_above_050() -> None:
+    assert alert_on_psi(0.5000001, 12, 12) == "ALERT"
+    assert alert_on_psi(0.60, 12, 12) == "ALERT"
     assert label_pt("ALERT") == "MUDANÇA FORTE"

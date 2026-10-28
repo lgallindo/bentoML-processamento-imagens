@@ -78,8 +78,8 @@ SNIPPETS: dict[str, str] = {
     """PSI = Σ_b termo_kl. Alternativas: χ²; JS divergence."""
     return sum(termo_kl(pr, pl, eps=eps) for pr, pl in zip(p_ref, p_lote))
 ''',
-    "faixa alerta": '''def faixa_alerta_psi(psi, n_ref, n_lote, stable=0.10, shift=0.25, min_n=8):
-    """INCONCLUSIVO / ESTÁVEL / INVESTIGAR / MUDANÇA FORTE."""
+    "faixa alerta": '''def faixa_alerta_psi(psi, n_ref, n_lote, stable=0.10, shift=0.50, min_n=8):
+    """INCONCLUSIVO / ESTÁVEL / INVESTIGAR / MUDANÇA FORTE (corte 0,50 no painel)."""
     if n_ref < min_n or n_lote < min_n:
         return "INCONCLUSIVO"
     if psi > shift:

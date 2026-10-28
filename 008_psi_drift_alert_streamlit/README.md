@@ -160,23 +160,24 @@ def psi_soma(p_ref, p_lote, eps=1e-6):
 A **faixa de alerta** traduz o PSI contínuo (e os tamanhos amostrais
 \(n_{\mathrm{ref}}\), \(n_{\mathrm{lote}}\)) num estado operacional legível:
 
-| Estado | Quando |
+| Estado | Quando (painel desta aula) |
 | :--- | :--- |
 | **INCONCLUSIVO** | \(n < 8\) em qualquer lado — ainda há poucas imagens |
 | **ESTÁVEL** | PSI &lt; 0,10 |
-| **INVESTIGAR** | 0,10 ≤ PSI ≤ 0,25 |
-| **MUDANÇA FORTE** | PSI &gt; 0,25 |
+| **INVESTIGAR** | 0,10 ≤ PSI ≤ 0,50 |
+| **MUDANÇA FORTE** | PSI &gt; 0,50 |
 
-Os cortes 0,10 / 0,25 vêm do monitoramento clássico de scorecards
-(crédito); o §11 e o §13 explicam a política e outros contextos. No
-código interno os rótulos EN são `QUIET` / `WATCH` / `ALERT` /
-`INCONCLUSIVE`; o handout e a UI usam o português da tabela.
+A literatura de scorecards cita com frequência 0,10 / 0,25 (§13). O painel
+usa **0,10 / 0,50** no freeze P2: o controle de praias mede ≈ 0,26 e, com
+o corte clássico 0,25, sairia MUDANÇA FORTE. No código interno os rótulos
+EN são `QUIET` / `WATCH` / `ALERT` / `INCONCLUSIVE`; o handout e a UI
+usam o português da tabela.
 
 Script: [`scripts/workflow_boxes/box_04_faixa.py`](scripts/workflow_boxes/box_04_faixa.py)
 
 ```python
-def faixa_alerta_psi(psi, n_ref, n_lote, stable=0.10, shift=0.25, min_n=8):
-    """INCONCLUSIVO / ESTÁVEL / INVESTIGAR / MUDANÇA FORTE."""
+def faixa_alerta_psi(psi, n_ref, n_lote, stable=0.10, shift=0.50, min_n=8):
+    """INCONCLUSIVO / ESTÁVEL / INVESTIGAR / MUDANÇA FORTE (corte do painel)."""
     if n_ref < min_n or n_lote < min_n:
         return "INCONCLUSIVO"
     if psi > shift:
@@ -460,15 +461,15 @@ As funções didáticas por caixa estão em
 
 Transformar o PSI contínuo numa decisão operacional legível no painel.
 
-Cortes clássicos de monitoramento contínuo de scorecards (Siddiqi e
-materiais de *ongoing monitoring*):
+Cortes **operacionais do painel** (calibrados no freeze Streamlit P2;
+scorecards clássicos usam 0,10 / 0,25 — ver §13):
 
 | Estado | Condição | O que significa | Ação típica |
 | :--- | :--- | :--- | :--- |
 | **INCONCLUSIVO** | \(n_{\mathrm{ref}} &lt; 8\) **ou** \(n_{\mathrm{lote}} &lt; 8\) | Ainda há poucas imagens | Esperar mais pedidos na janela |
 | **ESTÁVEL** | ambos \(n \ge 8\) e PSI &lt; 0,10 | Lote compatível com a referência | Seguir monitorando |
-| **INVESTIGAR** | ambos \(n \ge 8\) e 0,10 ≤ PSI ≤ 0,25 | Mudança moderada | Abrir ticket / olhar tema |
-| **MUDANÇA FORTE** | ambos \(n \ge 8\) e PSI &gt; 0,25 | Afastamento forte | Investigar com prioridade |
+| **INVESTIGAR** | ambos \(n \ge 8\) e 0,10 ≤ PSI ≤ 0,50 | Mudança moderada | Abrir ticket / olhar tema |
+| **MUDANÇA FORTE** | ambos \(n \ge 8\) e PSI &gt; 0,50 | Afastamento forte | Investigar com prioridade |
 
 No código interno os estados EN são `QUIET` / `WATCH` / `ALERT` /
 `INCONCLUSIVE`; a UI e este handout usam os rótulos em português acima.
@@ -508,8 +509,8 @@ no lado produção.
 
 **Política mínima sugerida (estudo).** Escolher a duração da janela;
 agregar só dessa fatia; exigir \(n \ge 8\) antes de sair de INCONCLUSIVO;
-alertar pelas faixas 0,10 / 0,25; revisar a referência quando o negócio
-mudar de domínio de propósito.
+alertar pelas faixas do painel (0,10 / 0,50 nesta aula); revisar a
+referência quando o negócio mudar de domínio de propósito.
 
 ---
 
@@ -522,7 +523,7 @@ domínio é o **papel** do índice e a **origem** dos cortes 0,10 / 0,25.
 | :--- | :--- | :--- | :--- |
 | Credit scoring / scorecards | Estabilidade da população de escores | &lt;0,10 estável; 0,10–0,25 investigar; &gt;0,25 forte | Siddiqi; [KAscore](https://ketchbrookanalytics.github.io/KAscore/articles/ongoing-monitoring.html) |
 | Monitoramento de features | Drift de entrada categórica ou binned | mesmos cortes clássicos, por feature | práticas de *ongoing monitoring* |
-| Esta aula (imagens) | Drift de luminância (P2/P1) | mesmos 0,10 / 0,25 + INCONCLUSIVO \(n&lt;8\) | freeze praias × florestas |
+| Esta aula (imagens) | Drift de luminância (P2/P1) | 0,10 / **0,50** + INCONCLUSIVO \(n&lt;8\) (calibrado no freeze) | praias × florestas/bolas |
 
 ### 13.1 Scorecards — exemplo trabalhado
 
@@ -543,13 +544,14 @@ nominais (UF, canal, produto). Conta-se a frequência relativa de cada
 rótulo na referência e no lote; aplica-se a mesma soma. O KS clássico
 sobre CDF **não** se define nesse eixo.
 
-### 13.3 Por que manter 0,10 / 0,25 nesta aula
+### 13.3 Por que o painel usa 0,10 / 0,50 (e não 0,25)
 
-O freeze (secção 14) mostra que florestas disparam com clareza no P2 e no
-P1, e que o controle de mesmo tema fica **logo acima** de 0,25 no P2 com
-\(n=50\) e 10 quantis — lição de sensibilidade, não licença para inventar
-corte ad hoc. Mantemos os cortes clássicos do crédito; o handout registra
-o número medido em vez de escondê-lo.
+O freeze (secção 14) mostra que florestas/bolas disparam com clareza no
+P2, e que o controle de mesmo tema fica **logo acima** de 0,25 no P2 com
+\(n=50\) e 10 quantis (≈ 0,26). Manter o corte clássico 0,25 pintaria o
+controle como MUDANÇA FORTE e estragaria a demonstração. O painel sobe o
+corte superior para **0,50**: controle → INVESTIGAR; troca de tema →
+MUDANÇA FORTE. O handout registra o número medido e a calibração.
 
 ---
 
@@ -567,17 +569,18 @@ o número medido em vez de escondê-lo.
 P2 usa **10 faixas por quantis** da referência; P1 usa histograma de L
 com 256 faixas (pixels).
 
-| Lote | Conteúdo | PSI P2 (média L) | Leitura P2 | PSI P1 (pixel L) | Leitura P1 | KS-D (ref.) |
-| :--- | :--- | ---: | :--- | ---: | :--- | ---: |
-| `control` | praias 51–100 | **0,259** | MUDANÇA FORTE (limiar) | **0,060** | ESTÁVEL | ≈ 0,051 |
-| `forests` | 50 florestas | **4,300** | MUDANÇA FORTE | **0,301** | MUDANÇA FORTE | ≈ 0,231 |
+| Lote | Conteúdo | PSI P2 (média L) | Leitura P2 (0,10/0,50) | PSI P1 (pixel L) | Leitura P1 |
+| :--- | :--- | ---: | :--- | ---: | :--- |
+| `control` | praias 51–100 | **0,259** | INVESTIGAR | **0,060** | ESTÁVEL |
+| `forests` | 50 florestas | **4,300** | MUDANÇA FORTE | **0,301** | MUDANÇA FORTE |
+| `balls` | 50 bolas | **2,117** | MUDANÇA FORTE | **0,307** | MUDANÇA FORTE |
 
 Calibração: com \(n=50\) e 10 quantis, cada faixa da referência tem cerca
 de cinco imagens. O segundo bloco de praias desloca um pouco as médias de
-L e o **P2** do controle fica **logo acima** do corte clássico 0,25
-(0,259). As florestas disparam para ~4,3 — uma ordem de magnitude acima.
-O espelho **P1** (pixels) separa limpo: controle estável (0,060), florestas
-mudança forte (0,301).
+L e o **P2** do controle fica ≈ 0,26 (acima do clássico 0,25). O painel
+usa corte superior **0,50** para o controle cair em INVESTIGAR. Florestas
+(~4,3) e bolas (~2,1) disparam MUDANÇA FORTE. O espelho **P1** (pixels)
+separa limpo: controle estável (0,060); florestas/bolas mudança forte.
 
 | Massas P2 (florestas) | Contagens P2 (ref.) | Contagens P2 (lote) |
 | :---: | :---: | :---: |
@@ -589,6 +592,8 @@ mudança forte (0,301).
 - Lotes offline (`just build-demo-batches`):
   - `batch_stats/control.json` — praias 51–100
   - `batch_stats/forests.json` — 50 florestas
+- Contingência visual (`just build-contingency-batches`), como na aula 003:
+  - `batch_stats/balls.json` — 50 bolas (`samples/balls`[:50])
 
 Confirmados com `just verify-psi control` e `just verify-psi forests`
 após `just build-demo-batches`.
@@ -612,7 +617,7 @@ após `just build-demo-batches`.
   request_stats.py          # request_features/ → lote (+ luminance_means)
   plotting.py               # histogramas, massas, médias
   corpus_stats.json         # freeze: praias[:50]
-  batch_stats/              # control.json, forests.json, …
+  batch_stats/              # control.json, forests.json, balls.json, …
   request_features/         # log vivo (gitkeep; JSON ignorados)
   features/                 # saídas de extract
   illustrations/            # PNGs do handout (just generate-illustrations)
@@ -663,6 +668,8 @@ just build-corpus-stats
 
 just build-demo-batches
 # grava batch_stats/control.json e batch_stats/forests.json
+just build-contingency-batches
+# grava batch_stats/balls.json (e landscapes, se pedido pela receita)
 
 just generate-illustrations
 # opcional: regenera illustrations/*.png usadas neste handout
@@ -713,8 +720,8 @@ app: massas → PSI → faixas ESTÁVEL / INVESTIGAR / MUDANÇA FORTE
 | **Referência / corpus** | distribuição de treino agregada |
 | **Lote / produção** | agregação de pedidos (ou batch demo) |
 | **ESTÁVEL** | PSI &lt; 0,10 com \(n \ge 8\) |
-| **INVESTIGAR** | 0,10 ≤ PSI ≤ 0,25 |
-| **MUDANÇA FORTE** | PSI &gt; 0,25 |
+| **INVESTIGAR** | 0,10 ≤ PSI ≤ 0,50 (painel; clássico scorecard ≤ 0,25) |
+| **MUDANÇA FORTE** | PSI &gt; 0,50 (painel) |
 | **Janela temporal** | fatia de pedidos (ex.: últimos 30 dias) usada no lote |
 
 ---

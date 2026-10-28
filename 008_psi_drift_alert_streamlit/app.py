@@ -2,7 +2,7 @@
 
 Orquestra o ritual didático (defs, amostras, gráficos e estado do alerta)
 sobre lotes offline em batch_stats/ comparados ao corpus de referência.
-O semáforo operacional é PSI P2 (média de L por imagem); P1 e D são espelhos.
+O semáforo operacional é PSI P2 (média de L por imagem); P1 é espelho.
 
 Pré-condições:
   - pasta batch_stats/ existe e contém JSON de lotes;
@@ -28,9 +28,8 @@ from pathlib import Path
 import streamlit as st
 from PIL import Image
 
-from alert_psi import alert_on_psi, label_pt
+from alert_psi import PSI_SHIFT, PSI_STABLE, alert_on_psi, label_pt
 from corpus_stats import load_default_corpus_stats
-from ks_compare import compare_stats
 from plotting import (
     load_thumbnails,
     plot_histogram,
@@ -162,9 +161,10 @@ por pixel).
 `batch_stats/`:
 
 - **Mesmo tema (outro trecho de praias)** — controle: praias
-  `[50:100]`, **disjuntas** do treino `[:50]`.
+  `[50:100]`, **disjuntas** do treino `[:50]`. No P2 (quantis) espera-se
+  **INVESTIGAR** (PSI perto de 0,26 no freeze), não MUDANÇA FORTE.
 - **Florestas** — tema divergente: espera-se **MUDANÇA FORTE** no P2.
-- **Bolas** (se existir no disco) — contingência visual.
+- **Bolas** (se existir no disco) — contingência visual: **MUDANÇA FORTE**.
 
 O lote misto praias+florestas e o JSON `beaches` (fatia de treino) **não**
 aparecem aqui, para não misturar aulas nem comparar o corpus consigo mesmo.
@@ -254,16 +254,17 @@ st.code(ALGORITMO_PSI, language="text")
 
 st.subheader("Faixas de alerta")
 st.markdown(
-    r"""
-Cortes clássicos de *credit scoring* / monitoramento de scorecards
-(Siddiqi e material de ongoing monitoring):
+    rf"""
+Cortes **operacionais deste painel** (calibrados no freeze Streamlit P2;
+literatura de scorecard costuma citar 0,10 / 0,25, mas o controle de
+praias fica ≈ 0,26 e pintaria MUDANÇA FORTE com o corte clássico):
 
 | Estado | Condição | Leitura |
 | :--- | :--- | :--- |
-| INCONCLUSIVO | \(n &lt; 8\) em qualquer lado | Janela / lote ainda fino |
-| ESTÁVEL | \(n \ge 8\) e PSI &lt; 0,10 | Compatível com a referência |
-| INVESTIGAR | \(n \ge 8\) e 0,10 ≤ PSI ≤ 0,25 | Mudança moderada |
-| MUDANÇA FORTE | \(n \ge 8\) e PSI &gt; 0,25 | Afastamento forte |
+| INCONCLUSIVO | \(n < 8\) em qualquer lado | Janela / lote ainda fino |
+| ESTÁVEL | \(n \ge 8\) e PSI < {PSI_STABLE:.2f} | Compatível com a referência |
+| INVESTIGAR | \(n \ge 8\) e {PSI_STABLE:.2f} ≤ PSI ≤ {PSI_SHIFT:.2f} | Mudança moderada |
+| MUDANÇA FORTE | \(n \ge 8\) e PSI > {PSI_SHIFT:.2f} | Afastamento forte |
 
 Em produção o lote é uma **caixa de tempo** (por exemplo pedidos dos
 últimos 30 dias). Os JSON em `batch_stats/` fazem o papel de uma janela
@@ -276,6 +277,10 @@ batches = list_batch_names(BATCH_STATS_DIR)
 with st.sidebar:
     st.header("Controles")
     st.caption("Explicação dos lotes e das faixas: «Como usar este painel».")
+    st.caption(
+        f"Faixas P2: ESTÁVEL < {PSI_STABLE:.2f} ≤ INVESTIGAR ≤ "
+        f"{PSI_SHIFT:.2f} < MUDANÇA FORTE (calibradas no freeze)."
+    )
     batch_name = st.selectbox(
         "Lote atual",
         batches,
@@ -300,10 +305,6 @@ with st.sidebar:
         value=256,
         step=16,
         help="256 = resolução nativa de L. Menos faixas = histograma mais grosso.",
-    )
-    mostrar_ks = st.checkbox(
-        "Mostrar D (KS) ao lado, só para comparação",
-        value=True,
     )
 
 referencia = load_default_corpus_stats()
@@ -404,16 +405,6 @@ with col_h2:
             series_label=label_lote,
             color="#ef6c00",
         )
-    )
-
-if mostrar_ks:
-    ks = compare_stats(referencia, lote, channel="L", bins=n_pixel_bins)
-    st.header("4. Comparação opcional com D (KS)")
-    st.metric("D (Kolmogorov–Smirnov sobre L por pixel)", f"{ks['statistic']:.4f}")
-    st.caption(
-        "O KS resume o máximo afastamento entre CDFs. O PSI soma uma "
-        "contribuição por faixa das massas. São histórias diferentes do "
-        "mesmo histograma de pixels."
     )
 
 st.header("Miniaturas")
