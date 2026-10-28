@@ -73,3 +73,9 @@ download-themed-samples:
 # Confere sha256 de samples/{beaches,forests,balls}/ contra MANIFEST.json.
 verify-themed-samples:
     uv run --no-active python scripts/download_themed_samples.py verify
+
+# Extrai lição 003|008 para repositório irmão pronto para Streamlit Community Cloud.
+# Ex.: just export-streamlit-cloud 003
+#      just export-streamlit-cloud 008 -- --git-init
+export-streamlit-cloud lesson *flags:
+    python3 scripts/export_streamlit_cloud.py {{lesson}} {{flags}}

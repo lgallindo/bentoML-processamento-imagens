@@ -19,6 +19,7 @@ scopes:
   - openspec
   - rules
   - deps
+  - scripts
 subject_max_chars: 72
 require_body: true
 latest_commit_file: LATEST_COMMIT
