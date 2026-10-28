@@ -120,14 +120,25 @@ fluxo = fig("01_workflow_l_to_alert.png")
 if fluxo:
     st.image(str(fluxo), caption="Fluxo: L → histograma → CDF → δ → D → alerta")
 
-with st.expander("Código mínimo por caixa do fluxo"):
+with st.expander("Uma caixa por vez — código e script"):
     st.caption(
-        "Cada caixa de illustrations/01_workflow_l_to_alert.png "
-        "corresponde a uma função em workflow_boxes.py."
+        "Mesmas caixas do fluxo acima; handout §1.1–1.6. "
+        "Scripts isolados em scripts/workflow_boxes/."
     )
-    for caixa, codigo in SNIPPETS.items():
-        st.markdown(f"**{caixa}**")
-        st.code(codigo, language="python")
+    ordem = [
+        ("L (pixel)", "illustrations/box_01_l_pixel.png", "scripts/workflow_boxes/box_01_luminancia.py"),
+        ("histograma h", "illustrations/box_02_histograma_h.png", "scripts/workflow_boxes/box_02_histograma.py"),
+        ("CDF F", "illustrations/box_03_cdf_f.png", "scripts/workflow_boxes/box_03_cdf.py"),
+        ("δ = |F − G|", "illustrations/box_04_delta.png", "scripts/workflow_boxes/box_04_delta.py"),
+        ("D = max δ", "illustrations/box_05_d_max.png", "scripts/workflow_boxes/box_05_d_max.py"),
+        ("alerta em D", "illustrations/box_06_alerta_d.png", "scripts/workflow_boxes/box_06_alerta.py"),
+    ]
+    for titulo, png, script in ordem:
+        st.markdown(f"**{titulo}** — `{script}`")
+        p = ROOT / png
+        if p.is_file():
+            st.image(str(p), width=160)
+        st.code(SNIPPETS[titulo], language="python")
 
 st.header("Como usar este painel")
 st.markdown(

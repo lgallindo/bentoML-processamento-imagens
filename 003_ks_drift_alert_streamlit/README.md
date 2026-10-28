@@ -47,45 +47,138 @@ de Kolmogorov–Smirnov **D**. Quando **D** cruza um limiar, o painel mostra
 
 ![Fluxo L → histograma → CDF → δ → D → alerta](illustrations/01_workflow_l_to_alert.png)
 
-### Código mínimo por caixa do fluxo
+As subseções abaixo espelham **cada caixa** desse fluxo (a figura
+completa acima permanece intacta). Cada caixa tem a sua própria miniatura,
+o código comentado e um script que executa **somente** aquele passo:
 
-Não havia mapa formal das caixas de
-`illustrations/01_workflow_l_to_alert.png` além da própria figura e do
-caption no Streamlit. O contrato canônico passa a ser o módulo
-[`workflow_boxes.py`](workflow_boxes.py): **uma função por caixa**, na
-ordem da figura.
+`scripts/workflow_boxes/box_0N_*.py`.
 
-| Caixa | Função | Entrada → saída |
-| :--- | :--- | :--- |
-| L (pixel) | `luminancia_L` | imagem → imagem modo L |
-| histograma h | `histograma_h` | imagem → contagens |
-| CDF F | `cdf_F` | contagens → CDF |
-| δ = \|F − G\| | `delta_FG` | duas CDFs → lista δ |
-| D = max δ | `D_max_delta` | δ → escalar D |
-| alerta em D | `alerta_em_D` | D, n → estado |
+### 1.1 Caixa — L (pixel)
+
+![Caixa L](illustrations/box_01_l_pixel.png)
+
+Converte a fotografia para tons de cinza. Cada pixel vira um inteiro
+\(L \in \{0,\ldots,255\}\). Sem L, não há histograma de brilho.
+
+Script: [`scripts/workflow_boxes/box_01_luminancia.py`](scripts/workflow_boxes/box_01_luminancia.py)
 
 ```python
 def luminancia_L(image):
+    """Devolve a grade em modo L (0 = preto … 255 = branco).
+
+    Alternativas: média Rec. 601 manual dos canais RGB; ou um canal
+    R/G/B isolado se a pergunta for cor, não luminância.
+    """
     return image.convert("L")
+```
 
+### 1.2 Caixa — histograma h
+
+![Caixa histograma](illustrations/box_02_histograma_h.png)
+
+Conta quantos pixels caíram em cada faixa de L. Com 256 faixas, cada
+nível de cinza é um balde. Com menos faixas, reagrupamos baldes
+(resolução mais grossa — o controle “Número de faixas” no Streamlit).
+
+Script: [`scripts/workflow_boxes/box_02_histograma.py`](scripts/workflow_boxes/box_02_histograma.py)
+
+```python
 def histograma_h(image, bins=256):
-    return list(image.convert("L").histogram())  # ou rebin para `bins`
+    """Contagens por faixa de L.
 
+    Alternativas: numpy.histogram sobre getdata(); ou densidades
+    (frações) no lugar de contagens — a CDF continua sendo a soma
+    acumulada, se a normalização for a mesma.
+    """
+    cinza = image.convert("L")
+    counts = list(cinza.histogram())  # 256 baldes nativos
+    if bins == 256:
+        return counts
+    out = [0] * bins
+    for i, value in enumerate(counts):
+        out[min(bins - 1, (i * bins) // 256)] += int(value)
+    return out
+```
+
+### 1.3 Caixa — CDF F
+
+![Caixa CDF](illustrations/box_03_cdf_f.png)
+
+Transforma contagens em fração acumulada: “até este tom de cinza, que
+parte do total já passou?”. A CDF é não-decrescente e termina em 1 —
+geometria que o KS aproveita.
+
+Script: [`scripts/workflow_boxes/box_03_cdf.py`](scripts/workflow_boxes/box_03_cdf.py)
+
+```python
 def cdf_F(counts):
+    """F_k = (soma das contagens até k) / N.
+
+    Alternativas: numpy.cumsum / N; ECDF ponto a ponto (um salto por
+    pixel) sem histogramar antes.
+    """
     total = sum(counts)
     acc, out = 0, []
     for c in counts:
         acc += c
         out.append(acc / total)
     return out
+```
 
+### 1.4 Caixa — δ = |F − G|
+
+![Caixa delta](illustrations/box_04_delta.png)
+
+Na mesma grade de faixas, mede a distância **vertical** entre a CDF da
+referência (\(F\)) e a do lote (\(G\)).
+
+Script: [`scripts/workflow_boxes/box_04_delta.py`](scripts/workflow_boxes/box_04_delta.py)
+
+```python
 def delta_FG(F, G):
+    """δ_k = |F_k − G_k|.
+
+    Alternativas: diferença com sinal (quem está acima); norma L2 das
+    diferenças; Cramér–von Mises (integral de (F−G)²) — outro teste.
+    """
     return [abs(a - b) for a, b in zip(F, G)]
+```
 
+### 1.5 Caixa — D = max δ
+
+![Caixa D](illustrations/box_05_d_max.png)
+
+A estatística de Kolmogorov–Smirnov de duas amostras é o **pior**
+afastamento vertical: \(D = \max_k \delta_k\).
+
+Script: [`scripts/workflow_boxes/box_05_d_max.py`](scripts/workflow_boxes/box_05_d_max.py)
+
+```python
 def D_max_delta(delta):
-    return max(delta)
+    """D = max δ.
 
+    Alternativas: Anderson–Darling (mais peso nas caudas); valor-p
+    assintótico a partir de D (nota de rodapé — fora da regra de alerta).
+    """
+    return max(delta)
+```
+
+### 1.6 Caixa — alerta em D
+
+![Caixa alerta](illustrations/box_06_alerta_d.png)
+
+Traduz \(D\) e a massa amostral (\(n\) em cada lado) em estado operacional.
+Com \(n < 8\), a aula declara INCONCLUSIVO mesmo que \(D\) seja alto.
+
+Script: [`scripts/workflow_boxes/box_06_alerta.py`](scripts/workflow_boxes/box_06_alerta.py)
+
+```python
 def alerta_em_D(D, n_ref, n_lote, limiar=0.10, min_n=8):
+    """INCONCLUSIVO / ALERTA / TRANQUILO.
+
+    Alternativas: semáforo FRTB (0,09 / 0,12); regra D+p (WATCH);
+    limiar calibrado por quantil histórico de D.
+    """
     if n_ref < min_n or n_lote < min_n:
         return "INCONCLUSIVO"
     return "ALERTA" if D >= limiar else "TRANQUILO"
@@ -757,8 +850,8 @@ linha `020`) e analisa a distribuição de **L** no Streamlit.
     verify_ks_alert.py          # imprime D/alerta sem UI
   tests/                    # pytest
   docs/
-    meta-da-aula-a-formula.md   # cartão-resumo da fórmula
     notas-experimento-freeze.md # por que 50; pixel vs média
+  scripts/workflow_boxes/       # um script por caixa do fluxo
   justfile
 ```
 
@@ -862,8 +955,8 @@ app: histograma → CDF → δ → D → alerta se D ≥ 0,10
 | **ALERTA** | $D \ge 0{,}10$ com amostras suficientes |
 | **Janela temporal** | fatia de pedidos (ex.: últimos 30 dias) usada no lote |
 
-Cartão-resumo ainda mais curto:
-[`docs/meta-da-aula-a-formula.md`](docs/meta-da-aula-a-formula.md).
+Notas de freeze (pixel vs média):
+[`docs/notas-experimento-freeze.md`](docs/notas-experimento-freeze.md).
 
 ---
 
@@ -871,6 +964,10 @@ Cartão-resumo ainda mais curto:
 
 ```bash
 just test
+# inclui tests/test_workflow_box_demos.py (scripts por caixa)
+
+python scripts/workflow_boxes/box_01_luminancia.py
+# … até box_06_alerta.py — cada um isolado
 ```
 
 ---

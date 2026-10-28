@@ -61,6 +61,38 @@ def workflow() -> None:
     plt.close(fig)
 
 
+def workflow_single_boxes() -> None:
+    """Uma PNG por caixa (não altera 01_workflow_l_to_alert.png)."""
+    steps = [
+        ("box_01_l_pixel.png", "L\n(pixel)", "#e3f2fd"),
+        ("box_02_histograma_h.png", "histograma\nh", "#e3f2fd"),
+        ("box_03_cdf_f.png", "CDF\nF", "#e3f2fd"),
+        ("box_04_delta.png", "δ = |F−G|", "#e3f2fd"),
+        ("box_05_d_max.png", "D = max δ", "#e3f2fd"),
+        ("box_06_alerta_d.png", "alerta\nem D", "#ffe0b2"),
+    ]
+    for name, label, face in steps:
+        fig, ax = plt.subplots(figsize=(2.4, 1.4))
+        ax.set_xlim(0, 1)
+        ax.set_ylim(0, 1)
+        ax.axis("off")
+        ax.add_patch(
+            mpatches.FancyBboxPatch(
+                (0.08, 0.22),
+                0.84,
+                0.56,
+                boxstyle="round,pad=0.02,rounding_size=0.08",
+                facecolor=face,
+                edgecolor="#1565c0",
+                linewidth=1.4,
+            )
+        )
+        ax.text(0.5, 0.5, label, ha="center", va="center", fontsize=11)
+        fig.tight_layout(pad=0.1)
+        fig.savefig(OUT / name, dpi=140, bbox_inches="tight")
+        plt.close(fig)
+
+
 def toy() -> None:
     h = np.array([2, 1, 3], dtype=float)
     cdf = np.cumsum(h) / h.sum()
@@ -124,6 +156,7 @@ def freeze_figs() -> None:
 def main() -> int:
     OUT.mkdir(exist_ok=True)
     workflow()
+    workflow_single_boxes()
     toy()
     freeze_figs()
     print(f"ok → {OUT}")
