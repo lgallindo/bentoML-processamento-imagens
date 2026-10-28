@@ -43,6 +43,7 @@ from sample_sets import (
     rotulo_lote,
     theme_paths_for_batch,
 )
+from workflow_boxes import SNIPPETS
 
 ROOT = Path(__file__).resolve().parent
 BATCH_STATS_DIR = ROOT / "batch_stats"
@@ -118,6 +119,15 @@ produz um **alerta** quando **D** cruza um limiar.
 fluxo = fig("01_workflow_l_to_alert.png")
 if fluxo:
     st.image(str(fluxo), caption="Fluxo: L → histograma → CDF → δ → D → alerta")
+
+with st.expander("Código mínimo por caixa do fluxo"):
+    st.caption(
+        "Cada caixa de illustrations/01_workflow_l_to_alert.png "
+        "corresponde a uma função em workflow_boxes.py."
+    )
+    for caixa, codigo in SNIPPETS.items():
+        st.markdown(f"**{caixa}**")
+        st.code(codigo, language="python")
 
 st.header("Como usar este painel")
 st.markdown(

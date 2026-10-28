@@ -7,11 +7,12 @@ O painel vivo está em [`app.py`](app.py).
 
 1. [Por que estamos aqui](#por-que-estamos-aqui)
 2. [Luminância L](#luminância-l)
-3. [Duas variáveis monitoradas](#duas-variáveis-monitoradas)
-4. [Fórmula do PSI](#fórmula-do-psi)
-5. [Faixas de alerta](#faixas-de-alerta-crédito--scorecards)
-6. [Números do freeze](#números-do-freeze-praias--florestas)
-7. [Estrutura / execução / testes](#estrutura-da-pasta-arquivos-principais)
+3. [Da CDF ao histograma: por que nasce o PSI](#da-cdf-ao-histograma-por-que-nasce-o-psi)
+4. [Duas variáveis monitoradas](#duas-variáveis-monitoradas)
+5. [Fórmula do PSI](#fórmula-do-psi)
+6. [Faixas de alerta](#faixas-de-alerta-crédito--scorecards)
+7. [Números do freeze](#números-do-freeze-praias--florestas)
+8. [Estrutura / execução / testes](#estrutura-da-pasta-arquivos-principais)
 
 ---
 
@@ -47,6 +48,50 @@ from PIL import Image
 img = Image.open("foto.jpg").convert("L")
 media_L = sum(img.getdata()) / (img.width * img.height)
 ```
+
+## Da CDF ao histograma: por que nasce o PSI
+
+Na [aula 003](../003_ks_drift_alert_streamlit/README.md) o afastamento entre
+treino e lote não se julga olhando histogramas lado a lado. Histogramas são
+honestos, porém **sem forma canônica**: mudam com o número de faixas, com o
+alinhamento dos cortes, com a escala do eixo. Derivam-se mal propriedades
+formais estáveis — limites, monotonia, leis limite — quando o objeto ainda é
+só um vetor de contagens.
+
+Por isso o KS sobe um degrau. A **função de distribuição acumulada** (CDF)
+carrega uma geometria que o histograma não oferece de graça: é
+**não-decrescente**, parte de valores próximos de zero quando a variável tende
+a $-\infty$ e satura em um quando tende a $+\infty$. Duas sigmoides empíricas
+na mesma grade permitem definir, com limpeza matemática,
+
+$$
+D = \sup_x \lvert F(x) - G(x) \rvert.
+$$
+
+A pergunta deixa de ser “os baldes coincidem?” e passa a ser “as curvas
+acumuladas afastam-se quanto, no pior ponto?”.
+
+Imagine, porém, que **não** queiramos construir a CDF. Queremos permanecer no
+histograma — nas massas relativas $p_b$ e $q_b$ de cada faixa $b$. A comparação
+direta de contagens (diferença euclidiana, razão crua, “olhômetro”) continua
+com propriedades teóricas pobres. O que resta, no mínimo respeitável, é uma
+divergência da família da informação: a **divergência de Kullback–Leibler** e,
+para não privilegiar um dos lados, a sua forma **simétrica**. Somando, faixa a
+faixa, termos do tipo $(q_b - p_b)\ln(q_b/p_b)$ (com suavização quando alguma
+massa some), obtém-se o índice que o crédito conhece como **Population
+Stability Index** (PSI).
+
+Há uma consequência prática decisiva. Para erguer uma CDF — ou qualquer objeto
+que “pareça” uma CDF — a variável subjacente precisa viver num **conjunto
+ordenado** (o eixo $x$ tem de admitir “menor que” e “maior que”). O PSI, ao
+trabalhar só com massas por categoria, **dispensa essa ordem**. As faixas podem
+ser níveis de cinza, faixas de score, ou rótulos nominais sem ranking intrínseco
+(produto, canal, UF). Donde: o mesmo aparelho serve a variáveis **categóricas**,
+território em que o KS clássico sobre CDF simplesmente não se define.
+
+Nesta aula o semáforo operacional é o PSI (em especial o **P2**, médias de L
+por imagem em quantis da referência). O KS em L por pixel permanece como
+espelho numérico — ponte para a 003 —, não como juiz.
 
 ## Duas variáveis monitoradas
 

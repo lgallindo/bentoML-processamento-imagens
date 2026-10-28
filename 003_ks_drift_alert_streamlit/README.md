@@ -47,6 +47,50 @@ de Kolmogorov–Smirnov **D**. Quando **D** cruza um limiar, o painel mostra
 
 ![Fluxo L → histograma → CDF → δ → D → alerta](illustrations/01_workflow_l_to_alert.png)
 
+### Código mínimo por caixa do fluxo
+
+Não havia mapa formal das caixas de
+`illustrations/01_workflow_l_to_alert.png` além da própria figura e do
+caption no Streamlit. O contrato canônico passa a ser o módulo
+[`workflow_boxes.py`](workflow_boxes.py): **uma função por caixa**, na
+ordem da figura.
+
+| Caixa | Função | Entrada → saída |
+| :--- | :--- | :--- |
+| L (pixel) | `luminancia_L` | imagem → imagem modo L |
+| histograma h | `histograma_h` | imagem → contagens |
+| CDF F | `cdf_F` | contagens → CDF |
+| δ = \|F − G\| | `delta_FG` | duas CDFs → lista δ |
+| D = max δ | `D_max_delta` | δ → escalar D |
+| alerta em D | `alerta_em_D` | D, n → estado |
+
+```python
+def luminancia_L(image):
+    return image.convert("L")
+
+def histograma_h(image, bins=256):
+    return list(image.convert("L").histogram())  # ou rebin para `bins`
+
+def cdf_F(counts):
+    total = sum(counts)
+    acc, out = 0, []
+    for c in counts:
+        acc += c
+        out.append(acc / total)
+    return out
+
+def delta_FG(F, G):
+    return [abs(a - b) for a, b in zip(F, G)]
+
+def D_max_delta(delta):
+    return max(delta)
+
+def alerta_em_D(D, n_ref, n_lote, limiar=0.10, min_n=8):
+    if n_ref < min_n or n_lote < min_n:
+        return "INCONCLUSIVO"
+    return "ALERTA" if D >= limiar else "TRANQUILO"
+```
+
 ---
 
 ## 2. DevOps: o serviço que responde
@@ -525,43 +569,20 @@ domínio de propósito (novo produto visual, nova câmera, novo mercado).
 
 ## 12. Limiares de D / KS em outros contextos
 
-Não existe um único “D mágico” para o planeta. Em estatística clássica, o
-teste de duas amostras pergunta se duas amostras podem ter vindo da mesma
-distribuição contínua. Para amostras grandes, rejeita-se essa hipótese ao
-nível $\alpha$ quando
-
-$$
-D > c(\alpha)\,\sqrt{\frac{n+m}{nm}},
-\qquad
-c(0{,}05)\approx 1{,}358
-$$
-
-([Wikipédia — Kolmogorov–Smirnov](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test)).
-Com $n = m = 50$, isso pede $D$ acima de cerca de $0{,}27$. Softwares e
-tabelas publicam os mesmos cortes para $n$ pequenos
-([MetricGate](https://metricgate.com/docs/kolmogorov-smirnov-critical-values/),
-[Real Statistics](https://real-statistics.com/statistics-tables/two-sample-kolmogorov-smirnov-table/)).
-
-Em astronomia e ciências experimentais, muitas vezes se consulta uma tabela
-de valores críticos $mnD$ para pares $(m,n)$ e $\alpha$ fixos
-([NED / Wall](https://ned.ipac.caltech.edu/level5/Wall2/TableA_8.html)): o
-espírito é o mesmo (quando $D$ é “grande demais” sob a hipótese nula), mas
-o número sai de uma grade pré-computada.
-
-No risco de mercado (FRTB, atribuição de P&L), o KS compara curvas de
-lucro/prejuízo hipotético e teórico ao longo de 250 dias. O regulador
-desenhou um semáforo em cima do próprio $D$: zona verde abaixo de
-**0,09**, vermelha acima de **0,12**, âmbar no meio
+No monitoramento de risco de mercado (FRTB / atribuição de P&L), o próprio
+regulador trata **D** como semáforo operacional: abaixo de **0,09** a zona
+é verde, acima de **0,12** é vermelha, e o intervalo âmbar fica no meio
 ([MathWorks](https://www.mathworks.com/help/risk/profit-and-loss-attribution-workflow.html);
 [Regulamento Delegado (UE) 2022/2059, art. 8](https://judict.eu/en/sla/32013R0575/32022R2059-X/article-8)).
-Aqui o limiar é **política**, não um $\alpha$ de livro-texto.
+Essa é a melhor âncora intuitiva para esta aula: o limiar **não** nasce de
+um $\alpha$ sagrado — nasce de **política**. O $0{,}10$ do painel Streamlit
+sente o mesmo espírito (corte único, legível, decidido a priori), só que
+calibrado ao experimento praias × florestas, não ao livro de Basileia.
 
-No *credit scoring*, o KS aparece com outro papel: mede o **poder de
-separação** entre clientes que deram default e os que não deram. Quanto
-**maior** o KS entre as duas curvas de score, melhor o modelo discrimina
-([SAS Model Manager](https://support.sas.com/documentation/cdl/en/mdlmgrug/69919/HTML/default/n194xndt3b3y1pn1ufc0mqbsmht4.htm)).
-Não se trata de “as distribuições são iguais?”; trata-se de “as curvas
-estão bem afastadas?”.
+Não existe um único “D mágico” para o planeta. O que muda de domínio a
+domínio é o **papel** do KS (teste de igualdade, tabela crítica, semáforo
+regulatório, ou índice de separação) e a **origem** do número que você
+compara com $D$.
 
 | Área | Papel do KS | Regra típica | Fonte |
 | :--- | :--- | :--- | :--- |
@@ -571,7 +592,105 @@ estão bem afastadas?”.
 | FRTB P&L | Semáforo regulatório sobre $D$ | verde &lt; 0,09; vermelho &gt; 0,12 | [MathWorks](https://www.mathworks.com/help/risk/profit-and-loss-attribution-workflow.html); [UE 2022/2059](https://judict.eu/en/sla/32013R0575/32022R2059-X/article-8) |
 | Credit scoring | Discriminação default vs non-default | KS alto = melhor separação | [SAS](https://support.sas.com/documentation/cdl/en/mdlmgrug/69919/HTML/default/n194xndt3b3y1pn1ufc0mqbsmht4.htm) |
 
+### 12.1 Estatística clássica (duas amostras) — exemplo trabalhado
+
+Pergunta: as duas amostras podem ter vindo da **mesma** distribuição
+contínua? Para amostras grandes, rejeita-se $H_0$ ao nível $\alpha$ quando
+
+$$
+D > c(\alpha)\,\sqrt{\frac{n+m}{nm}},
+\qquad
+c(0{,}05)\approx 1{,}358
+$$
+
+([Wikipédia — Kolmogorov–Smirnov](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test)).
+
+**Números.** Com $n = m = 50$ (o freeze desta aula):
+
+$$
+\sqrt{\frac{50+50}{50\cdot 50}} = \sqrt{\frac{1}{25}} = 0{,}2,
+\qquad
+1{,}358 \times 0{,}2 \approx 0{,}272.
+$$
+
+Ou seja: o teste clássico a $5\%$ pediria $D \gtrsim 0{,}27$ para rejeitar
+igualdade. No painel, florestas dão $D \approx 0{,}23$ — **abaixo** desse
+corte clássico, porém **acima** do limiar didático $0{,}10$. Duas leituras
+coexistem: “ainda não rejeitaria $H_0$ no livro-texto” versus “já
+dispararíamos o alarme operacional da aula”.
+
+### 12.2 Tabelas e software ($n$ pequenos) — exemplo trabalhado
+
+Quando $n$ ou $m$ são pequenos, a fórmula assintótica acima é grosseira.
+Tabelas publicam o valor crítico de $D$ (ou de uma estatística
+equivalente) para cada par $(n,m)$ e cada $\alpha$
+([MetricGate](https://metricgate.com/docs/kolmogorov-smirnov-critical-values/),
+[Real Statistics](https://real-statistics.com/statistics-tables/two-sample-kolmogorov-smirnov-table/)).
+
+**Números (ilustrativos).** Suponha $n = m = 10$ e $\alpha = 0{,}05$. A
+tabela de duas amostras típica coloca o crítico de $D$ na casa de
+$\approx 0{,}43$–$0{,}46$ (consulte a linha exata na fonte). Um $D = 0{,}30$
+que **alertaria** no Streamlit ($0{,}30 \ge 0{,}10$) **não** rejeitaria
+$H_0$ nessa tabela. Moral: o mesmo $D$ muda de veredito conforme a
+**regra** — política de aula versus teste formal com $n$ fino.
+
+### 12.3 Astronomia / ciências experimentais — exemplo trabalhado
+
+O espírito continua “$D$ grande demais sob $H_0$”, mas o número sai de uma
+grade pré-computada $mnD$ indexada por $(m,n)$ e $\alpha$
+([NED / Wall](https://ned.ipac.caltech.edu/level5/Wall2/TableA_8.html)).
+
+**Números.** Se a tabela listar, para $(m,n)=(20,20)$ e $\alpha=0{,}05$,
+um crítico $D_{\mathrm{crit}} = 0{,}30$, então:
+
+- $D = 0{,}22$ → não rejeita (ainda “compatível” com a nula naquele $\alpha$);
+- $D = 0{,}35$ → rejeita.
+
+O pesquisador **não** escolhe $0{,}10$ por legibilidade pedagógica; ele
+lê a célula $(m,n,\alpha)$. Na sala, nós invertemos a prioridade:
+escolhemos um corte simples e fixamos $n \ge 8$ via INCONCLUSIVO.
+
+### 12.4 FRTB / atribuição de P&L — exemplo trabalhado
+
+Aqui o KS compara, ao longo de uma janela (tipicamente 250 dias úteis), a
+distribuição do P&L **hipotético** com a do P&L **teórico**. O semáforo
+incide sobre **D**:
+
+| Zona | Condição sobre $D$ | Leitura |
+| :--- | :--- | :--- |
+| Verde | $D &lt; 0{,}09$ | Modelagem alinhada o bastante |
+| Âmbar | $0{,}09 \le D \le 0{,}12$ | Atenção / investigação |
+| Vermelho | $D &gt; 0{,}12$ | Fora do apetite regulatório |
+
+**Números.** Imagine três valores observados na mesa de risco:
+
+| Dia de relatório | $D$ | Zona FRTB | Se fosse o painel da aula ($0{,}10$) |
+| :--- | ---: | :--- | :--- |
+| t₁ | $0{,}07$ | Verde | TRANQUILO |
+| t₂ | $0{,}105$ | Âmbar | ALERTA |
+| t₃ | $0{,}15$ | Vermelho | ALERTA |
+
+O âmbar regulatório **não** existe nesta aula: colapsamos política em dois
+estados operacionais (mais INCONCLUSIVO por falta de massa). O ponto
+didático: **0,09 / 0,12** e **0,10** são primos — ambos cortes de
+governança sobre a mesma estatística $D$.
+
+### 12.5 Credit scoring — exemplo trabalhado
+
+No *credit scoring*, o KS troca de pergunta. Em vez de “as distribuições
+são iguais?”, pergunta-se “as curvas de score dos que **deram default** e
+dos que **não deram** estão bem afastadas?”. Quanto **maior** o KS entre
+essas duas curvas empíricas, melhor a discriminação do modelo
+([SAS Model Manager](https://support.sas.com/documentation/cdl/en/mdlmgrug/69919/HTML/default/n194xndt3b3y1pn1ufc0mqbsmht4.htm)).
+
+**Números.** Sejam $F_{\mathrm{mau}}$ e $F_{\mathrm{bom}}$ as CDFs do score
+nos dois grupos. Se $\max_x \lvert F_{\mathrm{mau}}(x)-F_{\mathrm{bom}}(x)\rvert = 0{,}45$,
+o modelo separa melhor do que outro com KS $= 0{,}20$. Aqui **não** se
+dispara alarme quando KS é grande — celebra-se. É o inverso semântico do
+monitoramento de drift desta pasta.
+
 ---
+
 
 ## 13. O experimento desta aula
 

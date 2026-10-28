@@ -129,6 +129,32 @@ de scorecards: estável, investigar, mudança forte.
 """
 )
 
+st.header("Da CDF ao histograma: por que nasce o PSI")
+st.markdown(
+    r"""
+Na aula **003** o KS **não** compara histogramas crus. Contagens por faixa
+não têm forma canônica: mudam com o número de baldes e com o corte dos
+eixos; propriedades formais estáveis (limites, monotonia) nascem com
+dificuldade. A **CDF** oferece o que falta — curva **não-decrescente**, com
+limites bem definidos em $\pm\infty$ — e permite
+
+$$
+D = \sup_x \lvert F(x) - G(x) \rvert.
+$$
+
+Se **recusarmos** a CDF e quisermos permanecer no histograma (massas
+$p_b$, $q_b$), a comparação direta ainda é teoricamente frágil. O mínimo
+respeitável é a divergência de informação **simétrica** (família KL):
+somando $(q_b-p_b)\ln(q_b/p_b)$ (com $\varepsilon$ se massa zero) chega-se
+ao **Population Stability Index**.
+
+Consequência decisiva: a CDF exige variável em conjunto **ordenado**; o
+PSI trabalha só com massas por categoria e **admite variáveis categóricas**
+(sem ranking intrínseco). Aqui o juiz é o PSI (P2); o KS em pixels fica
+como espelho da 003.
+"""
+)
+
 st.header("Definições")
 
 st.subheader("L — luminância")
