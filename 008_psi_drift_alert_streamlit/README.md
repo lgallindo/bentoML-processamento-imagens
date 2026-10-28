@@ -43,9 +43,29 @@ quando o índice cruza faixas clássicas de monitoramento de scorecards.
 
 ![Fluxo hist → massas → termo KL → PSI → faixa](illustrations/01_workflow_hist_to_psi.png)
 
-As subseções abaixo espelham **cada caixa** desse fluxo. Cada caixa tem a
-sua própria miniatura, o código comentado e um script que executa
-**somente** aquele passo: `scripts/workflow_boxes/box_0N_*.py`.
+Leia a figura **da esquerda para a direita**. Cada caixa introduz um termo
+que as caixas seguintes consomem; as subseções abaixo aprofundam o mesmo
+arco, cada uma com miniatura, código e um script isolado em
+`scripts/workflow_boxes/box_0N_*.py`.
+
+1. **Histograma / contagens** — ponto de partida do fluxo. Em cada
+   **faixa** (balde do eixo: quantil da média de L no caminho P2, ou nível
+   de cinza no espelho P1), conta-se quantas observações caíram. Essa
+   lista de inteiros ainda não compara treino e lote: só descreve “quantos
+   em cada balde”. Mais adiante (§7–§8 e o ritual do Streamlit) você verá
+   de onde vêm essas contagens; aqui basta saber que o fluxo **começa**
+   nelas.
+2. **Massas \(p_b\)** — as contagens normalizadas para frações que somam
+   1. Sem massas, o termo seguinte não tem o que dividir nem o que
+   logaritmar.
+3. **Termo KL** — contribuição **de uma única faixa** à divergência de
+   informação simétrica entre as massas da referência e do lote. É o
+   tijolo; o PSI é o muro.
+4. **PSI \(=\sum\)** — soma dos termos KL em **todas** as faixas. Esse
+   escalar é o número que o cartão de alerta lê.
+5. **Faixa de alerta** — tradução operacional do PSI (e da massa amostral
+   \(n\)) em ESTÁVEL / INVESTIGAR / MUDANÇA FORTE / INCONCLUSIVO, com os
+   cortes clássicos de crédito.
 
 O ritual visual L → histograma da [aula 003](../003_ks_drift_alert_streamlit/)
 permanece como irmão; aqui o semáforo operacional é **PSI P2**, não **D**.
@@ -54,7 +74,16 @@ permanece como irmão; aqui o semáforo operacional é **PSI P2**, não **D**.
 
 ![Caixa massas](illustrations/box_01_massas.png)
 
-Contagens por faixa viram frações que somam 1. Sem massas, não há termo KL.
+**Massa relativa** \(p_b\) é a fração de observações na faixa \(b\):
+\(p_b = c_b / \sum_j c_j\), com \(\sum_b p_b = 1\). Trabalhamos com massas
+(e não só com contagens brutas) porque o PSI compara **formas** de
+distribuição; o tamanho absoluto do lote entra depois, só na regra de
+INCONCLUSIVO (\(n < 8\)).
+
+No fluxo, as massas da **referência** (\(p_{\mathrm{ref}}\)) e do **lote**
+(\(p_{\mathrm{lote}}\)) alimentam o termo KL em cada faixa e, em seguida, a
+soma que define o PSI. No Streamlit, as barras lado a lado (seção 2 do
+ritual) são exatamente essas massas.
 
 Script: [`scripts/workflow_boxes/box_01_massas.py`](scripts/workflow_boxes/box_01_massas.py)
 
@@ -69,7 +98,21 @@ def massas_p(counts):
 
 ![Caixa termo KL](illustrations/box_02_termo_kl.png)
 
-Em cada faixa, \((q_b - p_b)\ln(q_b/p_b)\) com \(\varepsilon\) se massa zero.
+**Termo de Kullback–Leibler (forma simétrica usada no PSI)** numa faixa
+\(b\) é
+
+\[
+(q_b - p_b)\ln\frac{q_b}{p_b},
+\]
+
+com \(p_b = p_{\mathrm{ref}}[b]\), \(q_b = p_{\mathrm{lote}}[b]\) e
+suavização \(\varepsilon\) (padrão \(10^{-6}\)) quando alguma massa é
+zero: usa-se \(\max(p,\varepsilon)\) dentro do logaritmo. O termo mede
+quanto aquela faixa, sozinha, “puxa” a divergência entre as duas
+distribuições; faixas idênticas contribuem cerca de zero.
+
+Mais adiante (§9–§10) esse tijolo aparece dentro do somatório do PSI; no
+código de produção, `psi.compute_psi` aplica a mesma conta faixa a faixa.
 
 Script: [`scripts/workflow_boxes/box_02_termo_kl.py`](scripts/workflow_boxes/box_02_termo_kl.py)
 
@@ -85,7 +128,22 @@ def termo_kl(p_ref_b, p_lote_b, eps=1e-6):
 
 ![Caixa PSI](illustrations/box_03_psi_soma.png)
 
-Soma dos termos em todas as faixas. Esse número alimenta o semáforo.
+O **Population Stability Index (PSI)** é a soma dos termos KL em todas as
+faixas:
+
+\[
+\mathrm{PSI}
+= \sum_b
+\bigl(p_{\mathrm{lote}}[b] - p_{\mathrm{ref}}[b]\bigr)
+\cdot
+\ln\frac{p_{\mathrm{lote}}[b]}{p_{\mathrm{ref}}[b]}.
+\]
+
+É o escalar que o painel mostra no cartão colorido (caminho **P2**: médias
+de L por imagem). O espelho **P1** (pixels) calcula o mesmo índice sobre
+outra variável; o juiz operacional desta aula permanece o P2. A fórmula
+reaparece no §10; os limiares que a interpretam estão no §11 e na caixa
+seguinte.
 
 Script: [`scripts/workflow_boxes/box_03_psi_soma.py`](scripts/workflow_boxes/box_03_psi_soma.py)
 
@@ -99,7 +157,20 @@ def psi_soma(p_ref, p_lote, eps=1e-6):
 
 ![Caixa faixa](illustrations/box_04_faixa.png)
 
-Cortes 0,10 / 0,25 (crédito) + INCONCLUSIVO se \(n < 8\).
+A **faixa de alerta** traduz o PSI contínuo (e os tamanhos amostrais
+\(n_{\mathrm{ref}}\), \(n_{\mathrm{lote}}\)) num estado operacional legível:
+
+| Estado | Quando |
+| :--- | :--- |
+| **INCONCLUSIVO** | \(n < 8\) em qualquer lado — ainda há poucas imagens |
+| **ESTÁVEL** | PSI &lt; 0,10 |
+| **INVESTIGAR** | 0,10 ≤ PSI ≤ 0,25 |
+| **MUDANÇA FORTE** | PSI &gt; 0,25 |
+
+Os cortes 0,10 / 0,25 vêm do monitoramento clássico de scorecards
+(crédito); o §11 e o §13 explicam a política e outros contextos. No
+código interno os rótulos EN são `QUIET` / `WATCH` / `ALERT` /
+`INCONCLUSIVE`; o handout e a UI usam o português da tabela.
 
 Script: [`scripts/workflow_boxes/box_04_faixa.py`](scripts/workflow_boxes/box_04_faixa.py)
 
@@ -322,10 +393,10 @@ L por pixel permanece como espelho — ponte para a 003 —, não como juiz.
 
 ## 10. Cálculo passo a passo — massas e PSI (como no Streamlit)
 
-O painel em [`app.py`](app.py) percorre **quatro estágios numerados** após
+O painel em [`app.py`](app.py) percorre **três estágios numerados** após
 o cartão de alerta: (1) médias/massas P2 → (2) barras de massas →
-(3) espelho P1 → (4) \(D\) opcional. Abaixo está a mesma conta, na mesma
-ordem. No código, `psi.counts_to_masses` e `psi.compute_psi` fazem o miolo;
+(3) espelho P1. Abaixo está a mesma conta, na mesma ordem. No código,
+`psi.counts_to_masses` e `psi.compute_psi` fazem o miolo;
 `alert_psi.alert_on_psi` traduz o número em estado.
 
 ### Passo 1 — Massas e médias de L (P2)
@@ -348,14 +419,8 @@ No app: “2. Barras de massas por faixa (P2)”.
 ### Passo 3 — Espelho P1 (pixels)
 
 Repita a ideia com o histograma de L **por pixel** (grade da aula KS). O
-número P1 existe para comparar sensibilidade com \(D\); o semáforo
+número P1 existe para comparar sensibilidade entre escalas; o semáforo
 operacional permanece no P2.
-
-### Passo 4 — \(D\) (KS) opcional
-
-Se o checkbox estiver ligado, o app mostra também \(D\) sobre L por pixel.
-São histórias diferentes do mesmo histograma de pixels: máximo de
-\(\lvert F-G\rvert\) versus soma de contribuições por faixa.
 
 ### Fórmula
 

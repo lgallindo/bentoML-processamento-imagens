@@ -174,12 +174,11 @@ aparecem aqui, para não misturar aulas nem comparar o corpus consigo mesmo.
 valor de **PSI P2**. O alerta operacional responde só ao PSI P2 (e ao
 mínimo de imagens).
 
-**Passo 4 — Ritual gráfico (seções 1→4).** Desça na página:
+**Passo 4 — Ritual gráfico (seções 1→3).** Desça na página:
 
 1. distribuição das médias de L e massas P2;
 2. barras de massas (contribuição por faixa);
-3. espelho P1 (PSI nos pixels);
-4. $D$ (KS) opcional.
+3. espelho P1 (PSI nos pixels).
 
 **Passo 5 — Miniaturas.** No fim, confira as grades: à esquerda o treino;
 à direita o lote. No controle, as fotos **não** devem ser as mesmas do
