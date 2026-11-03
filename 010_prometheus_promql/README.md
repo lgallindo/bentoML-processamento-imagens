@@ -26,22 +26,38 @@ Pratique até conseguir:
 
 ## 1. Olhe o formato de `/metrics`
 
-Com o BentoML no ar (`just serve` na raiz):
+Com o BentoML no ar (`just serve` na raiz), abra no navegador
+<http://127.0.0.1:3000/metrics> ou salve o texto:
 
 ~~~bash
-curl -s http://127.0.0.1:3000/metrics | head -n 80
+curl -sS http://127.0.0.1:3000/metrics -o /tmp/metrics.txt
+head -n 80 /tmp/metrics.txt
 ~~~
+
+Abaixo, uma captura **real** do `ImageProcessor` deste repositório (depois de
+algumas chamadas a `/inference-grayscale`): o navegador mostra o mesmo corpo
+que o `curl` grava.
+
+![Resposta real de GET /metrics no navegador](illustrations/04_metrics_endpoint_browser.png)
+
+O texto completo dessa captura está em
+[`fixtures/metrics_bentoml_sample.txt`](fixtures/metrics_bentoml_sample.txt)
+(mesmo conteúdo da figura). Use-o offline se o serviço ainda não estiver no ar;
+quando puder, repita o `curl` na porta **3000** e compare.
 
 Observe linhas `# HELP`, `# TYPE` e amostras com labels entre chaves. Nos
 histogramas de duração, o label `le` (*less than or equal*) é o limite
-superior cumulativo do bucket.
+superior cumulativo do bucket. No exemplo, `bentoml_service_request_total`
+para `/inference-grayscale` com código 200 vale **5**; os buckets
+`…_duration_seconds_bucket` usam `le` de `0.005` até `+Inf`.
 
 | Métrica típica | Tipo |
 | :--- | :--- |
 | `bentoml_service_request_total` | contador |
-| `up` | gauge (produzido pelo Prometheus na coleta) |
+| `bentoml_service_request_in_progress` | gauge |
 | `bentoml_service_request_duration_seconds_bucket` | contadores por `le` |
 | `…_count` / `…_sum` | observações e soma das durações |
+| `up` | gauge (produzido pelo Prometheus na coleta, não por este `/metrics`) |
 
 Gere algumas chamadas (como no [tutorial](../docs/prometheus.md)) e volte a
 inspecionar `/metrics`: os contadores só fazem sentido **depois** de tráfego.
@@ -186,6 +202,8 @@ Relato curto (até uma página), **sem** painel Streamlit:
 
 | Arquivo | Papel |
 | :--- | :--- |
+| [`fixtures/metrics_bentoml_sample.txt`](fixtures/metrics_bentoml_sample.txt) | Captura real de `/metrics` (mesmo da figura) |
+| [`illustrations/04_metrics_endpoint_browser.png`](illustrations/04_metrics_endpoint_browser.png) | Screenshot do `/metrics` no navegador |
 | [`fixtures/duration_histogram.json`](fixtures/duration_histogram.json) | Conta manual de CDF/p95 |
 | [`SAMPLE_DATA.md`](SAMPLE_DATA.md) | Demo 8010 / 9100 |
 | [`prom_hist.py`](prom_hist.py) | Cálculo de CDF/quantil em Python (CLI/testes) |
