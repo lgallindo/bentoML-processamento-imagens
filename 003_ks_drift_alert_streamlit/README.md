@@ -206,7 +206,7 @@ Um serviço HTTP típico responde a perguntas como:
 | A espera é aceitável? | latência (p50, p95, …) |
 | Há erros? | taxa de falha, logs de exceção |
 
-Essas métricas descrevem a **saúde da tubulação**: o servidor aceita
+Essas métricas descrevem a **saúde do pipeline**: o servidor aceita
 conexões, o código não explode, a rede entrega bytes. Elas são
 indispensáveis — e insuficientes sozinhas quando o produto é um modelo de
 aprendizado de máquina.
@@ -264,14 +264,14 @@ de operações. Uma coisa é o serviço estar **vivo e rápido**. Outra é o
 **conteúdo** que passa por ele ainda parecer o mundo com o qual o modelo
 foi calibrado.
 
-A primeira pergunta — **saúde do serviço** — olha a tubulação. O processo
+A primeira pergunta — **saúde do serviço** — olha o pipeline. O processo
 está no ar? A porta responde? O cliente recebe o código HTTP esperado
 (em geral 200 nas rotas felizes)? A espera (latência) cabe no orçamento
 combinado? Exceções estão sob controle, ou há cascata de falhas? Enquanto
 essas respostas forem boas, a infraestrutura e o runtime parecem em ordem.
 
 A segunda pergunta — **adequação dos dados** — olha o que viaja *dentro*
-dessa tubulação. As fotos que chegam em produção ainda se parecem, na
+desse pipeline. As fotos que chegam em produção ainda se parecem, na
 distribuição de tons claros e escuros, com as fotos de referência do
 treino? O afastamento entre a forma da luminância no treino e a forma da
 luminância no lote recente ainda está abaixo do limiar que vocês

@@ -127,7 +127,7 @@ falar de alertas ou Prometheus.
 ### Ato I — Saúde do servidor
 
 **[`010_prometheus_promql`](../010_prometheus_promql/README.md)** —
-Pergunta: a tubulação responde com latência interpretável? Você lê o
+Pergunta: o pipeline responde com latência interpretável? Você lê o
 formato de `/metrics`, confirma o scrape, usa Table/Graph do Prometheus
 (`rate`, buckets, `histogram_quantile`) e estima um p95 **no papel** — sem
 Streamlit. Não mede qualidade de imagem nem drift de conteúdo (Ato III).

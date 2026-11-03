@@ -42,7 +42,7 @@ inferência mudou (modelo trocado, pré-processamento, bug).
 
 ## 2. HTTP verde ≠ dados adequados
 
-Saúde da tubulação (processo, HTTP, latência) e adequação da distribuição
+Saúde do pipeline (processo, HTTP, latência) e adequação da distribuição
 de **L** são perguntas independentes — ver o handout da 003. Nesta aula
 medimos adequação **duas vezes**: no que entra e no que sai.
 

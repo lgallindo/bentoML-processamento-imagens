@@ -191,7 +191,7 @@ def faixa_alerta_psi(psi, n_ref, n_lote, stable=0.10, shift=0.50, min_n=8):
 
 ## 2. DevOps: o serviço que responde
 
-DevOps, neste handout, é a pergunta da **tubulação**: o processo está no
+DevOps, neste handout, é a pergunta do **pipeline**: o processo está no
 ar? A porta responde? O cliente recebe o código HTTP esperado? A latência
 cabe no orçamento?
 
@@ -201,7 +201,7 @@ cabe no orçamento?
 | A espera é aceitável? | latência (p50, p95, …) |
 | Há erros? | taxa de falha, logs de exceção |
 
-Essas métricas descrevem a **saúde da tubulação**. São indispensáveis — e
+Essas métricas descrevem a **saúde do pipeline**. São indispensáveis — e
 insuficientes sozinhas quando o produto é um modelo. Nesta pasta, o serviço
 BentoML expõe `/inference-grayscale` (entre outras). Mais adiante você sobe
 e exercita esse serviço com as receitas `just` desta pasta.

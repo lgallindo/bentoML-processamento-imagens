@@ -49,7 +49,7 @@ desta aula mostra **D** e força **INCONCLUSIVO** quando \(n = 1\).
 
 O serviço BentoML desta pasta (mesmo espírito da 003) pode devolver
 **200** com latência baixa enquanto o *conteúdo* das fotos deixa de
-parecer o corpus de praias. Saúde da tubulação e adequação da
+parecer o corpus de praias. Saúde do pipeline e adequação da
 distribuição de luminância **L** são perguntas independentes — ver o
 capítulo correspondente no handout da 003.
 
