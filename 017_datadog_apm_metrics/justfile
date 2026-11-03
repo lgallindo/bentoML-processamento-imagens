@@ -1,0 +1,11 @@
+default:
+    @just --list
+
+generate-figures:
+    uv run --no-active --with matplotlib python scripts/generate_comparison_figures.py
+
+check-gate:
+    python3 scripts/check_datadog_gate.py
+
+test:
+    python3 -m pytest -q

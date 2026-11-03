@@ -55,8 +55,8 @@ o runtime emitiu, nem se foi o endpoint grayscale ou um filtro a jusante.
 | :--- | :--- | :--- |
 | Prometheus / Grafana 016 | Quanto? Quão lento? Com que taxa? | Séries numéricas |
 | **Loki / Explore (esta aula)** | O que foi escrito? Em que fase? | Linhas / eventos |
-| Elasticsearch 018 (stub) | Busca rica, agregações ad-hoc | Documentos |
-| Datadog 017 (stub) | Vendor único (métricas+logs+APM) | SaaS |
+| Elasticsearch 018 | Busca rica, agregações ad-hoc | Documentos |
+| Datadog 017 | Vendor único (métricas+logs+APM; DEGRADE-001) | SaaS |
 
 Regra de ouro:
 
@@ -231,6 +231,6 @@ canónicas estão ocupadas; as figuras documentam a UI, não o número efémero.
 | | Pasta |
 | :--- | :--- |
 | **Anterior** | [`016_grafana_dashboards`](../016_grafana_dashboards/README.md) |
-| **Seguinte** | [`018_elasticsearch_logs`](../018_elasticsearch_logs/README.md) (stub) ou Ato II [`011`](../011_corpus_histograms_model/README.md) |
+| **Seguinte** | [`018_elasticsearch_logs`](../018_elasticsearch_logs/README.md) ou Ato II [`011`](../011_corpus_histograms_model/README.md) |
 
 Ordem completa: [`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md).

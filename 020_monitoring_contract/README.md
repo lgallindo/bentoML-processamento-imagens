@@ -23,7 +23,7 @@ Cópia preenchida do modelo (Markdown). Rubrica mínima:
 | Três fins cobertos | Uma linha de sinal por fim |
 | Rastreio | Cada sinal aponta a uma aula `NNN_*` |
 | Acção | Há dono ou papel responsável nomeado |
-| Honestidade | Onde a trilha ainda é stub (`017`–`019`), diga «não disponível» |
+| Honestidade | Se um lab opcional ficou de fora (ex.: Datadog sem chave), diga «não disponível» — não invente cobertura |
 
 ## Roteiro
 

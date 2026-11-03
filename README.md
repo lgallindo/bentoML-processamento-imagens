@@ -247,7 +247,7 @@ just containerize       # imagem OCI a partir do bento (aula 009)
 
 Ordem das aulas: ver
 [`000_mlops_pipelines_goals`](000_mlops_pipelines_goals/README.md)
-(Ponte `009`, Grafana `016`, stubs `017`–`019`, fecho `020`).
+(Ponte `009`, Grafana `016`, Loki `019`, ES `018`, Datadog `017`, fecho `020`).
 
 Os argumentos das receitas `curl-*` são **posicionais**: para mudar só a porta,
 você precisa passar todos os anteriores — `just curl-inference-resize foto.webp saida.png

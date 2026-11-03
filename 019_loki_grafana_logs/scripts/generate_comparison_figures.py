@@ -112,7 +112,7 @@ def figure_roles() -> None:
         (0.77, 0.15),
         0.21,
         0.7,
-        "Elasticsearch\n018 (stub)",
+        "Elasticsearch\n018",
         "Busca rica\naggregações\n\nOutro eixo\nde logs",
         "#fce4ec",
     )

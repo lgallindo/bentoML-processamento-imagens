@@ -1,0 +1,17 @@
+default:
+    @just --list
+
+generate-figures:
+    uv run --no-active --with matplotlib python scripts/generate_comparison_figures.py
+
+generate-fixture:
+    python3 fixtures/generate_sample_log.py
+
+bulk-index:
+    python3 scripts/bulk_index_fixture.py
+
+capture-screenshots:
+    bash scripts/capture_screenshots.sh
+
+test:
+    python3 -m pytest -q

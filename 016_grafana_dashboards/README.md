@@ -59,7 +59,7 @@ Imagine que a latência do `/inference-grayscale` «parece» lenta. Onde olha?
 | UI Prometheus (aula 010) | PromQL ad-hoc, Table/Graph, regras | Layout estável para a equipa toda manhã |
 | **Grafana (esta aula)** | Painéis versionáveis, várias queries, Explore | Armazenar séries (continua a ser o Prom) |
 | Streamlit 015 | Histograma/CDF/p95 didáctico | Scrape real, alertas, fonte Prometheus viva |
-| Datadog (`017`, stub) | Vendor SaaS, APM/tags | Substituir o trio local da trilha |
+| Datadog (`017`) | Vendor SaaS, APM/tags (lab opcional) | Substituir o trio local da trilha |
 
 Regra de ouro (já na 010, agora com consequência visual):
 
@@ -213,6 +213,6 @@ anfitriões onde essas portas já estão ocupadas.
 | | Pasta |
 | :--- | :--- |
 | **Anterior** | [`015_prometheus_histcdf_streamlit`](../015_prometheus_histcdf_streamlit/README.md) (ou [`010`](../010_prometheus_promql/README.md) se saltar o reforço) |
-| **Seguinte** | [`019_loki_grafana_logs`](../019_loki_grafana_logs/README.md) (logs OSS; se stub, Ato II [`011`](../011_corpus_histograms_model/README.md)) |
+| **Seguinte** | [`019_loki_grafana_logs`](../019_loki_grafana_logs/README.md) (logs OSS) → `018` → `017`; ou Ato II [`011`](../011_corpus_histograms_model/README.md) |
 
 Ordem completa: [`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md).

@@ -4,7 +4,10 @@ Mapa canónico para aulas e tutoriais. A abertura da trilha
 ([aula 000](../000_mlops_pipelines_goals/README.md)) reproduz o mesmo contrato.
 Tutoriais: [Prometheus](prometheus.md), [Grafana](grafana.md).
 Handouts: [009 OCI](../009_bentoml_oci_runtime/README.md),
-[016 Grafana](../016_grafana_dashboards/README.md).
+[016 Grafana](../016_grafana_dashboards/README.md),
+[019 Loki](../019_loki_grafana_logs/README.md),
+[018 ES](../018_elasticsearch_logs/README.md),
+[017 Datadog](../017_datadog_apm_metrics/README.md).
 
 ## Trio canónico (observabilidade)
 
@@ -46,8 +49,8 @@ O painel Streamlit **não** substitui o BentoML em 3000.
 | ---: | :--- | :--- |
 | 009 | 3000 | OCI/runtime; sem painel Streamlit |
 | 016 | 4000 | UI Grafana (handout; ver grafana.md) |
-| 017 | 8125 / 8126 | Datadog agent (auxiliar; omitir se sem lab) |
-| 018 | 9200 | Elasticsearch (auxiliar; eixo logs; stub) |
+| 017 | 8125 / 8126 | Datadog agent (auxiliar; DEGRADE-001 se sem DD_API_KEY) |
+| 018 | 9200 | Elasticsearch (auxiliar; _bulk/_search; sem Kibana no lab) |
 | 019 | 3100 | Loki (auxiliar; Explore no Grafana 4000; handout completo) |
 | 020 | — | contrato de monitoramento (sem serviço) |
 

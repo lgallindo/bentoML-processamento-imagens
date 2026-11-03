@@ -171,12 +171,14 @@ Logs OSS: Promtail/push → Loki (**3100**) → Explore no Grafana (**4000**),
 correlacionando picos de latência com linhas `phase=slow`.
 
 **[`018_elasticsearch_logs`](../018_elasticsearch_logs/README.md)** —
-Stub: índice de logs de pedido (eixo eventos, não séries Prom). Porta
-auxiliar típica **9200**.
+Logs como documentos: JSONL → `_bulk` → `_search` / agregações no
+Elasticsearch (**9200**). Contraste com Loki e Prometheus; lab sem Kibana
+(capturas via API + HTML).
 
 **[`017_datadog_apm_metrics`](../017_datadog_apm_metrics/README.md)** —
-Stub: vendor SaaS; chave só em `.env` local. Sem chave, salta-se o lab
-(DEGRADE-001).
+Vendor SaaS: labels Prometheus ↔ tags Datadog; OpenMetrics contra `:3000`.
+Chave só em `.env` local. Sem `DD_API_KEY`, salta-se o lab (DEGRADE-001);
+o trio 3000/9090/4000 permanece.
 
 ### Ato II — Tijolos no serviço
 
