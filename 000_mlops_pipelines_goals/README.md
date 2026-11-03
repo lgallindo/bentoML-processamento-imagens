@@ -167,8 +167,8 @@ taxa, erro, p95 e linha de base na UI **4000**. Entrega com evidência do
 gráfico — sem Streamlit.
 
 **[`019_loki_grafana_logs`](../019_loki_grafana_logs/README.md)** —
-Stub: logs OSS (Loki) correlacionados ao Grafana. Porta auxiliar típica
-**3100**.
+Logs OSS: Promtail/push → Loki (**3100**) → Explore no Grafana (**4000**),
+correlacionando picos de latência com linhas `phase=slow`.
 
 **[`018_elasticsearch_logs`](../018_elasticsearch_logs/README.md)** —
 Stub: índice de logs de pedido (eixo eventos, não séries Prom). Porta

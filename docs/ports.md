@@ -48,7 +48,7 @@ O painel Streamlit **não** substitui o BentoML em 3000.
 | 016 | 4000 | UI Grafana (handout; ver grafana.md) |
 | 017 | 8125 / 8126 | Datadog agent (auxiliar; omitir se sem lab) |
 | 018 | 9200 | Elasticsearch (auxiliar; eixo logs; stub) |
-| 019 | 3100 | Loki (auxiliar; Explore no Grafana 4000; stub) |
+| 019 | 3100 | Loki (auxiliar; Explore no Grafana 4000; handout completo) |
 | 020 | — | contrato de monitoramento (sem serviço) |
 
 ## Demos sintéticas (opcionais)

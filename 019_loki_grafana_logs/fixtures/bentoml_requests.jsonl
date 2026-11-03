@@ -1,0 +1,40 @@
+{"logged_at": "2026-11-03T20:39:47.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 180, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:40:02.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 183, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:40:17.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 186, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:40:32.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 189, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:40:47.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 192, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:41:02.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 180, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:41:17.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 183, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:41:32.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 186, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:41:47.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 189, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:42:02.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 192, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:42:17.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 180, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:42:32.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 183, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:42:47.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 186, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:43:02.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 189, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:43:17.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 192, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:43:32.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 180, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:43:47.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 183, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:44:02.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 186, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:44:17.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 189, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:44:32.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 192, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:44:47.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 420, "phase": "slow", "message": "inference grayscale slow path"}
+{"logged_at": "2026-11-03T20:45:02.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 460, "phase": "slow", "message": "inference grayscale slow path"}
+{"logged_at": "2026-11-03T20:45:17.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 500, "phase": "slow", "message": "inference grayscale slow path"}
+{"logged_at": "2026-11-03T20:45:32.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 540, "phase": "slow", "message": "inference grayscale slow path"}
+{"logged_at": "2026-11-03T20:45:47.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 580, "phase": "slow", "message": "inference grayscale slow path"}
+{"logged_at": "2026-11-03T20:46:02.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 180, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:46:17.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 183, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:46:32.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 186, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:46:47.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 189, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:47:02.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 192, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:47:17.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 180, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:47:32.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 183, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:47:47.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 186, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:48:02.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 189, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:48:17.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 192, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:48:32.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 180, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:48:47.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 183, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:49:02.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 186, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:49:17.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 189, "phase": "stable", "message": "inference grayscale ok"}
+{"logged_at": "2026-11-03T20:49:32.371625Z", "endpoint": "/inference-grayscale", "http_response_code": 200, "latency_ms": 192, "phase": "stable", "message": "inference grayscale ok"}
