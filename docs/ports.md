@@ -1,10 +1,10 @@
 # Portas locais deste repositório
 
-Mapa canónico para aulas e tutoriais. A abertura da trilha
+Mapa canônico para aulas e tutoriais. A abertura da trilha
 ([aula 000](../000_mlops_pipelines_goals/README.md)) reproduz o mesmo contrato.
 Tutoriais: [Prometheus](prometheus.md), [Grafana](grafana.md).
 
-## Trio canónico (observabilidade)
+## Trio canônico (observabilidade)
 
 | Serviço | Porta | URL local | Como sobe |
 | :--- | ---: | :--- | :--- |
@@ -38,12 +38,12 @@ O painel Streamlit **não** substitui o BentoML em 3000.
 
 ## Demos sintéticas (opcionais)
 
-Quando uma aula sobe exporter/Prometheus **além** do trio canónico:
+Quando uma aula sobe exporter/Prometheus **além** do trio canônico:
 
 | Papel | Regra | Exemplo (aula 004) |
 | :--- | :--- | :--- |
 | Exporter / fake `/metrics` | **8000 + N** | 8004 |
 | Prometheus só-demo | **9090 + N** (N &lt; 10) | 9094 |
 
-O canónico 3000 / 9090 / 4000 continua válido em paralelo; a demo não o
+O canônico 3000 / 9090 / 4000 continua válido em paralelo; a demo não o
 substitui.

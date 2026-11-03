@@ -81,7 +81,7 @@ Neste repositório as portas abaixo são **contrato** para todas as aulas e
 tutoriais. Detalhe e auxiliares: [`docs/ports.md`](../docs/ports.md).
 Instalação: [Prometheus](../docs/prometheus.md), [Grafana](../docs/grafana.md).
 
-### Trio canónico
+### Trio canônico
 
 | Serviço | Porta | URL local |
 | :--- | ---: | :--- |
@@ -93,7 +93,7 @@ Instalação: [Prometheus](../docs/prometheus.md), [Grafana](../docs/grafana.md)
 cliente → BentoML :3000/metrics ← Prometheus :9090 ← Grafana :4000
 ```
 
-O Grafana, por omissão de fábrica, também tentaria a porta 3000; **neste
+O Grafana, no padrão de instalação, também usaria a porta 3000; **neste
 curso** ele fica em **4000**, para não colidir com o BentoML. Não use 3000
 para Grafana nem para a UI do Prometheus.
 
@@ -105,7 +105,7 @@ em `3000`.
 
 ### Demos sintéticas (quando existirem)
 
-Exporter de exemplo: **8000 + N**. Prometheus só-demo em paralelo ao canónico:
+Exporter de exemplo: **8000 + N**. Prometheus só-demo em paralelo ao canônico:
 **9090 + N** (na aula `004`: `8004` e `9094`). O trio 3000 / 9090 / 4000
 permanece a referência do curso.
 
