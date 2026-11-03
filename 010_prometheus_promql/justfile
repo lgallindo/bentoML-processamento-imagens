@@ -1,0 +1,21 @@
+default:
+    @just --list
+
+sync:
+    uv sync --no-active
+
+test:
+    uv run --no-active pytest -q
+
+# Demo sintética: exporter :8010 + Prometheus :9100 (não usa Streamlit)
+demo-exporter port="8010":
+    uv run --no-active python scripts/serve_sample_metrics.py --port {{port}}
+
+demo-prometheus:
+    prometheus \
+      --config.file=prometheus-demo.yml \
+      --storage.tsdb.path=/tmp/bentoml-imagens-prometheus-demo-010 \
+      --web.listen-address=127.0.0.1:9100
+
+generate-prom-illustrations:
+    uv run --no-active --with matplotlib python scripts/generate_prom_illustrations.py

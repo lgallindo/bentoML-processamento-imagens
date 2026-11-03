@@ -1,12 +1,16 @@
-# Aula 010 — Prometheus e PromQL
+# Aula 015 — Painel Streamlit: histograma e CDF no Prometheus
 
 Uma API pode responder HTTP 200 enquanto seus usuários esperam cada vez mais.
 Para investigar essa situação, precisamos saber **o que foi medido, em qual
 período e como a consulta transformou as medidas**.
 
-Se ainda não concluiu o [tutorial de instalação e coleta](../docs/prometheus.md),
-faça-o antes de continuar. Nesta aula você formula consultas em **PromQL**, a
-linguagem de consulta do Prometheus, e explica os números do painel.
+Pré-requisito: conclua a [aula 010](../010_prometheus_promql/README.md)
+(`/metrics` + PromQL na UI do Prometheus) e, se ainda não o fez, o
+[tutorial de instalação](../docs/prometheus.md).
+
+Nesta aula você usa um **painel Streamlit** para ver histograma, CDF e a
+comparação Python ↔ PromQL sobre os mesmos buckets — reforço visual do que a
+010 já pediu no papel e na UI do Prometheus.
 
 ## Sumário
 
@@ -35,7 +39,7 @@ Pratique até conseguir:
 - calcular uma taxa simples e reconstruir uma CDF a partir de buckets;
 - explicar o p95 estimado e comparar Python com PromQL sobre os mesmos dados;
 - interpretar uma linha de base móvel e escrever uma conclusão com seus limites;
-- usar o painel na ordem certa (fonte → conta → consulta → relato).
+- usar o painel Streamlit na ordem certa (fonte → conta → consulta → relato).
 
 ## 1. Escolha os dados e abra as ferramentas
 
@@ -53,7 +57,7 @@ desempenho do BentoML.
 
 **Portas (não confundir).** Mapa do curso: [`docs/ports.md`](../docs/ports.md).
 O trio canônico é BentoML **3000**, Prometheus **9090**, Grafana **4000**.
-Esta aula acrescenta auxiliares (Streamlit **8510**; demo **8010**/**9100**) —
+Esta aula acrescenta auxiliares (Streamlit **8515**; demo **8010**/**9100**) —
 eles **não** substituem o trio.
 
 | Porta | Processo | Papel |
@@ -61,18 +65,18 @@ eles **não** substituem o trio.
 | **3000** | BentoML (`just serve` na raiz) | API + `GET /metrics` (canônico) |
 | **9090** | Prometheus do tutorial | UI/API sobre o serviço real (canônico) |
 | **4000** | Grafana | Painéis do curso (canônico; nunca 3000) |
-| **8510** | Painel desta aula (`just app`) | Streamlit auxiliar |
+| **8515** | Painel desta aula (`just app`) | Streamlit auxiliar |
 | **8010** / **9100** | Exporter + Prometheus sintéticos | Demo auxiliar (opcional) |
 
 Na pasta da aula, instale as dependências e abra o painel:
 
 ~~~bash
-cd 010_prometheus_histcdf_streamlit
+cd 015_prometheus_histcdf_streamlit
 just sync
 just app
 ~~~
 
-O painel Streamlit fica em <http://127.0.0.1:8510>. Comece no modo **fixture**.
+O painel Streamlit fica em <http://127.0.0.1:8515>. Comece no modo **fixture**.
 
 Para gerar dados e carregá-los continuamente no Prometheus, mantenha três
 terminais abertos **nessa mesma pasta**:
@@ -81,7 +85,7 @@ terminais abertos **nessa mesma pasta**:
 |---|---|---|
 | 1 | `just demo-exporter` | Publica métricas sintéticas em `127.0.0.1:8010/metrics` |
 | 2 | `just demo-prometheus` | Coleta e armazena essas métricas; interface em `127.0.0.1:9100` |
-| 3 | `just app` | Abre o painel da aula em `127.0.0.1:8510` |
+| 3 | `just app` | Abre o painel da aula em `127.0.0.1:8515` |
 
 No painel, escolha **live** e informe `http://127.0.0.1:9100`. As primeiras
 coletas levam alguns segundos; deixe completar um minuto para explorar as

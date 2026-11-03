@@ -179,10 +179,9 @@ precisar mais do histórico.
 ## Continuação (aula 010)
 
 Com a coleta em `3000`/`9090` funcionando, a
-[aula 010](../010_prometheus_histcdf_streamlit/README.md) abre um **painel
-Streamlit** em `127.0.0.1:8510` para formular PromQL, reconstruir histograma/CDF
-e comparar com Python. A porta `8510` é só desse painel; não substitui o
-BentoML em `3000` nem a UI do Prometheus em `9090`.
+[aula 010](../010_prometheus_promql/README.md) trabalha `/metrics` e PromQL na UI do Prometheus (`9090`). O painel Streamlit (histograma/CDF) é a
+[aula 015](../015_prometheus_histcdf_streamlit/README.md) em `127.0.0.1:8515` —
+não substitui o BentoML em `3000` nem a UI do Prometheus.
 
 ## Referências
 

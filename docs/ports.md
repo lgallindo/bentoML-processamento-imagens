@@ -32,7 +32,9 @@ Pasta `NNN_*` → porta **8500 + N** (N = número da aula).
 | 005 | 8505 | KS entrada/saída |
 | 006 | 8506 | tráfego misto |
 | 008 | 8508 | alerta PSI |
-| 010 | 8510 | PromQL / latência |
+| 015 | 8515 | histograma/CDF Prometheus (após a 010) |
+
+A aula **010** (`010_prometheus_promql`) não usa Streamlit.
 
 O painel Streamlit **não** substitui o BentoML em 3000.
 

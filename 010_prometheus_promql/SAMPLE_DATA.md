@@ -9,7 +9,7 @@ depender da velocidade do seu computador para produzir a mudança.
 
 Estes dados são **sintéticos**: os tempos de resposta são construídos pelo
 gerador. Não são medições do BentoML nem evidência de desempenho de um modelo.
-As portas **8010** / **9100** / **8510** são **auxiliares** desta demo; o
+As portas **8010** / **9100** são **auxiliares** desta demo; o
 trio canônico do curso continua **3000** / **9090** / **4000**
 ([`docs/ports.md`](../docs/ports.md)).
 
@@ -19,7 +19,7 @@ Depois de instalar Prometheus e `promtool` pelo
 [pré-requisito](../docs/prometheus.md), abra um terminal na pasta desta aula:
 
 ```bash
-cd 010_prometheus_histcdf_streamlit
+cd 010_prometheus_promql
 just sync
 uv run --no-active python scripts/serve_sample_metrics.py
 ```
@@ -165,8 +165,7 @@ Em um terceiro terminal nesta pasta:
 just app
 ```
 
-Abra <http://127.0.0.1:8510>, escolha o modo conectado e informe
-`http://127.0.0.1:9100` como URL do Prometheus. Selecione grayscale e atualize.
+Na UI do Prometheus em <http://127.0.0.1:9100/query>, consulte as taxas e o quantil.
 O painel compara Python e PromQL sobre os **buckets acumulados desde a partida
 do gerador**. Já a consulta com `rate` acima descreve a janela recente. Depois
 de uma fase lenta, o acumulado ainda contém suas observações durante a recuperação.

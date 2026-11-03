@@ -353,5 +353,5 @@ distribuições está na
 
 | | Pasta |
 | :--- | :--- |
-| **Anterior** | [`010_prometheus_histcdf_streamlit`](../010_prometheus_histcdf_streamlit/README.md) |
+| **Anterior** | [`010_prometheus_promql`](../010_prometheus_promql/README.md) |
 | **Seguinte** | [`012_grayscale_request_logging`](../012_grayscale_request_logging/README.md) |

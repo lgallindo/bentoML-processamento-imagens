@@ -22,7 +22,7 @@ Contrato do curso (detalhe em [`docs/ports.md`](../docs/ports.md)):
 | **Grafana** | **4000** |
 
 Painéis Streamlit das aulas: **8500 + N** (exemplo: `003` → `8503`;
-`010` → `8510`).
+`015` → `8515`).
 
 ## Objetivos finais de monitoramento
 
@@ -87,7 +87,9 @@ que sustentam o resto:
 
 **Ato I — Saúde do servidor.** Latência e séries no caminho BentoML →
 Prometheus → Grafana:
-[`010_prometheus_histcdf_streamlit`](../010_prometheus_histcdf_streamlit/README.md).
+[`010_prometheus_promql`](../010_prometheus_promql/README.md)
+(texto `/metrics` + PromQL); reforço visual opcional em
+[`015_prometheus_histcdf_streamlit`](../015_prometheus_histcdf_streamlit/README.md).
 
 **Ato II — Tijolos no serviço.** Corpus, log e rotas de monitor — o caminho
 dos dados; o juízo do alerta vem depois:
@@ -124,13 +126,17 @@ falar de alertas ou Prometheus.
 
 ### Ato I — Saúde do servidor
 
-**[`010_prometheus_histcdf_streamlit`](../010_prometheus_histcdf_streamlit/README.md)** —
-Pergunta: a tubulação responde com latência interpretável? Você lê séries e
-labels, distingue contador de taxa, reconstrói histograma/CDF a partir de
-buckets do Prometheus, estima um p95 e redige um relato com limites. Não
-mede qualidade de imagem nem drift de conteúdo — isso é o Ato III. Pré-req:
-vocabulário `001`–`002` e o serviço/coleta dos tutoriais de Prometheus e
-Grafana.
+**[`010_prometheus_promql`](../010_prometheus_promql/README.md)** —
+Pergunta: a tubulação responde com latência interpretável? Você lê o
+formato de `/metrics`, confirma o scrape, usa Table/Graph do Prometheus
+(`rate`, buckets, `histogram_quantile`) e estima um p95 **no papel** — sem
+Streamlit. Não mede qualidade de imagem nem drift de conteúdo (Ato III).
+Pré-req: vocabulário `001`–`002` e o [tutorial Prometheus](../docs/prometheus.md).
+
+**[`015_prometheus_histcdf_streamlit`](../015_prometheus_histcdf_streamlit/README.md)** —
+Painel Streamlit (porta **8515**): histograma, CDF e Python ↔ PromQL sobre
+os mesmos buckets. Reforço visual **depois** da 010; não substitui a UI do
+Prometheus.
 
 ### Ato II — Tijolos no serviço
 

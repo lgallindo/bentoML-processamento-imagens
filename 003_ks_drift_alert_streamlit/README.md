@@ -33,7 +33,7 @@ devolve a versão em cinza, o status é **200**, o tempo de resposta está baixo
 Do ponto de vista de disponibilidade, o dia está tranquilo.
 
 Na ordem de estudo da trilha, a
-[aula 010](../010_prometheus_histcdf_streamlit/README.md) já ensinou a
+[aula 010](../010_prometheus_promql/README.md) já ensinou a
 interrogar **latência** e volume com Prometheus/PromQL (saúde do servidor).
 Aqui a pergunta muda: adequação dos **dados** — o mundo das imagens — não a
 duração da requisição.
