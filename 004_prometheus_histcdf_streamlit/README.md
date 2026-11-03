@@ -154,7 +154,7 @@ Exemplo numérico com dez latências já ordenadas (ms):
 
 A média destas dez medidas é 50,4 ms: fica perto do miolo da amostra, mas
 esconde a cauda que o p95/p99 tornam visível. Com histogramas Prometheus não
-temos a lista completa; estimamos o quantil a partir dos buckets (secção 6).
+temos a lista completa; estimamos o quantil a partir dos buckets (seção 6).
 
 Formule primeiro a pergunta («a rota grayscale ficou lenta na última
 janela de um minuto?»), depois escolha janela e *q*.
