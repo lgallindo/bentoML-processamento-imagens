@@ -1,58 +1,34 @@
-# Aula 004 — Prometheus e PromQL: das séries à interpretação da latência
+# Aula 004 — Prometheus e PromQL
 
 Uma API pode responder HTTP 200 enquanto seus usuários esperam cada vez mais.
 Para investigar essa situação, precisamos saber **o que foi medido, em qual
 período e como a consulta transformou as medidas**.
 
-Você já seguiu o [tutorial de instalação e coleta](../docs/prometheus.md).
-Nesta aula, vai formular consultas em **PromQL**, a linguagem de consulta do
-Prometheus, e explicar os números que aparecem no painel.
+Se ainda não concluiu o [tutorial de instalação e coleta](../docs/prometheus.md),
+faça-o antes de continuar. Nesta aula você formula consultas em **PromQL**, a
+linguagem de consulta do Prometheus, e explica os números do painel.
 
 ## Sumário
 
-1. [Posição na trilha](#posição-na-trilha)
-2. [Objetivos e roteiro](#objetivos-e-roteiro)
-3. [1. Escolha os dados e abra as ferramentas](#1-escolha-os-dados-e-abra-as-ferramentas)
-4. [Como usar este painel](#como-usar-este-painel)
-5. [2. Da requisição à interpretação](#2-da-requisição-à-interpretação)
-6. [3. Métricas, labels e seletores](#3-métricas-labels-e-seletores)
-7. [4. Contador, gauge e tipos da consulta](#4-contador-gauge-e-tipos-da-consulta)
-8. [5. Da contagem à taxa](#5-da-contagem-à-taxa)
-9. [6. Buckets: reconstrua uma distribuição](#6-buckets-reconstrua-uma-distribuição)
-10. [7. Traduza a conta para PromQL](#7-traduza-a-conta-para-promql)
-11. [8. Laboratório](#8-laboratório-hipótese-consulta-e-evidência)
-12. [9. Linha de base e alerta](#9-leia-a-linha-de-base-e-o-alerta)
-13. [10. Exercício e entrega](#10-exercício-e-entrega)
-14. [11. Código e materiais](#11-código-e-materiais)
-15. [Glossário](#glossário)
-16. [Referências](#referências-para-consulta)
+1. [Objetivos](#objetivos)
+2. [1. Escolha os dados e abra as ferramentas](#1-escolha-os-dados-e-abra-as-ferramentas)
+3. [Como usar este painel](#como-usar-este-painel)
+4. [2. Da requisição à interpretação](#2-da-requisição-à-interpretação)
+5. [3. Métricas, labels e seletores](#3-métricas-labels-e-seletores)
+6. [4. Contador, gauge e tipos da consulta](#4-contador-gauge-e-tipos-da-consulta)
+7. [5. Da contagem à taxa](#5-da-contagem-à-taxa)
+8. [6. Buckets: reconstrua uma distribuição](#6-buckets-reconstrua-uma-distribuição)
+9. [7. Traduza a conta para PromQL](#7-traduza-a-conta-para-promql)
+10. [8. Laboratório](#8-laboratório-hipótese-consulta-e-evidência)
+11. [9. Linha de base e alerta](#9-leia-a-linha-de-base-e-o-alerta)
+12. [10. Exercício e entrega](#10-exercício-e-entrega)
+13. [11. Código e materiais](#11-código-e-materiais)
+14. [Glossário](#glossário)
+15. [Referências](#referências-para-consulta)
 
-## Posição na trilha
+## Objetivos
 
-O [índice da trilha](../000_mlops_pipelines_goals/README.md) nomeia três fins de
-monitoramento. Esta aula cobre sobretudo a **saúde do serviço** vista pela
-**latência** e pelo volume de pedidos instrumentados.
-
-| Aula | Pergunta central | Grandeza típica |
-| :--- | :--- | :--- |
-| **000** | Mapa treino → inferência → monitoramento; quatro atos de estudo | — |
-| **001** / **002** | O que são histograma e CDF? | Contagens e fração acumulada |
-| **004** (esta) | A *tubulação* responde com latência interpretável? | Duração de requisição; taxa; p95 |
-| **003** / **008** | Os *dados* (mundo das imagens) ainda combinam com a referência? | Distribuição de L; **D** ou **PSI** |
-
-Na [ordem de estudo](../000_mlops_pipelines_goals/README.md), esta aula é o
-**Ato I** (saúde): vem depois do vocabulário `001`–`002` e da ponte de
-*deploy*, e **antes** dos tijolos `010`–`040` e do teatro `003`…`008`. O
-número da pasta (`004`) não muda; só a posição no roteiro.
-
-Um resultado de latência **não** demonstra qualidade das imagens nem
-desempenho de um modelo. Os cartões de alerta das aulas 003 e 008 (estados
-sobre drift) **não** são o semáforo desta pasta: aqui, `pending` / `firing`
-pertencem às regras do **Prometheus**.
-
-## Objetivos e roteiro
-
-Ao concluir, você deverá conseguir:
+Pratique até conseguir:
 
 - identificar uma série por sua métrica e seus labels;
 - distinguir contador acumulado, taxa e valor observado no instante;
@@ -60,18 +36,6 @@ Ao concluir, você deverá conseguir:
 - explicar o p95 estimado e comparar Python com PromQL sobre os mesmos dados;
 - interpretar uma linha de base móvel e escrever uma conclusão com seus limites;
 - usar o painel na ordem certa (fonte → conta → consulta → relato).
-
-| Tempo | Atividade |
-|---|---|
-| 5 min | Situar a aula na trilha (saúde ≠ adequação de dados) |
-| 10 min | Abrir fontes e o painel; ritual de uso |
-| 10 min | Reconhecer fluxo scrape → séries → consulta |
-| 15 min | Selecionar séries e ler labels |
-| 15 min | Calcular taxas e agregar por endpoint |
-| 20 min | Reconstruir histograma, CDF e p95 |
-| 20 min | Explorar fixture e dados coletados |
-| 15 min | Ler a regra de alerta |
-| 15 min | Produzir e discutir o relatório |
 
 ## 1. Escolha os dados e abra as ferramentas
 
@@ -132,10 +96,10 @@ fica no corpo da página.
    expressão PromQL; **não** executa essa expressão no servidor. Comparação
    numérica Python ↔ PromQL exige modo live.
 5. **Miniaturas / gráficos.** Leia histograma e CDF como a mesma população da
-   tabela; mude um controle e regenere a leitura — não misture um q novo com
+   tabela; mude um controle e regenere a leitura. Não misture um q novo com
    um resultado antigo.
 
-Porta do app desta aula: <http://127.0.0.1:8504> (para conviver com a 003).
+Porta do app desta aula: <http://127.0.0.1:8504>.
 
 
 ## 2. Da requisição à interpretação
@@ -172,7 +136,7 @@ Um **quantil** (ou percentil) responde: «abaixo de que valor está a fração
 fica abaixo do valor; com *q* = 0,95 (p95), cerca de 95% ficam abaixo; com
 *q* = 0,99 (p99), cerca de 99%. Em monitoramento de latência, p50 descreve o
 caso típico; p95 e p99 descrevem a cauda lenta (a fração que mais incomoda o
-usuário). Em comércio eletrónico, um p95 de checkout alto pode coexistir com
+usuário). Em comércio eletrônico, um p95 de checkout alto pode coexistir com
 média baixa se poucas compras forem lentas. Em APIs de inferência, o p95 por
 `endpoint` ajuda a ver se uma rota específica arrasta a experiência.
 
@@ -192,7 +156,7 @@ A média destas dez medidas é 50,4 ms: fica perto do miolo da amostra, mas
 esconde a cauda que o p95/p99 tornam visível. Com histogramas Prometheus não
 temos a lista completa; estimamos o quantil a partir dos buckets (secção 6).
 
-Formulue primeiro a pergunta («a rota grayscale ficou lenta na última
+Formule primeiro a pergunta («a rota grayscale ficou lenta na última
 janela de um minuto?»), depois escolha janela e *q*.
 
 
@@ -626,9 +590,8 @@ Uma consulta `[30m]` pode começar a retornar valores antes de completar
 não constituem uma referência de meia hora. O cenário sintético ajuda a ler
 as curvas, mas não garante que essa regra adaptativa dispara em todo ciclo.
 
-**Decisão proporcional:** um alerta de latência orienta uma investigação.
-Ele não determina sozinho a causa nem indica automaticamente necessidade
-de retreinar um modelo.
+**Decisão:** um alerta de latência orienta uma investigação. A causa e a
+próxima ação (inclusive sobre o modelo) exigem outras evidências.
 
 ## 10. Exercício e entrega
 
@@ -736,15 +699,8 @@ just test
 just generate-prom-illustrations
 ~~~
 
-Retorne ao [índice da trilha MLOps](../000_mlops_pipelines_goals/README.md)
-ou à [apresentação do repositório](../README.md).
-
-## Roteiro da trilha
-
-| | Pasta |
-| :--- | :--- |
-| **Anterior** | [`002_histogram_cdf_streamlit`](../002_histogram_cdf_streamlit/README.md) (+ ponte de *deploy*; [`docs/prometheus.md`](../docs/prometheus.md)) |
-| **Seguinte** | [`010_corpus_histograms_model`](../010_corpus_histograms_model/README.md) |
+Outros materiais do repositório: [índice MLOps](../000_mlops_pipelines_goals/README.md)
+e [apresentação do repositório](../README.md).
 
 ## Glossário
 
