@@ -720,8 +720,8 @@ e [apresentação do repositório](../README.md).
 
 | | Pasta |
 | :--- | :--- |
-| **Anterior** | [`002_histogram_cdf_streamlit`](../002_histogram_cdf_streamlit/README.md) (+ ponte de *deploy*; [`docs/prometheus.md`](../docs/prometheus.md)) |
-| **Seguinte** | [`011_corpus_histograms_model`](../011_corpus_histograms_model/README.md) |
+| **Anterior** | [`010_prometheus_promql`](../010_prometheus_promql/README.md) |
+| **Seguinte** | [`016_grafana_dashboards`](../016_grafana_dashboards/README.md) |
 
 ## Glossário
 

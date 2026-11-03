@@ -1,5 +1,9 @@
 # Grafana para visualizar as métricas deste projeto
 
+Handout numerado da trilha:
+[`016_grafana_dashboards`](../016_grafana_dashboards/README.md).
+Este ficheiro permanece o roteiro de instalação e painéis.
+
 Mapa de portas do curso: [ports.md](ports.md) (Grafana **4000**; BentoML
 permanece em **3000**).
 

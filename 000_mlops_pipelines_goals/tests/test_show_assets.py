@@ -30,9 +30,14 @@ GOAL_WATCH_PHRASES = (
 INDEX_FOLDERS = (
     "001_histogram_cdf_cli",
     "002_histogram_cdf_streamlit",
+    "009_bentoml_oci_runtime",
     "003_ks_drift_alert_streamlit",
     "010_prometheus_promql",
     "015_prometheus_histcdf_streamlit",
+    "016_grafana_dashboards",
+    "017_datadog_apm_metrics",
+    "018_elasticsearch_logs",
+    "019_loki_grafana_logs",
     "004_ks_anomaly_detection_streamlit",
     "005_ks_input_output_streamlit",
     "006_ks_mixed_landscape_streamlit",
@@ -41,6 +46,7 @@ INDEX_FOLDERS = (
     "012_grayscale_request_logging",
     "013_request_log_histograms",
     "014_ks_production_vs_corpus",
+    "020_monitoring_contract",
 )
 
 LOGO_FILES = (

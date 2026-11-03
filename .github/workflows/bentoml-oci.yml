@@ -1,0 +1,40 @@
+# CI raso da aula 009 — o aluno só lê este ficheiro.
+name: bentoml-oci
+
+on:
+  push:
+    paths:
+      - "service.py"
+      - "bentofile.yaml"
+      - "pyproject.toml"
+      - "uv.lock"
+      - ".github/workflows/bentoml-oci.yml"
+  pull_request:
+    paths:
+      - "service.py"
+      - "bentofile.yaml"
+      - "pyproject.toml"
+      - "uv.lock"
+      - ".github/workflows/bentoml-oci.yml"
+  workflow_dispatch:
+
+jobs:
+  build-bento:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
+      - name: Sync dependencies
+        run: uv sync --no-active
+
+      - name: Build BentoML package
+        run: uv run --no-active bentoml build
+
+      - name: List bentos
+        run: uv run --no-active bentoml list

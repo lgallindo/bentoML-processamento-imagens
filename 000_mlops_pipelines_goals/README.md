@@ -71,25 +71,36 @@ flowchart LR
   W -.->|HTTP| R
 ```
 
-Antes de medir saúde, é preciso ter o serviço no ar e expondo métricas. Os
-tutoriais de Prometheus e Grafana cuidam disso na hora certa.
+Antes de medir saúde, a ponte `009` deixa o runtime raspável; em seguida
+`010`/`016` e os tutoriais em `docs/` fecham a leitura de séries e painéis.
 
 ## Ordem de estudo em quatro atos
 
-Estude nesta ordem. A numeração agrupa temas: `001`–`002` vocabulário;
-`010`–`014` plataforma (saúde + tijolos); `003`–`006` teatro KS; `008` PSI.
-A `003` e a `008` mantêm os paths estáveis (links e extratos Cloud).
+Estude nesta ordem (atos, não lexicografia das pastas). `001`–`002`
+vocabulário; ponte `009` (BentoML → OCI); `010`–`015` PromQL (+ Streamlit
+opcional); `016` Grafana; depois logs/vendors `019` Loki → `018` ES →
+`017` Datadog (este último exige chave de laboratório); `011`–`014` tijolos;
+`003`–`006` teatro KS; `008` PSI; fecho `020` (contrato). A `003` e a `008`
+mantêm os paths estáveis (links e extratos Cloud).
 
 **Ato 0 — Vocabulário.** Histograma e CDF, as duas leituras de distribuição
 que sustentam o resto:
 [`001_histogram_cdf_cli`](../001_histogram_cdf_cli/README.md) →
 [`002_histogram_cdf_streamlit`](../002_histogram_cdf_streamlit/README.md).
 
+**Ponte — Runtime empacotado.** Do código ao contêiner OCI, com `/metrics`
+alcançável antes de consultar séries:
+[`009_bentoml_oci_runtime`](../009_bentoml_oci_runtime/README.md).
+
 **Ato I — Saúde do servidor.** Latência e séries no caminho BentoML →
-Prometheus → Grafana:
-[`010_prometheus_promql`](../010_prometheus_promql/README.md)
-(texto `/metrics` + PromQL); reforço visual opcional em
-[`015_prometheus_histcdf_streamlit`](../015_prometheus_histcdf_streamlit/README.md).
+Prometheus → Grafana, depois logs/vendors:
+[`010_prometheus_promql`](../010_prometheus_promql/README.md) →
+[`015_prometheus_histcdf_streamlit`](../015_prometheus_histcdf_streamlit/README.md)
+(opcional) →
+[`016_grafana_dashboards`](../016_grafana_dashboards/README.md) →
+[`019_loki_grafana_logs`](../019_loki_grafana_logs/README.md) →
+[`018_elasticsearch_logs`](../018_elasticsearch_logs/README.md) →
+[`017_datadog_apm_metrics`](../017_datadog_apm_metrics/README.md).
 
 **Ato II — Tijolos no serviço.** Corpus, log e rotas de monitor — o caminho
 dos dados; o juízo do alerta vem depois:
@@ -106,6 +117,10 @@ lote, janela, entrada/saída, tráfego misto e, por fim, outro instrumento
 [`005_ks_input_output_streamlit`](../005_ks_input_output_streamlit/README.md) →
 [`006_ks_mixed_landscape_streamlit`](../006_ks_mixed_landscape_streamlit/README.md) →
 [`008_psi_drift_alert_streamlit`](../008_psi_drift_alert_streamlit/README.md).
+
+**Fecho — Contrato de monitoramento.** Uma página que amarra os três fins
+desta aula 000 a sinais e limiares:
+[`020_monitoring_contract`](../020_monitoring_contract/README.md).
 
 ## Índice das aulas
 
@@ -124,6 +139,13 @@ O mesmo objeto da `001`, agora num painel: cola valores (ou amostra), ajusta
 bins e intervalo, vê tabela e gráfico juntos. Consolida a intuição antes de
 falar de alertas ou Prometheus.
 
+### Ponte — Runtime empacotado
+
+**[`009_bentoml_oci_runtime`](../009_bentoml_oci_runtime/README.md)** —
+Empacota o serviço (`just build`), gera imagem OCI e prova
+`GET /metrics` na porta **3000**. Critério de saída: nomear o que a `010`
+irá consultar. Inclui leitura rasa do workflow de CI — sem editar YAML.
+
 ### Ato I — Saúde do servidor
 
 **[`010_prometheus_promql`](../010_prometheus_promql/README.md)** —
@@ -131,12 +153,30 @@ Pergunta: o pipeline responde com latência interpretável? Você lê o
 formato de `/metrics`, confirma o scrape, usa Table/Graph do Prometheus
 (`rate`, buckets, `histogram_quantile`) e estima um p95 **no papel** — sem
 Streamlit. Não mede qualidade de imagem nem drift de conteúdo (Ato III).
-Pré-req: vocabulário `001`–`002` e o [tutorial Prometheus](../docs/prometheus.md).
+Pré-req: ponte `009`, vocabulário `001`–`002` e o
+[tutorial Prometheus](../docs/prometheus.md).
 
 **[`015_prometheus_histcdf_streamlit`](../015_prometheus_histcdf_streamlit/README.md)** —
 Painel Streamlit (porta **8515**): histograma, CDF e Python ↔ PromQL sobre
 os mesmos buckets. Reforço visual **depois** da 010; não substitui a UI do
 Prometheus.
+
+**[`016_grafana_dashboards`](../016_grafana_dashboards/README.md)** —
+Handout numerado sobre [`docs/grafana.md`](../docs/grafana.md): painéis de
+taxa, erro, p95 e linha de base na UI **4000**. Entrega com evidência do
+gráfico — sem Streamlit.
+
+**[`019_loki_grafana_logs`](../019_loki_grafana_logs/README.md)** —
+Stub: logs OSS (Loki) correlacionados ao Grafana. Porta auxiliar típica
+**3100**.
+
+**[`018_elasticsearch_logs`](../018_elasticsearch_logs/README.md)** —
+Stub: índice de logs de pedido (eixo eventos, não séries Prom). Porta
+auxiliar típica **9200**.
+
+**[`017_datadog_apm_metrics`](../017_datadog_apm_metrics/README.md)** —
+Stub: vendor SaaS; chave só em `.env` local. Sem chave, salta-se o lab
+(DEGRADE-001).
 
 ### Ato II — Tijolos no serviço
 
@@ -187,6 +227,12 @@ puros?
 Irmã da `003`: mesma parábola operacional, outro instrumento (PSI e faixas
 clássicas de monitoramento). Fecha o Ato III mostrando que trocar a métrica
 não apaga a pergunta sobre o mundo dos dados.
+
+### Fecho — Contrato de monitoramento
+
+**[`020_monitoring_contract`](../020_monitoring_contract/README.md)** —
+Uma página que amarra saúde, drift e anomalia a sinais, limiares e dono,
+citando as aulas já cursadas.
 
 ---
 

@@ -16,7 +16,11 @@ RUNTIME_LABEL = "Runtime (BentoML)"
 GOAL_COLUMNS: tuple[tuple[str, tuple[str, ...]], ...] = (
     (
         "Saúde do servidor",
-        ("raiz /metrics", "010_prometheus_promql"),
+        (
+            "009_bentoml_oci_runtime",
+            "010_prometheus_promql",
+            "016_grafana_dashboards",
+        ),
     ),
     (
         "Drift de dados",

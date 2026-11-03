@@ -1,0 +1,67 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {"type": "prometheus", "uid": "bentoml-prometheus"},
+      "fieldConfig": {"defaults": {}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+      "id": 1,
+      "targets": [
+        {
+          "expr": "sum by (endpoint) (rate(bentoml_service_request_total[1m]))",
+          "legendFormat": "{{endpoint}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Requisições por segundo",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "bentoml-prometheus"},
+      "fieldConfig": {"defaults": {}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+      "id": 2,
+      "targets": [
+        {
+          "expr": "sum by (endpoint) (rate(bentoml_service_request_total{http_response_code=~\"5..\"}[1m]))",
+          "legendFormat": "5xx {{endpoint}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Taxa de erro (5xx)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "bentoml-prometheus"},
+      "fieldConfig": {"defaults": {"unit": "s"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 8},
+      "id": 3,
+      "targets": [
+        {
+          "expr": "bentoml:http_request_duration_seconds:p95_1m",
+          "legendFormat": "p95 — {{endpoint}}",
+          "refId": "A"
+        },
+        {
+          "expr": "avg_over_time(bentoml:http_request_duration_seconds:p95_1m[30m]) + 3 * stddev_over_time(bentoml:http_request_duration_seconds:p95_1m[30m])",
+          "legendFormat": "limite — {{endpoint}}",
+          "refId": "B"
+        }
+      ],
+      "title": "p95 versus linha de base (±3σ)",
+      "type": "timeseries"
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": ["bentoml", "aula-016"],
+  "templating": {"list": []},
+  "time": {"from": "now-15m", "to": "now"},
+  "title": "BentoML — saúde (aula 016)",
+  "uid": "bentoml-health-016",
+  "version": 1
+}

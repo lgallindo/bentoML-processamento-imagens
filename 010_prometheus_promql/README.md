@@ -195,8 +195,12 @@ Relato curto (até uma página), **sem** painel Streamlit:
 just test
 ~~~
 
+**Anterior:** ponte OCI —
+[aula 009](../009_bentoml_oci_runtime/README.md).
+
 **Seguinte (opcional):** painel Streamlit histograma/CDF —
-[aula 015](../015_prometheus_histcdf_streamlit/README.md).
+[aula 015](../015_prometheus_histcdf_streamlit/README.md); quem já domina
+buckets pode ir à [aula 016](../016_grafana_dashboards/README.md).
 
 ## Glossário
 

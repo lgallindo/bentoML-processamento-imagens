@@ -66,6 +66,42 @@ build:
 list:
     uv run --no-active bentoml list
 
+# Gera imagem OCI a partir do bento (tag opcional; default = último bento).
+# Ex.: just containerize
+#      just containerize image-demo:abc123
+containerize tag="":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [[ -n "{{tag}}" ]]; then
+      uv run --no-active bentoml containerize "{{tag}}"
+    else
+      latest="$(uv run --no-active bentoml list -o=json | python3 -c 'import json,sys; rows=json.load(sys.stdin); print(rows[0]["tag"] if rows else "")')"
+      if [[ -z "$latest" ]]; then
+        echo "Nenhum bento encontrado; execute just build primeiro." >&2
+        exit 1
+      fi
+      echo "containerize: $latest"
+      uv run --no-active bentoml containerize "$latest"
+    fi
+
+# Sobe a imagem OCI na porta canónica 3000 e prova GET /metrics (aula 009).
+# image: etiqueta Docker local (obrigatória).
+oci-smoke image:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    cid="$(docker run -d --rm -p 3000:3000 "{{image}}")"
+    cleanup() { docker stop "$cid" >/dev/null 2>&1 || true; }
+    trap cleanup EXIT
+    for _ in $(seq 1 30); do
+      if curl --fail --silent --show-error http://127.0.0.1:3000/metrics >/dev/null; then
+        echo "oci-smoke: OK — /metrics em :3000"
+        exit 0
+      fi
+      sleep 1
+    done
+    echo "oci-smoke: /metrics não respondeu a tempo" >&2
+    exit 1
+
 # Baixa (ou regenera) amostras temáticas a partir de samples/SOURCES.toml.
 download-themed-samples:
     uv run --no-active python scripts/download_themed_samples.py download

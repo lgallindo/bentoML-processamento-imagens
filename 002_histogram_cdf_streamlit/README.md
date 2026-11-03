@@ -138,4 +138,4 @@ em seguida o Ato I cobre a **saúde** do servidor — não o alerta KS da `003`.
 | | Pasta |
 | :--- | :--- |
 | **Anterior** | [`001_histogram_cdf_cli`](../001_histogram_cdf_cli/README.md) |
-| **Seguinte** | [`010_prometheus_promql`](../010_prometheus_promql/README.md) (após a ponte de *deploy*; instalação em [`docs/prometheus.md`](../docs/prometheus.md)) |
+| **Seguinte** | [`009_bentoml_oci_runtime`](../009_bentoml_oci_runtime/README.md) (ponte BentoML → OCI); depois [`010_prometheus_promql`](../010_prometheus_promql/README.md) |
