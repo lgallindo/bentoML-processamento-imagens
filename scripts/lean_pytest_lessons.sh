@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Harness lean: pytest por aula sem uv sync e sem pipe para tail.
-# Uso: scripts/lean_pytest_lessons.sh [003|005|006|008|all]
+# Uso: scripts/lean_pytest_lessons.sh [003|004|005|006|008|all]
 set -euo pipefail
 
 ROOT="$(git -C "$(dirname "$0")/.." rev-parse --show-toplevel)"
@@ -9,8 +9,9 @@ WAVE="${1:-all}"
 
 declare -A LESSONS=(
   [003]="003_ks_drift_alert_streamlit"
-  [005]="005_ks_anomaly_detection_streamlit"
-  [006]="006_ks_input_output_streamlit"
+  [004]="004_ks_anomaly_detection_streamlit"
+  [005]="005_ks_input_output_streamlit"
+  [006]="006_ks_mixed_landscape_streamlit"
   [008]="008_psi_drift_alert_streamlit"
 )
 
@@ -43,7 +44,7 @@ run_one() {
 
 keys=()
 if [[ "$WAVE" == "all" ]]; then
-  keys=(003 005 006 008)
+  keys=(003 004 005 006 008)
 else
   keys=("$WAVE")
 fi
