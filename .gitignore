@@ -1,5 +1,6 @@
-# Ambiente virtual local (criado por `uv sync`)
+# Ambiente virtual local (criado por `uv sync`); também ignora symlink para fora do mount
 .venv/
+.venv
 
 # Bytecode Python
 __pycache__/
