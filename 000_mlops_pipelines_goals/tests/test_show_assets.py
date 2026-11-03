@@ -133,7 +133,7 @@ def test_justfile_has_open_goals_map() -> None:
 def test_builder_constants() -> None:
     mod = _load_builder()
     assert mod.RUNTIME_LABEL == "Runtime (BentoML)"
-    assert mod.ANOMALY_BACKLOG_CHIP == "detector: backlog"
+    assert mod.ANOMALY_BACKLOG_CHIP == "005_ks_anomaly_detection_streamlit"
     titles = [col[0] for col in mod.GOAL_COLUMNS]
     assert titles == list(GOAL_LABELS)
     assert mod.ANOMALY_BACKLOG_CHIP in mod.GOAL_COLUMNS[2][1]

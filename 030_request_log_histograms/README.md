@@ -189,4 +189,18 @@ só para montar essa figura estática. Bibliotecas de gráfico estatístico
 encaixam melhor em notebooks, CLIs ou apps interativos; aqui o contrato é
 «receber/devolver imagem» de ponta a ponta.
 
-[`040_ks_production_vs_corpus`](../040_ks_production_vs_corpus/README.md)
+## Para onde isto aponta
+
+Comparar barras production versus corpus **à vista** não substitui o semáforo
+de alerta. Continue na
+[`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md)
+para a literacia KS; a irmã
+[`008_psi_drift_alert_streamlit`](../008_psi_drift_alert_streamlit/README.md)
+troca o instrumento (PSI). O endpoint KS no serviço vem a seguir na `040`.
+
+## Roteiro da trilha
+
+| | Pasta |
+| :--- | :--- |
+| **Anterior** | [`020_grayscale_request_logging`](../020_grayscale_request_logging/README.md) |
+| **Seguinte** | [`040_ks_production_vs_corpus`](../040_ks_production_vs_corpus/README.md) |

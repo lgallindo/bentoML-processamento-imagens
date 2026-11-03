@@ -358,3 +358,13 @@ just test
 3. [PSI — KAscore Ongoing Monitoring](https://ketchbrookanalytics.github.io/KAscore/articles/ongoing-monitoring.html)
 4. Taplin & Hunt, Risks 2019 — [MDPI](https://www.mdpi.com/2227-9091/7/2/53)
 5. [Pillow — Image](https://pillow.readthedocs.io/en/stable/reference/Image.html)
+
+## Roteiro da trilha
+
+Ordem de estudo em quatro atos: ver
+[`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md).
+
+| | Pasta |
+| :--- | :--- |
+| **Anterior** | [`006_ks_input_output_streamlit`](../006_ks_input_output_streamlit/README.md) |
+| **Seguinte** | [`008_psi_drift_alert_streamlit`](../008_psi_drift_alert_streamlit/README.md) |

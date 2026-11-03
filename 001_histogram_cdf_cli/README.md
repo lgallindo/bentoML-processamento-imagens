@@ -275,4 +275,12 @@ Funções em `histcdf.py`: `histogram_from_values`, `cdf_from_counts`,
    `hi` entra no último bin; fora do intervalo → erro.
 3. Converter contagens em CDF pela acumulação normalizada da seção Conceitos.
 
-[`002_histogram_cdf_streamlit`](../002_histogram_cdf_streamlit/README.md)
+## Roteiro da trilha
+
+Ordem de estudo em quatro atos: ver
+[`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md).
+
+| | Pasta |
+| :--- | :--- |
+| **Anterior** | [`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md) |
+| **Seguinte** | [`002_histogram_cdf_streamlit`](../002_histogram_cdf_streamlit/README.md) |

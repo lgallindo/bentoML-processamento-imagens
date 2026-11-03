@@ -177,4 +177,17 @@ só para montar essa figura estática. Bibliotecas de gráfico estatístico
 encaixam melhor em notebooks, CLIs ou apps interativos; aqui o contrato é
 «receber/devolver imagem» de ponta a ponta.
 
-[`030_request_log_histograms`](../030_request_log_histograms/README.md)
+## Para onde isto aponta
+
+O log em disco **alimenta** a vigilância; interpretar o afastamento
+production/corpus com cartão de alerta é papel da
+[`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md).
+Para **olhar** histogramas lado a lado no próprio serviço, continue na
+[`030_request_log_histograms`](../030_request_log_histograms/README.md).
+
+## Roteiro da trilha
+
+| | Pasta |
+| :--- | :--- |
+| **Anterior** | [`010_corpus_histograms_model`](../010_corpus_histograms_model/README.md) |
+| **Seguinte** | [`030_request_log_histograms`](../030_request_log_histograms/README.md) |

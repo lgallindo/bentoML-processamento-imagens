@@ -339,4 +339,19 @@ Escolha **três** fotografias suas (ou capturas do celular). Para cada uma:
    semelhantes ao corpus? Em que canal (L versus R/G/B) a diferença aparece com
    mais clareza?
 
-[`020_grayscale_request_logging`](../020_grayscale_request_logging/README.md)
+## Para onde isto aponta
+
+Esta pasta ensina a **empacotar** corpus, modelo picklable e rotas
+`/monitor-histogram-corpus-*`. Isso não é o cartão de alerta nem a parábola
+«HTTP verde / mundo errado». A literacia de decisão sobre afastamento de
+distribuições está na
+[`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md)
+(e o mapa dos fins em
+[`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md)).
+
+## Roteiro da trilha
+
+| | Pasta |
+| :--- | :--- |
+| **Anterior** | [`004_prometheus_histcdf_streamlit`](../004_prometheus_histcdf_streamlit/README.md) |
+| **Seguinte** | [`020_grayscale_request_logging`](../020_grayscale_request_logging/README.md) |

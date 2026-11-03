@@ -32,6 +32,12 @@ Imagine um serviço de imagens em produção: o cliente envia uma foto, a API
 devolve a versão em cinza, o status é **200**, o tempo de resposta está baixo.
 Do ponto de vista de disponibilidade, o dia está tranquilo.
 
+Na ordem de estudo da trilha, a
+[aula 004](../004_prometheus_histcdf_streamlit/README.md) já ensinou a
+interrogar **latência** e volume com Prometheus/PromQL (saúde do servidor).
+Aqui a pergunta muda: adequação dos **dados** — o mundo das imagens — não a
+duração da requisição.
+
 Agora mude o *conteúdo* das fotos — de praias para florestas, de estúdio para
 rua à noite — e mantenha o mesmo endpoint. O HTTP continua verde. A latência
 continua aceitável. O que mudou foi o **mundo** que chega ao modelo.
@@ -984,4 +990,14 @@ python scripts/workflow_boxes/box_01_luminancia.py
 6. Limiares FRTB / crédito: ver links na
    [seção 12](#12-limiares-de-d--ks-em-outros-contextos)
 
-[`004_prometheus_histcdf_streamlit`](../004_prometheus_histcdf_streamlit/README.md)
+## Roteiro da trilha
+
+Ordem de estudo em quatro atos: ver
+[`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md).
+Esta pasta abre o Ato III (drift e anomalia), depois dos tijolos `010`–`040`.
+
+| | Pasta |
+| :--- | :--- |
+| **Anterior** | [`040_ks_production_vs_corpus`](../040_ks_production_vs_corpus/README.md) |
+| **Seguinte** | [`005_ks_anomaly_detection_streamlit`](../005_ks_anomaly_detection_streamlit/README.md) |
+| Irmã (PSI) | [`008_psi_drift_alert_streamlit`](../008_psi_drift_alert_streamlit/README.md) |

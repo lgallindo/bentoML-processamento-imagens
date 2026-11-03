@@ -35,9 +35,15 @@ monitoramento. Esta aula cobre sobretudo a **saúde do serviço** vista pela
 
 | Aula | Pergunta central | Grandeza típica |
 | :--- | :--- | :--- |
-| **000** | Mapa treino → inferência → monitoramento | — |
-| **003** / **008** | Os *dados* (mundo das imagens) ainda combinam com a referência? | Distribuição de L; **D** ou **PSI** |
+| **000** | Mapa treino → inferência → monitoramento; quatro atos de estudo | — |
+| **001** / **002** | O que são histograma e CDF? | Contagens e fração acumulada |
 | **004** (esta) | A *tubulação* responde com latência interpretável? | Duração de requisição; taxa; p95 |
+| **003** / **008** | Os *dados* (mundo das imagens) ainda combinam com a referência? | Distribuição de L; **D** ou **PSI** |
+
+Na [ordem de estudo](../000_mlops_pipelines_goals/README.md), esta aula é o
+**Ato I** (saúde): vem depois do vocabulário `001`–`002` e da ponte de
+*deploy*, e **antes** dos tijolos `010`–`040` e do teatro `003`…`008`. O
+número da pasta (`004`) não muda; só a posição no roteiro.
 
 Um resultado de latência **não** demonstra qualidade das imagens nem
 desempenho de um modelo. Os cartões de alerta das aulas 003 e 008 (estados
@@ -156,12 +162,38 @@ Esse intervalo de coleta é diferente da **janela de consulta**, como
 `[1m]`, e do **passo do gráfico**, que determina em quais instantes a
 expressão será avaliada para desenhar a curva.
 
-**Parâmetro e pergunta.** A **janela** de consulta (`[1m]`, `[5m]`, …) e o
-**quantil** (p95, p99) são parâmetros que você escolhe para uma pergunta de
-latência. Mudar a janela pode mudar a leitura sem que o serviço tenha mudado
-no mesmo instante: a janela curta reage mais cedo; a longa mistura fases. O
-mesmo vale para o quantil: p95 e p99 resumem a mesma população de outra
-maneira. Declare a pergunta, depois o parâmetro — não o contrário.
+**Janela e quantil.** A **janela** de consulta (`[1m]`, `[5m]`, …) limita o
+histórico que a expressão usa. A janela curta reage mais cedo a uma mudança;
+a longa mistura fases. Mudar a janela pode alterar o número lido sem que o
+serviço tenha mudado no mesmo instante.
+
+Um **quantil** (ou percentil) responde: «abaixo de que valor está a fração
+*q* das observações?» Com *q* = 0,50 (p50 / mediana), metade das observações
+fica abaixo do valor; com *q* = 0,95 (p95), cerca de 95% ficam abaixo; com
+*q* = 0,99 (p99), cerca de 99%. Em monitoramento de latência, p50 descreve o
+caso típico; p95 e p99 descrevem a cauda lenta (a fração que mais incomoda o
+usuário). Em comércio eletrónico, um p95 de checkout alto pode coexistir com
+média baixa se poucas compras forem lentas. Em APIs de inferência, o p95 por
+`endpoint` ajuda a ver se uma rota específica arrasta a experiência.
+
+Exemplo numérico com dez latências já ordenadas (ms):
+
+~~~text
+20, 22, 24, 25, 28, 30, 35, 40, 80, 200
+~~~
+
+| Quantil | Leitura aproximada nesta amostra | Valor |
+| :--- | :--- | ---: |
+| p50 | 5.ª e 6.ª posições (metade da amostra) | ≈ 29 ms |
+| p95 | perto da 9,5.ª posição (cauda) | entre 80 e 200 ms |
+| p99 | ainda mais na cauda | próximo de 200 ms |
+
+A média destas dez medidas é 50,4 ms: fica perto do miolo da amostra, mas
+esconde a cauda que o p95/p99 tornam visível. Com histogramas Prometheus não
+temos a lista completa; estimamos o quantil a partir dos buckets (secção 6).
+
+Formulue primeiro a pergunta («a rota grayscale ficou lenta na última
+janela de um minuto?»), depois escolha janela e *q*.
 
 
 ## 3. Métricas, labels e seletores
@@ -707,6 +739,13 @@ just generate-prom-illustrations
 Retorne ao [índice da trilha MLOps](../000_mlops_pipelines_goals/README.md)
 ou à [apresentação do repositório](../README.md).
 
+## Roteiro da trilha
+
+| | Pasta |
+| :--- | :--- |
+| **Anterior** | [`002_histogram_cdf_streamlit`](../002_histogram_cdf_streamlit/README.md) (+ ponte de *deploy*; [`docs/prometheus.md`](../docs/prometheus.md)) |
+| **Seguinte** | [`010_corpus_histograms_model`](../010_corpus_histograms_model/README.md) |
+
 ## Glossário
 
 | Termo | Significado nesta aula |
@@ -718,7 +757,7 @@ ou à [apresentação do repositório](../README.md).
 | **`rate` / `increase`** | Transformações de contador em taxa ou crescimento na janela |
 | **Quantil (p95)** | Valor sob o qual está a fração *q* das observações (estimado) |
 | **Recording rule** | Expressão pré-calculada e gravada como nova série |
-| **`pending` / `firing`** | Estados da regra de alerta no Prometheus (não são os cartões da 003/008) |
+| **`pending` / `firing`** | Estados da regra de alerta no Prometheus |
 
 
 ## Referências para consulta

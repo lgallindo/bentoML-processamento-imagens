@@ -128,4 +128,14 @@ cdf ← cdf_from_counts(counts)
 O gráfico usa os **centros** `(edges[i]+edges[i+1])/2` para alinhar barras e
 pontos da CDF.
 
-[`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md)
+## Roteiro da trilha
+
+Ordem de estudo em quatro atos: ver
+[`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md).
+Depois do vocabulário, a ponte é entregar o runtime (BentoML / imagem OCI);
+em seguida o Ato I cobre a **saúde** do servidor — não o alerta KS da `003`.
+
+| | Pasta |
+| :--- | :--- |
+| **Anterior** | [`001_histogram_cdf_cli`](../001_histogram_cdf_cli/README.md) |
+| **Seguinte** | [`004_prometheus_histcdf_streamlit`](../004_prometheus_histcdf_streamlit/README.md) (após a ponte de *deploy*; instalação em [`docs/prometheus.md`](../docs/prometheus.md)) |

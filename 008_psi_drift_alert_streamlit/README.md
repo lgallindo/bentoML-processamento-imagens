@@ -752,3 +752,15 @@ python scripts/workflow_boxes/box_01_massas.py
 6. Kolmogorov–Smirnov (comparação opcional com \(D\)) —
    [Wikipédia](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test)
 7. Aula irmã KS: [`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md)
+
+## Roteiro da trilha
+
+Ordem de estudo em quatro atos: ver
+[`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md).
+Esta pasta encerra o Ato III: mesma parábola da `003`, outro instrumento (PSI).
+
+| | Pasta |
+| :--- | :--- |
+| **Anterior** | [`007_ks_mixed_landscape_streamlit`](../007_ks_mixed_landscape_streamlit/README.md) |
+| **Seguinte** | — (fim do roteiro numerado; releia os três fins em [`000`](../000_mlops_pipelines_goals/README.md)) |
+| Irmã (KS) | [`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md) |

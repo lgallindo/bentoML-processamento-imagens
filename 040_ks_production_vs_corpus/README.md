@@ -299,3 +299,19 @@ do capítulo KS (`[10,0,0,10]` vs `[0,10,10,0]`) e calcule D à mão; confira co
 `ks_statistic` + `ks_p_value` para `n_eff = 10`. Entregue: (a) o JSON real do
 endpoint; (b) D e p do exemplo de brinquedo; (c) uma frase dizendo se rejeitaria
 H₀ a 5% em cada caso.
+
+## Para onde isto aponta
+
+O endpoint devolve **D** / valor-p (contrato HTTP). O ritual
+INCONCLUSIVO / ALERTA / TRANQUILO, a parábola e o painel didático estão na
+[`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md).
+Para anomalia em janela ou candidato, use a
+[`005_ks_anomaly_detection_streamlit`](../005_ks_anomaly_detection_streamlit/README.md).
+Esta pasta **não** substitui a `003`.
+
+## Roteiro da trilha
+
+| | Pasta |
+| :--- | :--- |
+| **Anterior** | [`030_request_log_histograms`](../030_request_log_histograms/README.md) |
+| **Seguinte** | [`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md) |

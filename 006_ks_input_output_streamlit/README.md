@@ -217,6 +217,13 @@ just test
 A 003 olha só a **entrada**. Esta aula coloca a **saída** no mesmo aparelho
 de alerta e mostra quando os dois lados divergem.
 
-[`005_ks_anomaly_detection_streamlit`](../005_ks_anomaly_detection_streamlit/README.md)
-· [`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md)
-· [`008_psi_drift_alert_streamlit`](../008_psi_drift_alert_streamlit/README.md)
+## Roteiro da trilha
+
+Ordem de estudo em quatro atos: ver
+[`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md).
+
+| | Pasta |
+| :--- | :--- |
+| **Anterior** | [`005_ks_anomaly_detection_streamlit`](../005_ks_anomaly_detection_streamlit/README.md) |
+| **Seguinte** | [`007_ks_mixed_landscape_streamlit`](../007_ks_mixed_landscape_streamlit/README.md) |
+| Âncora KS | [`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md) |

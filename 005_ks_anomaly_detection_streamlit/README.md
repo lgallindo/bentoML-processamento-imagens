@@ -233,6 +233,12 @@ corridas unitárias focadas sem pipe para `tail`.
 Ver bibliografia KS / drift no handout da
 [aula 003](../003_ks_drift_alert_streamlit/README.md#18-bibliografia).
 
-[`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md) ·
-[`006_ks_input_output_streamlit`](../006_ks_input_output_streamlit/README.md) ·
-[`000`](../000_mlops_pipelines_goals/README.md)
+## Roteiro da trilha
+
+Ordem de estudo em quatro atos: ver
+[`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md).
+
+| | Pasta |
+| :--- | :--- |
+| **Anterior** | [`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md) |
+| **Seguinte** | [`006_ks_input_output_streamlit`](../006_ks_input_output_streamlit/README.md) |
