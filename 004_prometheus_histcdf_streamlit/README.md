@@ -51,6 +51,18 @@ A fixture é um retrato único: não contém o histórico necessário a `rate`.
 Os dados sintéticos permitem estudar consultas; seus valores não medem o
 desempenho do BentoML.
 
+**Portas (não confundir).** O [tutorial de instalação](../docs/prometheus.md)
+sobe o **BentoML** em `3000` e o **Prometheus** em `9090`. Esta aula acrescenta
+um **painel Streamlit** em `8504`, que lê fixture ou consulta o Prometheus.
+São processos distintos:
+
+| Porta | Processo | Papel |
+| ---: | :--- | :--- |
+| **3000** | BentoML (`just serve` na raiz) | API + `GET /metrics` (alvo do scrape no tutorial) |
+| **9090** | Prometheus do tutorial | UI/API sobre o serviço real |
+| **8504** | Painel desta aula (`just app`) | Streamlit: fixture ou modo live |
+| **8004** / **9094** | Exporter + Prometheus sintéticos | Cenário controlado (opcional) |
+
 Na pasta da aula, instale as dependências e abra o painel:
 
 ~~~bash
@@ -59,7 +71,7 @@ just sync
 just app
 ~~~
 
-O painel está em <http://127.0.0.1:8504>. Comece no modo **fixture**.
+O painel Streamlit fica em <http://127.0.0.1:8504>. Comece no modo **fixture**.
 
 Para gerar dados e carregá-los continuamente no Prometheus, mantenha três
 terminais abertos **nessa mesma pasta**:
@@ -98,9 +110,6 @@ fica no corpo da página.
 5. **Miniaturas / gráficos.** Leia histograma e CDF como a mesma população da
    tabela; mude um controle e regenere a leitura. Não misture um q novo com
    um resultado antigo.
-
-Porta do app desta aula: <http://127.0.0.1:8504>.
-
 
 ## 2. Da requisição à interpretação
 

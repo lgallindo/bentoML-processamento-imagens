@@ -173,8 +173,17 @@ Pressione `Ctrl+C` nos terminais do Prometheus e do BentoML. Os dados desta aula
 ficam em `/tmp/bentoml-imagens-prometheus`; você pode apagá-los quando não
 precisar mais do histórico.
 
+## Continuação (aula 004)
+
+Com a coleta em `3000`/`9090` funcionando, a
+[aula 004](../004_prometheus_histcdf_streamlit/README.md) abre um **painel
+Streamlit** em `127.0.0.1:8504` para formular PromQL, reconstruir histograma/CDF
+e comparar com Python. A porta `8504` é só desse painel; não substitui o
+BentoML em `3000` nem a UI do Prometheus em `9090`.
+
 ## Referências
 
 - [Métricas e integração Prometheus do BentoML](https://docs.bentoml.org/en/latest/build-with-bentoml/observability/metrics.html)
 - [Primeiros passos com Prometheus](https://prometheus.io/docs/prometheus/latest/getting_started/)
 - [Instalação do Prometheus](https://prometheus.io/docs/prometheus/latest/installation/)
+

@@ -4,7 +4,8 @@ default:
 sync:
     uv sync --no-active
 
-app port="8503":
+# 8504: painel Streamlit desta aula (3000 = BentoML; 9090 = Prometheus do tutorial)
+app port="8504":
     uv run --no-active streamlit run app.py --server.port {{port}} --server.headless true
 
 test:
