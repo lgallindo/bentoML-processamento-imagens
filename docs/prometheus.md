@@ -102,8 +102,25 @@ curl --get --silent --show-error --fail \
 ```
 
 No resultado JSON, `status` deve ser `success` e o valor da série deve ser `1`.
-Se aparecer `DOWN`, confirme que o BentoML continua rodando, que sua porta é
-3000 e que `curl http://127.0.0.1:3000/metrics` responde.
+Se aparecer `DOWN`, confirme que o BentoML continua rodando (`just serve` — ele
+**não** sobe sozinho), que sua porta é 3000 e que
+`curl http://127.0.0.1:3000/metrics` responde.
+
+**Prometheus errado na porta 9090.** O arquivo
+[`monitoring/prometheus.yml`](../monitoring/prometheus.yml) deste repositório
+define **apenas** o job `bentoml-imagens` → `127.0.0.1:3000`. Se
+`/targets` listar cadvisor, flower, exporters de outros sistemas etc., você
+está olhando **outra** instância de Prometheus (já residente na máquina), não
+a da aula. Nesse caso:
+
+1. Confirme se o processo que você iniciou usou
+   `--config.file=monitoring/prometheus.yml` deste repo.
+2. Se a porta 9090 já estiver ocupada, pare essa instância **ou** suba a da
+   aula noutra porta (ex. `9091`) e use essa URL no restante do tutorial:
+   `--web.listen-address=127.0.0.1:9091`.
+3. A demo sintética da [aula 010](../010_prometheus_promql/README.md) usa
+   **9100** de propósito, para não brigar com um Prometheus “de produção”
+   local na 9090.
 
 ## 4. Gere tráfego e consulte a latência
 

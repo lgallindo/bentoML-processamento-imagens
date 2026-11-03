@@ -64,8 +64,17 @@ inspecionar `/metrics`: os contadores só fazem sentido **depois** de tráfego.
 
 ## 2. Confirme a coleta
 
-Prometheus canônico: <http://127.0.0.1:9090/targets> — o job
-`bentoml-imagens` deve estar `UP`.
+O BentoML **não** inicia sozinho: na raiz do repo, `just serve` (porta
+**3000**). O Prometheus da aula sobe com
+`monitoring/prometheus.yml` (job único `bentoml-imagens` → `127.0.0.1:3000`);
+veja o [tutorial](../docs/prometheus.md).
+
+Abra <http://127.0.0.1:9090/targets> **só se** for essa instância. O job
+`bentoml-imagens` deve estar `UP`. Se a página mostrar muitos targets
+(cadvisor, flower, backends de outros projetos…) e **não** listar
+`bentoml-imagens`, a porta 9090 pertence a **outro** Prometheus — não ao da
+aula. Suba o da aula com o `prometheus.yml` deste repo (outra porta, se
+preciso) ou use a demo em **9100** (`just demo-prometheus` nesta pasta).
 
 ~~~promql
 up{job="bentoml-imagens"}
