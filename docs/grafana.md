@@ -1,5 +1,8 @@
 # Grafana para visualizar as métricas deste projeto
 
+Mapa de portas do curso: [ports.md](ports.md) (Grafana **4000**; BentoML
+permanece em **3000**).
+
 Este tutorial continua o roteiro de
 [Prometheus com o `/metrics` deste projeto](prometheus.md). O BentoML expõe as
 métricas; o Prometheus coleta e armazena as séries temporais; o Grafana consulta

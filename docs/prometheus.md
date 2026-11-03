@@ -1,5 +1,8 @@
 # Prometheus com o `/metrics` deste projeto
 
+Mapa de portas do curso: [ports.md](ports.md) (BentoML **3000**, Prometheus
+**9090**, Grafana **4000**).
+
 Uma API pode continuar respondendo `200` e, ainda assim, estar ficando mais
 lenta. Observar uma chamada isolada não revela esse tipo de degradação: é
 preciso medir continuamente, preservar o histórico e comparar o comportamento

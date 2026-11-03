@@ -227,6 +227,10 @@ just                    # lista todas as receitas
 just sync               # monta ou atualiza a .venv/
 just serve              # sobe o servidor na porta 3000
 just swagger            # abre a documentação interativa no navegador
+just check-ports        # confere o mapa canônico 3000/9090/4000 (+ Streamlit)
+
+# Observabilidade local: BentoML :3000 → Prometheus :9090 → Grafana :4000
+# (mapa completo em docs/ports.md; não use Grafana na 3000).
 
 just curl-inference-grayscale samples/demo/cesar-fachada-1.webp
 just curl-inference-blur         samples/demo/cesar-fachada-1.webp desfoque.png 8.0
@@ -251,7 +255,7 @@ Os arquivos gerados (`grayscale.png`, `blur.png`, `resized.png`) estão no
 | Mensagem | O que fazer |
 |---|---|
 | `curl: (7) Failed to connect to localhost port 3000` | o servidor não está de pé. Volte ao terminal 1 e rode `just serve` |
-| um rastro de erro enorme terminando em `OSError: [Errno 98] Address already in use` | algo já ocupa a porta. Ignore o rastro e leia só a **última** linha; suba em outra porta com `just serve 3001` |
+| um rastro de erro enorme terminando em `OSError: [Errno 98] Address already in use` | algo já ocupa a **3000**. Ignore o rastro e leia só a **última** linha; liberte a porta (não mude o BentoML do curso para outra porta nem coloque Grafana em 3000 — ver [`docs/ports.md`](docs/ports.md)) |
 | o terminal do `serve` parece travado | é assim mesmo: ele está ocupado sendo servidor. Use a outra janela |
 | `curl: (22) ... returned error: 400` | você mandou algo inválido. Repita com `curl` na mão, sem `--fail`, para ler a explicação |
 | `command not found: just` | feche e reabra o terminal depois de `uv tool install rust-just` |

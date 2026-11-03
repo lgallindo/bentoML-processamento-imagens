@@ -51,17 +51,18 @@ A fixture é um retrato único: não contém o histórico necessário a `rate`.
 Os dados sintéticos permitem estudar consultas; seus valores não medem o
 desempenho do BentoML.
 
-**Portas (não confundir).** O [tutorial de instalação](../docs/prometheus.md)
-sobe o **BentoML** em `3000` e o **Prometheus** em `9090`. Esta aula acrescenta
-um **painel Streamlit** em `8504`, que lê fixture ou consulta o Prometheus.
-São processos distintos:
+**Portas (não confundir).** Mapa do curso: [`docs/ports.md`](../docs/ports.md).
+O trio canônico é BentoML **3000**, Prometheus **9090**, Grafana **4000**.
+Esta aula acrescenta auxiliares (Streamlit **8504**; demo **8004**/**9094**) —
+eles **não** substituem o trio.
 
 | Porta | Processo | Papel |
 | ---: | :--- | :--- |
-| **3000** | BentoML (`just serve` na raiz) | API + `GET /metrics` (alvo do scrape no tutorial) |
-| **9090** | Prometheus do tutorial | UI/API sobre o serviço real |
-| **8504** | Painel desta aula (`just app`) | Streamlit: fixture ou modo live |
-| **8004** / **9094** | Exporter + Prometheus sintéticos | Cenário controlado (opcional) |
+| **3000** | BentoML (`just serve` na raiz) | API + `GET /metrics` (canônico) |
+| **9090** | Prometheus do tutorial | UI/API sobre o serviço real (canônico) |
+| **4000** | Grafana | Painéis do curso (canônico; nunca 3000) |
+| **8504** | Painel desta aula (`just app`) | Streamlit auxiliar |
+| **8004** / **9094** | Exporter + Prometheus sintéticos | Demo auxiliar (opcional) |
 
 Na pasta da aula, instale as dependências e abra o painel:
 
