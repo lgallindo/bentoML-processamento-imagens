@@ -34,9 +34,6 @@ Três perguntas atravessam a trilha inteira:
 3. Detecção de anomalias — uma janela de métrica foge da linha de base (por
    exemplo média ± k desvios-padrão no p95).
 
-Os **atos** abaixo organizam *como* você estuda. Estes **objetivos** nomeiam
-*o que* o monitoramento deve vigiar no fim. Não são a mesma lista.
-
 ## Visão de arquitetura
 
 As figuras em [`illustrations/`](illustrations/) mostram o mesmo mapa em três
