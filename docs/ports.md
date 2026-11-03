@@ -34,18 +34,33 @@ Pasta `NNN_*` → porta **8500 + N** (N = número da aula).
 | 008 | 8508 | alerta PSI |
 | 015 | 8515 | histograma/CDF Prometheus (após a 010) |
 
-A aula **010** (`010_prometheus_promql`) não usa Streamlit.
-
 O painel Streamlit **não** substitui o BentoML em 3000.
 
 ## Demos sintéticas (opcionais)
 
 Quando uma aula sobe exporter/Prometheus **além** do trio canônico:
 
-| Papel | Regra | Exemplo (aula 010) |
-| :--- | :--- | :--- |
-| Exporter / fake `/metrics` | **8000 + N** | 8010 |
-| Prometheus só-demo | **9090 + N** | 9100 |
+| Papel | Regra |
+| :--- | :--- |
+| Exporter / fake `/metrics` | **8000 + N** |
+| Prometheus só-demo | **9090 + N** |
 
-O canônico 3000 / 9090 / 4000 continua válido em paralelo; a demo não o
-substitui.
+Mapa por aula (N = número da pasta). Só use o par se essa aula de fato
+subir a demo; o trio canônico **3000** / **9090** / **4000** continua válido
+em paralelo e a demo **não** o substitui.
+
+| Aula | Exporter (`8000+N`) | Prometheus demo (`9090+N`) |
+| ---: | ---: | ---: |
+| 001 | 8001 | 9091 |
+| 002 | 8002 | 9092 |
+| 003 | 8003 | 9093 |
+| 004 | 8004 | 9094 |
+| 005 | 8005 | 9095 |
+| 006 | 8006 | 9096 |
+| 008 | 8008 | 9098 |
+| 010 | 8010 | 9100 |
+| 011 | 8011 | 9101 |
+| 012 | 8012 | 9102 |
+| 013 | 8013 | 9103 |
+| 014 | 8014 | 9104 |
+| 015 | 8015 | 9105 |
