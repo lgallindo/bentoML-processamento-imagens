@@ -1,5 +1,7 @@
 {
-  "annotations": {"list": []},
+  "annotations": {
+    "list": []
+  },
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
@@ -7,9 +9,20 @@
   "links": [],
   "panels": [
     {
-      "datasource": {"type": "prometheus", "uid": "bentoml-prometheus"},
-      "fieldConfig": {"defaults": {}, "overrides": []},
-      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+      "datasource": {
+        "type": "prometheus",
+        "uid": "bentoml-prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
       "id": 1,
       "targets": [
         {
@@ -18,13 +31,24 @@
           "refId": "A"
         }
       ],
-      "title": "Requisições por segundo",
+      "title": "Requisi\u00e7\u00f5es por segundo",
       "type": "timeseries"
     },
     {
-      "datasource": {"type": "prometheus", "uid": "bentoml-prometheus"},
-      "fieldConfig": {"defaults": {}, "overrides": []},
-      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+      "datasource": {
+        "type": "prometheus",
+        "uid": "bentoml-prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
       "id": 2,
       "targets": [
         {
@@ -37,31 +61,52 @@
       "type": "timeseries"
     },
     {
-      "datasource": {"type": "prometheus", "uid": "bentoml-prometheus"},
-      "fieldConfig": {"defaults": {"unit": "s"}, "overrides": []},
-      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 8},
+      "datasource": {
+        "type": "prometheus",
+        "uid": "bentoml-prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
       "id": 3,
       "targets": [
         {
-          "expr": "bentoml:http_request_duration_seconds:p95_1m",
-          "legendFormat": "p95 — {{endpoint}}",
+          "expr": "histogram_quantile(0.95, sum by (le, endpoint) (rate(bentoml_service_request_duration_seconds_bucket[1m])))",
+          "legendFormat": "p95 live \u2014 {{endpoint}}",
           "refId": "A"
         },
         {
-          "expr": "avg_over_time(bentoml:http_request_duration_seconds:p95_1m[30m]) + 3 * stddev_over_time(bentoml:http_request_duration_seconds:p95_1m[30m])",
-          "legendFormat": "limite — {{endpoint}}",
+          "expr": "avg_over_time(histogram_quantile(0.95, sum by (le, endpoint) (rate(bentoml_service_request_duration_seconds_bucket[1m])))[10m:30s]) + 3 * stddev_over_time(histogram_quantile(0.95, sum by (le, endpoint) (rate(bentoml_service_request_duration_seconds_bucket[1m])))[10m:30s])",
+          "legendFormat": "limite ~ \u2014 {{endpoint}}",
           "refId": "B"
         }
       ],
-      "title": "p95 versus linha de base (±3σ)",
+      "title": "p95 versus linha de base (\u00b13\u03c3)",
       "type": "timeseries"
     }
   ],
   "schemaVersion": 39,
-  "tags": ["bentoml", "aula-016"],
-  "templating": {"list": []},
-  "time": {"from": "now-15m", "to": "now"},
-  "title": "BentoML — saúde (aula 016)",
+  "tags": [
+    "bentoml",
+    "aula-016"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "title": "BentoML \u2014 sa\u00fade (aula 016)",
   "uid": "bentoml-health-016",
   "version": 1
 }

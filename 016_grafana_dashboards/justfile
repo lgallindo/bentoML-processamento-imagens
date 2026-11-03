@@ -1,0 +1,14 @@
+default:
+    @just --list
+
+# Figuras didácticas (pipeline, papéis, esquema de painéis).
+generate-figures:
+    uv run --no-active --with matplotlib python scripts/generate_comparison_figures.py
+    uv run --no-active --with matplotlib python scripts/generate_dashboard_schematic.py
+
+# Capturas de UI via Docker efémero + gstack browse (ver scripts/capture_screenshots.sh).
+capture-screenshots:
+    bash scripts/capture_screenshots.sh
+
+test:
+    uv run --no-active pytest -q

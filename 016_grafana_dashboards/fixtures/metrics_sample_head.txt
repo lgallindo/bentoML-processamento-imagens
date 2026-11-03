@@ -1,0 +1,46 @@
+# HELP bentoml_service_request_total Requisicoes sinteticas acumuladas desde a partida.
+# TYPE bentoml_service_request_total counter
+bentoml_service_request_total{endpoint="/inference-grayscale",http_response_code="200"} 7960
+bentoml_service_request_total{endpoint="/inference-blur",http_response_code="200"} 3980
+bentoml_service_request_total{endpoint="/inference-resize",http_response_code="200"} 1990
+# HELP bentoml_service_request_duration_seconds Duracoes sinteticas em segundos.
+# TYPE bentoml_service_request_duration_seconds histogram
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",le="0.005"} 556
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",le="0.01"} 1390
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",le="0.025"} 3336
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",le="0.05"} 5244
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",le="0.1"} 6160
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",le="0.25"} 7000
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",le="0.5"} 7720
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",le="1.0"} 7960
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",le="+Inf"} 7960
+bentoml_service_request_duration_seconds_count{endpoint="/inference-grayscale"} 7960
+bentoml_service_request_duration_seconds_sum{endpoint="/inference-grayscale"} 845.416000000
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-blur",le="0.005"} 0
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-blur",le="0.01"} 278
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-blur",le="0.025"} 1112
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-blur",le="0.05"} 2224
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-blur",le="0.1"} 2900
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-blur",le="0.25"} 3260
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-blur",le="0.5"} 3740
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-blur",le="1.0"} 3980
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-blur",le="+Inf"} 3980
+bentoml_service_request_duration_seconds_count{endpoint="/inference-blur"} 3980
+bentoml_service_request_duration_seconds_sum{endpoint="/inference-blur"} 573.464000000
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-resize",le="0.005"} 278
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-resize",le="0.01"} 556
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-resize",le="0.025"} 834
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-resize",le="0.05"} 1232
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-resize",le="0.1"} 1630
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-resize",le="0.25"} 1750
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-resize",le="0.5"} 1870
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-resize",le="1.0"} 1990
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-resize",le="+Inf"} 1990
+bentoml_service_request_duration_seconds_count{endpoint="/inference-resize"} 1990
+bentoml_service_request_duration_seconds_sum{endpoint="/inference-resize"} 224.656000000
+# HELP aula004_demo_phase Fase sintetica: 0 estavel, 1 lenta, 2 recuperacao.
+# TYPE aula004_demo_phase gauge
+aula004_demo_phase 0
+# HELP aula004_demo_elapsed_seconds Tempo desde a partida do gerador.
+# TYPE aula004_demo_elapsed_seconds gauge
+aula004_demo_elapsed_seconds 398
