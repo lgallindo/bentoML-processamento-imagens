@@ -157,8 +157,7 @@ Script: [`scripts/workflow_boxes/box_05_d_max.py`](scripts/workflow_boxes/box_05
 def D_max_delta(delta):
     """D = max δ.
 
-    Alternativas: Anderson–Darling (mais peso nas caudas); valor-p
-    assintótico a partir de D (nota de rodapé — fora da regra de alerta).
+    Alternativa: Anderson–Darling, com mais peso nas caudas.
     """
     return max(delta)
 ```
@@ -176,7 +175,7 @@ Script: [`scripts/workflow_boxes/box_06_alerta.py`](scripts/workflow_boxes/box_0
 def alerta_em_D(D, n_ref, n_lote, limiar=0.10, min_n=8):
     """INCONCLUSIVO / ALERTA / TRANQUILO.
 
-    Alternativas: semáforo FRTB (0,09 / 0,12); regra D+p (WATCH);
+    Alternativas: semáforo FRTB (0,09 / 0,12);
     limiar calibrado por quantil histórico de D.
     """
     if n_ref < min_n or n_lote < min_n:
@@ -584,14 +583,12 @@ Com a regra $D \ge 0{,}10$, este brinquedo já cairia em **ALERTA**
 (supondo amostras grandes o bastante para sair de INCONCLUSIVO — ver o
 capítulo do alerta).
 
-### Nota: valor-p
-
-O software ainda calcula um **valor-p** assintótico clássico do teste KS
-de duas amostras, com tamanho efetivo baseado no **número de imagens** de
-cada lado (pixels da mesma foto **não** são independentes — há sutileza
-de graus de liberdade e dependência espacial). Esse valor-p **não** entra
-na regra de alerta: trate-o como nota estatística no rodapé do painel, não
-como motor do alarme. O alerta responde a **D**.
+> **Nota de rodapé — valor-p.** O KS clássico também pode ser apresentado
+> como teste de hipótese, com um valor-p baseado no tamanho amostral. O
+> painel desta aula usa **D** como regra operacional direta. Como o dado
+> comparado é um histograma agregado de pixels e pixels da mesma foto não
+> são independentes, a aproximação de valor-p não é usada para decidir o
+> alerta.
 
 ---
 
@@ -708,9 +705,10 @@ $$
 
 Ou seja: o teste clássico a $5\%$ pediria $D \gtrsim 0{,}27$ para rejeitar
 igualdade. No painel, florestas dão $D \approx 0{,}23$ — **abaixo** desse
-corte clássico, porém **acima** do limiar didático $0{,}10$. Duas leituras
-coexistem: “ainda não rejeitaria $H_0$ no livro-texto” versus “já
-dispararíamos o alarme operacional da aula”.
+corte clássico, porém **acima** do limiar didático $0{,}10$. Esta seção é
+uma nota estatística sobre interpretações possíveis de D; o painel segue
+somente a regra operacional direta: alerta quando $D \ge 0{,}10$ e há ao
+menos 8 imagens de cada lado.
 
 ### 12.2 Tabelas e software ($n$ pequenos) — exemplo trabalhado
 
@@ -725,7 +723,9 @@ tabela de duas amostras típica coloca o crítico de $D$ na casa de
 $\approx 0{,}43$–$0{,}46$ (consulte a linha exata na fonte). Um $D = 0{,}30$
 que **alertaria** no Streamlit ($0{,}30 \ge 0{,}10$) **não** rejeitaria
 $H_0$ nessa tabela. Moral: o mesmo $D$ muda de veredito conforme a
-**regra** — política de aula versus teste formal com $n$ fino.
+**regra** — política de aula versus teste formal com $n$ fino. Essa
+comparação é uma nota estatística; a regra operacional implementada continua
+sendo somente **D ≥ 0,10**, com o mínimo de imagens.
 
 ### 12.3 Astronomia / ciências experimentais — exemplo trabalhado
 
@@ -828,7 +828,7 @@ linha `020`) e analisa a distribuição de **L** no Streamlit.
   README.md                 # handout da aula
   app.py                    # Streamlit: defs + gráficos + alerta sobre D
   service.py                # BentoML /inference-grayscale + log
-  alert_rule.py             # alert_on_d (D≥0,10) + regra legada D+p
+  alert_rule.py             # alerta operacional direto sobre D (D≥0,10)
   ks_compare.py             # D, CDFs, contagens entre referência e lote
   histogram.py              # L, histograma, CDF
   corpus_stats.py           # agrega features/ → estatística de treino
@@ -860,7 +860,7 @@ linha `020`) e analisa a distribuição de **L** no Streamlit.
 | `service.py` | API BentoML; log em `/inference-grayscale` |
 | `request_log.py` | grava JSON em `request_features/` |
 | `histogram.py` | histograma e CDF |
-| `ks_compare.py` | $D$ (e valor-p assintótico, nota de rodapé) |
+| `ks_compare.py` | CDFs e estatística $D$ |
 | `alert_rule.py` | regra INCONCLUSIVO / ALERTA / TRANQUILO sobre **D** |
 | `app.py` | painel Streamlit |
 | `corpus_stats.json` | referência agregada de treino |
@@ -881,8 +881,9 @@ just sync
 # cria/atualiza .venv e instala dependências do pyproject (uv)
 
 just download-samples
-# aponta para samples/{beaches,forests,balls}/ na raiz do repositório
-# (não baixa de novo se o corpus temático já estiver lá)
+# usa samples/{beaches,forests,balls}/ ao lado da pasta da aula ou em um
+# diretório de monorepo encontrado acima dela; SAMPLES_ROOT pode apontar
+# explicitamente para esse diretório
 
 just extract-features
 # extrai histograma L (e canais) das primeiras 50 praias → features/*.json

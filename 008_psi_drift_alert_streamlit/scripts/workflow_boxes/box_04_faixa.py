@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Caixa 4 — faixa de alerta sobre PSI (cortes 0,10 / 0,25).
+"""Caixa 4 — faixa de alerta sobre PSI (cortes 0,10 / 0,50).
 
 Executa somente esta caixa (entrada = PSI e tamanhos n).
 
@@ -33,7 +33,8 @@ def main() -> int:
     assert faixa_alerta_psi(0.40, 5, 50) == "INCONCLUSIVO"
     assert faixa_alerta_psi(0.05, 50, 50) == "ESTÁVEL"
     assert faixa_alerta_psi(0.15, 50, 50) == "INVESTIGAR"
-    assert faixa_alerta_psi(0.40, 50, 50) == "MUDANÇA FORTE"
+    assert faixa_alerta_psi(0.40, 50, 50) == "INVESTIGAR"
+    assert faixa_alerta_psi(0.60, 50, 50) == "MUDANÇA FORTE"
     print("faixa alerta — ok")
     return 0
 

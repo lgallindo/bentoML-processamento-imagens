@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 
 from sample_sets import (
@@ -12,6 +14,25 @@ from sample_sets import (
     list_batch_names,
     theme_paths_for_batch,
 )
+
+
+def test_repo_root_uses_samples_root_override(tmp_path: Path, monkeypatch) -> None:
+    from sample_sets import repo_root
+
+    samples_root = tmp_path / "lesson-copy"
+    (samples_root / "samples").mkdir(parents=True)
+    monkeypatch.setenv("SAMPLES_ROOT", str(samples_root))
+    assert repo_root() == samples_root.resolve()
+
+
+def test_repo_root_finds_samples_in_lesson_only_copy(tmp_path: Path, monkeypatch) -> None:
+    import sample_sets
+
+    lesson = tmp_path / "lesson"
+    (lesson / "samples").mkdir(parents=True)
+    monkeypatch.delenv("SAMPLES_ROOT", raising=False)
+    monkeypatch.setattr(sample_sets, "__file__", str(lesson / "sample_sets.py"))
+    assert sample_sets.repo_root() == lesson.resolve()
 
 
 def test_control_paths_disjoint_from_corpus() -> None:

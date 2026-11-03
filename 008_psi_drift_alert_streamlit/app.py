@@ -7,7 +7,8 @@ O semáforo operacional é PSI P2 (média de L por imagem); P1 é espelho.
 Pré-condições:
   - pasta batch_stats/ existe e contém JSON de lotes;
   - corpus_stats.json carregável via load_default_corpus_stats();
-  - samples/beaches (e temas dos lotes) existem na raiz do repositório Git.
+  - samples/beaches (e temas dos lotes) existem ao lado desta aula, acima
+    dela em um monorepo, ou no diretório indicado por SAMPLES_ROOT.
 
 Fluxo::
 

@@ -6,15 +6,14 @@ Usage::
     python scripts/export_streamlit_cloud.py 003
     python scripts/export_streamlit_cloud.py 008 --out /path/to/streamlit-psi-drift-alert
 
-Does not push. Patches ``repo_root()`` to avoid ``git rev-parse``.
-Vendors freeze sample slices under ``samples/``.
+Does not push. Vendors freeze sample slices under ``samples/``; lesson code
+resolves that folder without requiring Git metadata.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
-import re
 import shutil
 import subprocess
 import sys
@@ -44,21 +43,6 @@ numpy>=2.0.0
 seaborn>=0.13.0
 matplotlib>=3.8.0
 """
-
-REPO_ROOT_REPLACEMENT = '''def repo_root() -> Path:
-    """Lesson / extract repository root (Cloud-safe; does not invoke git)."""
-    import os
-
-    override = os.environ.get("SAMPLES_ROOT") or os.environ.get("LESSON_ROOT")
-    if override:
-        return Path(override).expanduser().resolve()
-    here = Path(__file__).resolve().parent
-    # Prefer directory that already contains samples/ or app.py.
-    for candidate in (here, *here.parents):
-        if (candidate / "samples").is_dir() or (candidate / "app.py").is_file():
-            return candidate
-    return here
-'''
 
 EXCLUDE_DIR_NAMES = {
     ".venv",
@@ -121,53 +105,8 @@ def vendor_samples(out: Path) -> dict:
     return copied
 
 
-def patch_repo_root_functions(out: Path) -> list[str]:
-    """Replace any ``def repo_root(): ... git rev-parse ...`` block."""
-    touched: list[str] = []
-    pattern = re.compile(
-        r"def repo_root\(\) -> Path:\n"
-        r"(?:.*\n)*?"
-        r"(?:[ \t]+return Path\(\s*\n"
-        r"[ \t]+subprocess\.check_output\(\s*\n"
-        r"[ \t]+\[\"git\", \"rev-parse\", \"--show-toplevel\"\],\s*\n"
-        r"(?:.*\n)+?"
-        r"[ \t]+\)\s*\n"
-        r"[ \t]+\)|"
-        r"[ \t]+return Path\(\s*\n"
-        r"[ \t]+subprocess\.check_output\(\[\"git\", \"rev-parse\", \"--show-toplevel\"\].*?\n"
-        r"[ \t]+\))",
-        re.MULTILINE,
-    )
-    # Simpler line-based rewrite for known style in this repo.
-    simple = re.compile(
-        r"def repo_root\(\) -> Path:\n"
-        r"    return Path\(\n"
-        r"        subprocess\.check_output\(\n"
-        r"            \[\"git\", \"rev-parse\", \"--show-toplevel\"\],\n"
-        r"            text=True,\n"
-        r"        \)\.strip\(\)\n"
-        r"    \)\n",
-        re.MULTILINE,
-    )
-    for path in out.rglob("*.py"):
-        text = path.read_text(encoding="utf-8")
-        if "rev-parse" not in text or "def repo_root" not in text:
-            continue
-        new, n = simple.subn(REPO_ROOT_REPLACEMENT + "\n", text)
-        if n == 0:
-            # Fallback: replace function body heuristically
-            new, n = pattern.subn(REPO_ROOT_REPLACEMENT + "\n", text)
-        if n:
-            # Drop unused subprocess import if no longer referenced.
-            if "subprocess." not in new and "import subprocess" in new:
-                new = re.sub(r"^import subprocess\n", "", new, count=1, flags=re.M)
-            path.write_text(new, encoding="utf-8")
-            touched.append(str(path.relative_to(out)))
-    return touched
-
-
 def assert_no_rev_parse_runtime(out: Path) -> None:
-    """Fail if app runtime modules still call git rev-parse."""
+    """Fail if app runtime modules still invoke git rev-parse."""
     runtime = [
         out / "app.py",
         out / "sample_sets.py",
@@ -285,7 +224,7 @@ def export_lesson(lesson: str, out: Path, *, git_init: bool) -> None:
     print(f"export {lesson}: {src} → {out}")
     copy_tree(src, out)
     samples = vendor_samples(out)
-    patched = patch_repo_root_functions(out)
+    patched: list[str] = []
     write_cloud_meta(out, lesson, samples, patched)
     assert_no_rev_parse_runtime(out)
     if git_init:

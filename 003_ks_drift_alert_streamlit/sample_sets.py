@@ -13,7 +13,7 @@ Saídas principais: caminhos_referencia, theme_paths_for_batch, list_batch_names
 
 from __future__ import annotations
 
-import subprocess
+import os
 from pathlib import Path
 
 CORPUS_TAKE = 50
@@ -31,12 +31,18 @@ LOTES_EXCLUIDOS = frozenset({"landscapes", "beaches"})
 
 
 def repo_root() -> Path:
-    return Path(
-        subprocess.check_output(
-            ["git", "rev-parse", "--show-toplevel"],
-            text=True,
-        ).strip()
-    )
+    """Find the samples root for a monorepo checkout or lesson-only copy.
+
+    Set SAMPLES_ROOT when samples/ lives outside the lesson tree.
+    """
+    override = os.environ.get("SAMPLES_ROOT")
+    if override:
+        return Path(override).expanduser().resolve()
+    root = Path(__file__).resolve().parent
+    for candidate in (root, *root.parents):
+        if (candidate / "samples").is_dir():
+            return candidate
+    return root
 
 
 def list_image_paths(folder: Path) -> list[Path]:

@@ -1,4 +1,4 @@
-"""Freeze qualitativo: control estável-ish; forests mais forte. Skip sem JSONs."""
+"""Freeze qualitativo: control INVESTIGAR; forests MUDANÇA FORTE."""
 
 from __future__ import annotations
 

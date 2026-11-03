@@ -1,8 +1,7 @@
 """Kolmogorov–Smirnov entre histogramas agregados (corpus × production).
 
 Compara as CDFs empíricas derivadas das contagens de um canal. A forma da
-distribuição vem dos pixels agregados; o tamanho efetivo da amostra para o
-valor-p é o número de **imagens** de cada conjunto.
+distribuição vem dos pixels agregados.
 """
 
 from __future__ import annotations

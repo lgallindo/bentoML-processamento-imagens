@@ -31,5 +31,4 @@ openspec/
 .specify/
 .openspec/
 
-# Agent sausage / local planning (never ship to turma)
 .local/

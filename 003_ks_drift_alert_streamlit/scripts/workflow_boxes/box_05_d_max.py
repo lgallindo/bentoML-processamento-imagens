@@ -14,10 +14,7 @@ from __future__ import annotations
 def D_max_delta(delta: list[float]) -> float:
     """D = máximo de |F−G| ao longo das faixas.
 
-    Alternativas:
-      - KS com peso (Anderson–Darling) — penaliza caudas;
-      - valor-p assintótico a partir de D e n_eff (nota de rodapé na aula;
-        não entra na regra de alerta).
+    Alternativa: KS com peso (Anderson–Darling), que penaliza caudas.
     """
     if not delta:
         raise ValueError("lista delta vazia")

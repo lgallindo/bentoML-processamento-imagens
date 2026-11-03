@@ -26,8 +26,9 @@ just verify-ks-alert control
 just verify-ks-alert forests
 ```
 
-Espera-se ordem de grandeza \(D \approx 0{,}05\) (TRANQUILO / QUIET na regra
-D+p) no controle e \(D \approx 0{,}23\) nas florestas.
+Espera-se ordem de grandeza \(D \approx 0{,}05\) (TRANQUILO) no controle e
+\(D \approx 0{,}23\) (ALERTA) nas florestas. A regra do painel é somente
+\(D \ge 0{,}10\), com mínimo de 8 imagens em cada lado.
 
 ## 2. L por pixel versus média de L por imagem
 

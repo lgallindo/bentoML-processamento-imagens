@@ -52,4 +52,5 @@ def test_workflow_boxes_psi_wrappers() -> None:
     assert abs(termo_kl(0.5, 0.5)) < 1e-12
     assert psi_soma([0.5, 0.5], [0.5, 0.5]) == 0.0
     assert faixa_alerta_psi(0.05, 50, 50) == "QUIET"
-    assert faixa_alerta_psi(0.40, 50, 50) == "ALERT"
+    assert faixa_alerta_psi(0.40, 50, 50) == "WATCH"
+    assert faixa_alerta_psi(0.60, 50, 50) == "ALERT"

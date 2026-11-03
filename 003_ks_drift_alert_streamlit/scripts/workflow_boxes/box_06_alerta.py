@@ -22,7 +22,6 @@ def alerta_em_D(
 
     Alternativas:
       - semáforo FRTB (verde < 0,09; vermelho > 0,12; âmbar no meio);
-      - regra D+p (ALERT / WATCH / QUIET) em ``alert_rule.alert_on_d_and_p``;
       - limiar calibrado por quantil histórico de D em produção.
     A aula fixa limiar=0,10 e exige n≥8 em cada lado.
     """

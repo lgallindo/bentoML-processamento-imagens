@@ -83,11 +83,11 @@ SNIPPETS: dict[str, str] = {
     return [abs(a - b) for a, b in zip(F, G)]
 ''',
     "D = max δ": '''def D_max_delta(delta):
-    """D = max δ. Alternativas: Anderson–Darling; valor-p (rodapé)."""
+    """D = max δ. Alternativa: Anderson–Darling."""
     return max(delta)
 ''',
     "alerta em D": '''def alerta_em_D(D, n_ref, n_lote, limiar=0.10, min_n=8):
-    """INCONCLUSIVO / ALERTA / TRANQUILO. Alternativas: FRTB; D+p."""
+    """INCONCLUSIVO / ALERTA / TRANQUILO. Alternativas: FRTB."""
     if n_ref < min_n or n_lote < min_n:
         return "INCONCLUSIVO"
     return "ALERTA" if D >= limiar else "TRANQUILO"

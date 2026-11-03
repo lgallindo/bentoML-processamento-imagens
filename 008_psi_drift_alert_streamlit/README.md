@@ -572,15 +572,17 @@ com 256 faixas (pixels).
 | Lote | Conteúdo | PSI P2 (média L) | Leitura P2 (0,10/0,50) | PSI P1 (pixel L) | Leitura P1 |
 | :--- | :--- | ---: | :--- | ---: | :--- |
 | `control` | praias 51–100 | **0,259** | INVESTIGAR | **0,060** | ESTÁVEL |
-| `forests` | 50 florestas | **4,300** | MUDANÇA FORTE | **0,301** | MUDANÇA FORTE |
-| `balls` | 50 bolas | **2,117** | MUDANÇA FORTE | **0,307** | MUDANÇA FORTE |
+| `forests` | 50 florestas | **4,300** | MUDANÇA FORTE | **0,301** | INVESTIGAR |
+| `balls` | 50 bolas | **2,117** | MUDANÇA FORTE | **0,307** | INVESTIGAR |
 
 Calibração: com \(n=50\) e 10 quantis, cada faixa da referência tem cerca
 de cinco imagens. O segundo bloco de praias desloca um pouco as médias de
 L e o **P2** do controle fica ≈ 0,26 (acima do clássico 0,25). O painel
 usa corte superior **0,50** para o controle cair em INVESTIGAR. Florestas
-(~4,3) e bolas (~2,1) disparam MUDANÇA FORTE. O espelho **P1** (pixels)
-separa limpo: controle estável (0,060); florestas/bolas mudança forte.
+(~4,3) e bolas (~2,1) disparam MUDANÇA FORTE em P2. O espelho **P1**
+(pixels) também distingue o controle (0,060, ESTÁVEL) das trocas de tema
+(≈0,30, INVESTIGAR). P1 usa a mesma faixa 0,10 / 0,50 do painel, mas é um
+espelho comparativo; só P2 governa o cartão operacional desta aula.
 
 | Massas P2 (florestas) | Contagens P2 (ref.) | Contagens P2 (lote) |
 | :---: | :---: | :---: |
@@ -658,7 +660,8 @@ just sync
 # cria/atualiza .venv e instala dependências do pyproject (uv)
 
 just download-samples
-# aponta para samples/{beaches,forests,balls}/ na raiz do repositório
+# usa samples/ ao lado da aula ou acima dela; defina SAMPLES_ROOT se
+# as amostras estiverem em outro diretório
 
 just extract-features
 # extrai histograma L e média de L das primeiras 50 praias → features/*.json

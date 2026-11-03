@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
-import subprocess
+import os
 import sys
 import tempfile
 from pathlib import Path
@@ -18,12 +18,13 @@ from request_stats import build_request_stats, write_request_stats  # noqa: E402
 
 
 def repo_root() -> Path:
-    return Path(
-        subprocess.check_output(
-            ["git", "rev-parse", "--show-toplevel"],
-            text=True,
-        ).strip()
-    )
+    override = os.environ.get("SAMPLES_ROOT")
+    if override:
+        return Path(override).expanduser().resolve()
+    for candidate in (ROOT, *ROOT.parents):
+        if (candidate / "samples").is_dir():
+            return candidate
+    return ROOT
 
 
 def main(argv: list[str] | None = None) -> int:

@@ -1,12 +1,12 @@
-"""Imprime D, p, n_eff e estado do alerta para corpus vs batch_stats/<lote>.json.
+"""Imprime D e o estado do alerta para corpus vs batch_stats/<lote>.json.
 
 Pré-condições: corpus_stats.json e batch_stats/<lote>.json nesta aula.
 
 Fluxo::
 
-    corpus + lote JSON ──► compare_stats ──► alert_on_d_and_p ──► stdout
+    corpus + lote JSON ──► compare_stats ──► alert_on_d ──► stdout
 
-Saída: uma linha com D, p, n_eff e o estado (ALERT|QUIET|…).
+Saída: uma linha com D, tamanhos e o estado (ALERT|QUIET|…).
 """
 
 from __future__ import annotations
@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from alert_rule import alert_on_d_and_p  # noqa: E402
+from alert_rule import alert_on_d  # noqa: E402
 from corpus_stats import load_default_corpus_stats  # noqa: E402
 from ks_compare import compare_stats  # noqa: E402
 from request_stats import load_request_stats  # noqa: E402
@@ -36,15 +36,13 @@ def main(argv: list[str] | None = None) -> int:
     corpus = load_default_corpus_stats()
     production = load_request_stats(path)
     payload = compare_stats(corpus, production, channel="L", bins=256)
-    state = alert_on_d_and_p(
-        payload["p_value"],
+    state = alert_on_d(
         payload["statistic"],
         payload["n_images_corpus"],
         payload["n_images_production"],
     )
     print(
-        f"batch={name} D={payload['statistic']:.6f} p={payload['p_value']:.6g} "
-        f"n_eff={payload['n_eff']:.3f} "
+        f"batch={name} D={payload['statistic']:.6f} "
         f"n_c={payload['n_images_corpus']} n_p={payload['n_images_production']} "
         f"alerta={state}"
     )

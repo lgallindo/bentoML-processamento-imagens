@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import argparse
-import subprocess
+import os
 import sys
 import time
 from pathlib import Path
@@ -13,12 +13,13 @@ DEFAULT_PORT = 3338
 
 
 def repo_root() -> Path:
-    return Path(
-        subprocess.check_output(
-            ["git", "rev-parse", "--show-toplevel"],
-            text=True,
-        ).strip()
-    )
+    override = os.environ.get("SAMPLES_ROOT")
+    if override:
+        return Path(override).expanduser().resolve()
+    for candidate in (ROOT, *ROOT.parents):
+        if (candidate / "samples").is_dir():
+            return candidate
+    return ROOT
 
 
 def list_theme_images(theme: str) -> list[Path]:

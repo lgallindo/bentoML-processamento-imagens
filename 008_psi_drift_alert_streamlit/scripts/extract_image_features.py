@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import subprocess
+import os
 import sys
 from pathlib import Path
 
@@ -17,12 +17,13 @@ CORPUS_TAKE = 50
 
 
 def repo_root() -> Path:
-    return Path(
-        subprocess.check_output(
-            ["git", "rev-parse", "--show-toplevel"],
-            text=True,
-        ).strip()
-    )
+    override = os.environ.get("SAMPLES_ROOT")
+    if override:
+        return Path(override).expanduser().resolve()
+    for candidate in (ROOT, *ROOT.parents):
+        if (candidate / "samples").is_dir():
+            return candidate
+    return ROOT
 
 
 def main() -> int:
