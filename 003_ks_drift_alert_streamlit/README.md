@@ -33,7 +33,7 @@ devolve a versão em cinza, o status é **200**, o tempo de resposta está baixo
 Do ponto de vista de disponibilidade, o dia está tranquilo.
 
 Na ordem de estudo da trilha, a
-[aula 004](../004_prometheus_histcdf_streamlit/README.md) já ensinou a
+[aula 010](../010_prometheus_histcdf_streamlit/README.md) já ensinou a
 interrogar **latência** e volume com Prometheus/PromQL (saúde do servidor).
 Aqui a pergunta muda: adequação dos **dados** — o mundo das imagens — não a
 duração da requisição.
@@ -343,7 +343,7 @@ treino) com o JSON do lote escolhido na barra lateral. Use o seletor
 **Lote atual** para trocar controle (praias) / florestas / bolas; use o
 controle de **faixas** para reagrupar o histograma de L (256 no freeze).
 O lote misto praias+florestas fica na aula opcional
-[`007_ks_mixed_landscape_streamlit`](../007_ks_mixed_landscape_streamlit/README.md).
+[`006_ks_mixed_landscape_streamlit`](../006_ks_mixed_landscape_streamlit/README.md).
 
 Há também um caminho **offline**: `just build-demo-batches` materializa
 lotes de demonstração sem precisar do servidor no ar. Serve para estudar
@@ -998,6 +998,6 @@ Esta pasta abre o Ato III (drift e anomalia), depois dos tijolos `010`–`040`.
 
 | | Pasta |
 | :--- | :--- |
-| **Anterior** | [`040_ks_production_vs_corpus`](../040_ks_production_vs_corpus/README.md) |
-| **Seguinte** | [`005_ks_anomaly_detection_streamlit`](../005_ks_anomaly_detection_streamlit/README.md) |
+| **Anterior** | [`014_ks_production_vs_corpus`](../014_ks_production_vs_corpus/README.md) |
+| **Seguinte** | [`004_ks_anomaly_detection_streamlit`](../004_ks_anomaly_detection_streamlit/README.md) |
 | Irmã (PSI) | [`008_psi_drift_alert_streamlit`](../008_psi_drift_alert_streamlit/README.md) |

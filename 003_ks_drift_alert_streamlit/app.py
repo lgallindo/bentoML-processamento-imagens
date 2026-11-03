@@ -165,7 +165,7 @@ de alerta).
   **ALERTA**.
 
 O lote misto praias+florestas **não** aparece aqui; ele é a aula opcional
-`007_ks_mixed_landscape_streamlit`. Um JSON chamado `beaches` (mesma fatia
+`006_ks_mixed_landscape_streamlit`. Um JSON chamado `beaches` (mesma fatia
 do treino) também fica de fora, para não comparar o corpus consigo mesmo.
 
 **Passo 3 — Cartão de alerta.** Logo abaixo das definições, leia

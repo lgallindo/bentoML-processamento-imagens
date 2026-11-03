@@ -1,0 +1,229 @@
+# Aula 005 — KS na entrada e na saída
+
+Do serviço em produção a **dois** alertas sobre **D**: um na luminância das
+imagens **submetidas** (entrada) e outro na luminância das imagens
+**devolvidas** (saída). O painel vivo está em [`app.py`](app.py).
+
+## Sumário
+
+1. [Por que estamos aqui](#1-por-que-estamos-aqui)
+2. [HTTP verde ≠ dados adequados](#2-http-verde--dados-adequados)
+3. [L, histograma, CDF e D](#3-l-histograma-cdf-e-d)
+4. [Dois alertas, uma regra](#4-dois-alertas-uma-regra)
+5. [Modo saudável e modo deslocado](#5-modo-saudável-e-modo-deslocado)
+6. [Passo a passo — UI ≡ fórmula](#6-passo-a-passo--ui--fórmula)
+7. [O experimento desta aula](#7-o-experimento-desta-aula)
+8. [Estrutura da pasta](#8-estrutura-da-pasta)
+9. [Como executar](#9-como-executar)
+10. [Testes](#10-testes)
+11. [Comparação com a 003](#11-comparação-com-a-003)
+
+---
+
+## 1. Por que estamos aqui
+
+Um serviço pode responder **rápido** e com **HTTP 200** e, mesmo assim,
+trabalhar sobre um mundo diferente do treino. A
+[aula 003](../003_ks_drift_alert_streamlit/README.md) mede essa combinação
+na luminância **L** das imagens **submetidas** e dispara um alerta sobre a
+estatística **D** (Kolmogorov–Smirnov).
+
+Aqui a pergunta se desdobra. O cliente manda uma imagem — isso é a
+**entrada**. O serviço devolve outra — isso é a **saída**. Cada lado tem a
+sua distribuição de L, a sua CDF, o seu **D**, o seu alerta.
+
+Quando entrada e saída contam a mesma história, o filtro está **espelhando**
+o uso. Quando a entrada parece estável e a saída não, algo no caminho de
+inferência mudou (modelo trocado, pré-processamento, bug).
+
+![Fluxo L → histograma → CDF → δ → D → alerta](../003_ks_drift_alert_streamlit/illustrations/01_workflow_l_to_alert.png)
+
+---
+
+## 2. HTTP verde ≠ dados adequados
+
+Saúde da tubulação (processo, HTTP, latência) e adequação da distribuição
+de **L** são perguntas independentes — ver o handout da 003. Nesta aula
+medimos adequação **duas vezes**: no que entra e no que sai.
+
+---
+
+## 3. L, histograma, CDF e D
+
+Uma fotografia digital é uma grade de **pixels**. Em cores, cada pixel
+carrega canais; para falar de claro/escuro, convertemos com
+`Image.convert("L")`: **0** = preto, **255** = branco. Esse valor é a
+luminância **L**.
+
+O **histograma** conta quantos pixels caíram em cada faixa de L. A **CDF**
+acumula, faixa a faixa, a fração do total até aquele ponto:
+
+\[
+F_k = \frac{1}{N}\sum_{i=0}^{k} h_i.
+\]
+
+Com duas CDFs \(F\) (referência) e \(G\) (lote),
+
+\[
+\delta_k = \lvert F_k - G_k \rvert,
+\qquad
+D = \max_k \delta_k.
+\]
+
+Nesta aula o eixo é **L por pixel** nos dois lados (entrada e saída).
+
+![CDFs dual](../003_ks_drift_alert_streamlit/illustrations/05_dual_cdf.png)
+
+![δ e D](../003_ks_drift_alert_streamlit/illustrations/06_delta_d.png)
+
+---
+
+## 4. Dois alertas, uma regra
+
+| Estado | Condição | Leitura |
+| :--- | :--- | :--- |
+| **INCONCLUSIVO** | \(n &lt; 8\) em qualquer lado daquele KS | Janela / lote ainda fino |
+| **ALERTA** | \(n \ge 8\) e \(D \ge 0{,}10\) | Formas de L divergem naquele lado |
+| **TRANQUILO** | \(n \ge 8\) e \(D &lt; 0{,}10\) | Compatível com a referência naquele lado |
+
+O valor-p assintótico pode ser calculado; **não** entra na regra de alerta
+(`alert_rule.py`).
+
+Em produção o lote é uma **caixa de tempo** (por exemplo pedidos dos
+últimos 30 dias). Aqui os JSON em `batch_stats/` fazem o papel de uma
+janela já agregada.
+
+---
+
+## 5. Modo saudável e modo deslocado
+
+No caminho **saudável**, a saída é só `convert("L")`. Entrada e saída
+tendem a contar a mesma história:
+
+| Lote | Entrada | Saída |
+| :--- | :--- | :--- |
+| control (praias 51–100) | TRANQUILO | TRANQUILO |
+| forests | ALERTA | ALERTA (espelha o drift) |
+
+No caminho **deslocado**, a saída soma **+40** em cada pixel de L (teto
+255). Com o lote de **controle**, a entrada fica TRANQUILO e a saída
+dispara ALERTA — a turma vê o contraste “pedidos ok, emissão estranha”.
+
+---
+
+## 6. Passo a passo — UI ≡ fórmula
+
+```text
+# Variáveis:
+# ref_in / ref_out — freeze de entrada e de saída (treino saudável)
+# lote_in / lote_out — agregação da janela (ou batch_stats)
+
+D_in  ← KS(ref_in, lote_in)
+D_out ← KS(ref_out, lote_out)
+alerta_in  ← regra(D_in,  n_lote)
+alerta_out ← regra(D_out, n_lote)
+# leitura conjunta: espelha? só saída? só entrada?
+```
+
+No Streamlit: escolha o lote e o modo (saudável / deslocado); leia os dois
+estados do alerta e as CDFs de cada lado.
+
+---
+
+## 7. O experimento desta aula
+
+1. Fixar referência de entrada e de saída a partir das mesmas 50 praias de
+   treino (saída = filtro saudável).
+2. Comparar lotes de controle e de florestas nos dois lados.
+3. No Streamlit, ler os dois alertas e a leitura conjunta; experimentar o
+   modo deslocado no controle.
+
+---
+
+## 8. Estrutura da pasta
+
+```text
+005_ks_input_output_streamlit/
+  README.md
+  app.py                         # dois alertas + histogramas/CDFs
+  service.py                     # /inference-grayscale e -shifted
+  grayscale_model.py             # saudável + deslocado (+40)
+  request_log.py                 # log entrada e saída (pair_id)
+  io_pipeline.py                 # espelho offline do filtro
+  alert_rule.py / ks_compare.py / histogram.py / …
+  corpus_stats_input.json
+  corpus_stats_output.json
+  corpus_stats_output_shifted.json
+  batch_stats/
+    control_input.json
+    control_output.json
+    control_output_shifted.json
+    forests_input.json
+    forests_output.json
+  scripts/
+    extract_io_features.py
+    build_corpus_io.py
+    build_demo_batches_io.py
+    verify_io_alerts.py
+    save_grayscale_models.py
+  tests/
+  justfile
+```
+
+---
+
+## 9. Como executar
+
+```bash
+cd 005_ks_input_output_streamlit
+# pasta da aula
+
+just sync
+# ambiente uv
+
+just download-samples
+# aponta samples/{beaches,forests}/ na raiz do repositório
+
+just build-demo-batches-io
+# regenera corpus_* e batch_stats/* (offline, sem servidor)
+
+just verify-io-alerts
+# imprime D/alerta entrada e saída no terminal
+
+just streamlit
+# http://localhost:8505
+```
+
+Com servidor (log vivo):
+
+```bash
+just save-models
+just serve
+# porta 3335 — /inference-grayscale e /inference-grayscale-shifted
+```
+
+---
+
+## 10. Testes
+
+```bash
+just test
+```
+
+---
+
+## 11. Comparação com a 003
+
+A 003 olha só a **entrada**. Esta aula coloca a **saída** no mesmo aparelho
+de alerta e mostra quando os dois lados divergem.
+
+## Roteiro da trilha
+
+Ordem de estudo em quatro atos: ver
+[`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md).
+
+| | Pasta |
+| :--- | :--- |
+| **Anterior** | [`004_ks_anomaly_detection_streamlit`](../004_ks_anomaly_detection_streamlit/README.md) |
+| **Seguinte** | [`006_ks_mixed_landscape_streamlit`](../006_ks_mixed_landscape_streamlit/README.md) |
+| Âncora KS | [`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md) |

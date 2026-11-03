@@ -1,0 +1,15 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+rule_files:
+  - ../monitoring/bentoml.rules.yml
+
+scrape_configs:
+  - job_name: bentoml-imagens
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - 127.0.0.1:8010
+        labels:
+          source: synthetic

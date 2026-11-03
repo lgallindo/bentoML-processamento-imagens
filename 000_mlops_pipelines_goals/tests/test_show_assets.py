@@ -31,15 +31,15 @@ INDEX_FOLDERS = (
     "001_histogram_cdf_cli",
     "002_histogram_cdf_streamlit",
     "003_ks_drift_alert_streamlit",
-    "004_prometheus_histcdf_streamlit",
-    "005_ks_anomaly_detection_streamlit",
-    "006_ks_input_output_streamlit",
-    "007_ks_mixed_landscape_streamlit",
+    "010_prometheus_histcdf_streamlit",
+    "004_ks_anomaly_detection_streamlit",
+    "005_ks_input_output_streamlit",
+    "006_ks_mixed_landscape_streamlit",
     "008_psi_drift_alert_streamlit",
-    "010_corpus_histograms_model",
-    "020_grayscale_request_logging",
-    "030_request_log_histograms",
-    "040_ks_production_vs_corpus",
+    "011_corpus_histograms_model",
+    "012_grayscale_request_logging",
+    "013_request_log_histograms",
+    "014_ks_production_vs_corpus",
 )
 
 LOGO_FILES = (
@@ -131,7 +131,7 @@ def test_justfile_has_open_goals_map() -> None:
 def test_builder_constants() -> None:
     mod = _load_builder()
     assert mod.RUNTIME_LABEL == "Runtime (BentoML)"
-    assert mod.ANOMALY_BACKLOG_CHIP == "005_ks_anomaly_detection_streamlit"
+    assert mod.ANOMALY_BACKLOG_CHIP == "004_ks_anomaly_detection_streamlit"
     titles = [col[0] for col in mod.GOAL_COLUMNS]
     assert titles == list(GOAL_LABELS)
     assert mod.ANOMALY_BACKLOG_CHIP in mod.GOAL_COLUMNS[2][1]

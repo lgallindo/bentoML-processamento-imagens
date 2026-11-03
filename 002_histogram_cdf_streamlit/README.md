@@ -138,4 +138,4 @@ em seguida o Ato I cobre a **saúde** do servidor — não o alerta KS da `003`.
 | | Pasta |
 | :--- | :--- |
 | **Anterior** | [`001_histogram_cdf_cli`](../001_histogram_cdf_cli/README.md) |
-| **Seguinte** | [`004_prometheus_histcdf_streamlit`](../004_prometheus_histcdf_streamlit/README.md) (após a ponte de *deploy*; instalação em [`docs/prometheus.md`](../docs/prometheus.md)) |
+| **Seguinte** | [`010_prometheus_histcdf_streamlit`](../010_prometheus_histcdf_streamlit/README.md) (após a ponte de *deploy*; instalação em [`docs/prometheus.md`](../docs/prometheus.md)) |

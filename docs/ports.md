@@ -26,13 +26,13 @@ Pasta `NNN_*` → porta **8500 + N** (N = número da aula).
 
 | Aula | Porta | Exemplo |
 | ---: | ---: | :--- |
-| 002 | 8502 | `just app` / painel histograma+CDF |
-| 003 | 8503 | `just streamlit` |
-| 004 | 8504 | `just app` (PromQL / histograma de latência) |
-| 005 | 8505 | … |
-| 006 | 8506 | … |
-| 007 | 8507 | … |
-| 008 | 8508 | … |
+| 002 | 8502 | histograma+CDF |
+| 003 | 8503 | alerta KS |
+| 004 | 8504 | anomalia KS |
+| 005 | 8505 | KS entrada/saída |
+| 006 | 8506 | tráfego misto |
+| 008 | 8508 | alerta PSI |
+| 010 | 8510 | PromQL / latência |
 
 O painel Streamlit **não** substitui o BentoML em 3000.
 
@@ -40,10 +40,10 @@ O painel Streamlit **não** substitui o BentoML em 3000.
 
 Quando uma aula sobe exporter/Prometheus **além** do trio canônico:
 
-| Papel | Regra | Exemplo (aula 004) |
+| Papel | Regra | Exemplo (aula 010) |
 | :--- | :--- | :--- |
-| Exporter / fake `/metrics` | **8000 + N** | 8004 |
-| Prometheus só-demo | **9090 + N** (N &lt; 10) | 9094 |
+| Exporter / fake `/metrics` | **8000 + N** | 8010 |
+| Prometheus só-demo | **9090 + N** | 9100 |
 
 O canônico 3000 / 9090 / 4000 continua válido em paralelo; a demo não o
 substitui.

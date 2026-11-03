@@ -21,7 +21,8 @@ Contrato do curso (detalhe em [`docs/ports.md`](../docs/ports.md)):
 | **Prometheus** | **9090** |
 | **Grafana** | **4000** |
 
-Painéis Streamlit das aulas: **8500 + N** (exemplo: `004` → `8504`).
+Painéis Streamlit das aulas: **8500 + N** (exemplo: `003` → `8503`;
+`010` → `8510`).
 
 ## Objetivos finais de monitoramento
 
@@ -75,8 +76,9 @@ tutoriais de Prometheus e Grafana cuidam disso na hora certa.
 
 ## Ordem de estudo em quatro atos
 
-Estude nesta ordem — ela **não** segue a numeração das pastas. A pasta
-`004` vem no Ato I; a `003` volta no Ato III.
+Estude nesta ordem. A numeração agrupa temas: `001`–`002` vocabulário;
+`010`–`014` plataforma (saúde + tijolos); `003`–`006` teatro KS; `008` PSI.
+A `003` e a `008` mantêm os paths estáveis (links e extratos Cloud).
 
 **Ato 0 — Vocabulário.** Histograma e CDF, as duas leituras de distribuição
 que sustentam o resto:
@@ -85,28 +87,27 @@ que sustentam o resto:
 
 **Ato I — Saúde do servidor.** Latência e séries no caminho BentoML →
 Prometheus → Grafana:
-[`004_prometheus_histcdf_streamlit`](../004_prometheus_histcdf_streamlit/README.md).
+[`010_prometheus_histcdf_streamlit`](../010_prometheus_histcdf_streamlit/README.md).
 
 **Ato II — Tijolos no serviço.** Corpus, log e rotas de monitor — o caminho
 dos dados; o juízo do alerta vem depois:
-[`010_corpus_histograms_model`](../010_corpus_histograms_model/README.md) →
-[`020_grayscale_request_logging`](../020_grayscale_request_logging/README.md) →
-[`030_request_log_histograms`](../030_request_log_histograms/README.md) →
-[`040_ks_production_vs_corpus`](../040_ks_production_vs_corpus/README.md).
+[`011_corpus_histograms_model`](../011_corpus_histograms_model/README.md) →
+[`012_grayscale_request_logging`](../012_grayscale_request_logging/README.md) →
+[`013_request_log_histograms`](../013_request_log_histograms/README.md) →
+[`014_ks_production_vs_corpus`](../014_ks_production_vs_corpus/README.md).
 
 **Ato III — Drift e anomalias.** O teatro das imagens: referência versus
 lote, janela, entrada/saída, tráfego misto e, por fim, outro instrumento
 (PSI):
 [`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md) →
-[`005_ks_anomaly_detection_streamlit`](../005_ks_anomaly_detection_streamlit/README.md) →
-[`006_ks_input_output_streamlit`](../006_ks_input_output_streamlit/README.md) →
-[`007_ks_mixed_landscape_streamlit`](../007_ks_mixed_landscape_streamlit/README.md) →
+[`004_ks_anomaly_detection_streamlit`](../004_ks_anomaly_detection_streamlit/README.md) →
+[`005_ks_input_output_streamlit`](../005_ks_input_output_streamlit/README.md) →
+[`006_ks_mixed_landscape_streamlit`](../006_ks_mixed_landscape_streamlit/README.md) →
 [`008_psi_drift_alert_streamlit`](../008_psi_drift_alert_streamlit/README.md).
 
 ## Índice das aulas
 
-Catálogo por pasta. Para **estudar**, use a ordem dos quatro atos acima; a
-numeração dos nomes não é o roteiro.
+Catálogo por pasta. Para **estudar**, use a ordem dos quatro atos acima.
 
 ### Ato 0 — Vocabulário
 
@@ -123,7 +124,7 @@ falar de alertas ou Prometheus.
 
 ### Ato I — Saúde do servidor
 
-**[`004_prometheus_histcdf_streamlit`](../004_prometheus_histcdf_streamlit/README.md)** —
+**[`010_prometheus_histcdf_streamlit`](../010_prometheus_histcdf_streamlit/README.md)** —
 Pergunta: a tubulação responde com latência interpretável? Você lê séries e
 labels, distingue contador de taxa, reconstrói histograma/CDF a partir de
 buckets do Prometheus, estima um p95 e redige um relato com limites. Não
@@ -133,22 +134,22 @@ Grafana.
 
 ### Ato II — Tijolos no serviço
 
-**[`010_corpus_histograms_model`](../010_corpus_histograms_model/README.md)** —
+**[`011_corpus_histograms_model`](../011_corpus_histograms_model/README.md)** —
 O serviço deixa de ser só filtro HTTP: entra um corpus de treino, um modelo
 picklable de tons de cinza e rotas que reportam histogramas do corpus. Você
 vê onde o «mundo de referência» mora no runtime.
 
-**[`020_grayscale_request_logging`](../020_grayscale_request_logging/README.md)** —
+**[`012_grayscale_request_logging`](../012_grayscale_request_logging/README.md)** —
 Cada pedido a `/inference-grayscale` grava features em disco **antes** da
 conversão para cinza (canais R/G/B ainda existem). Sem esse log, não há
 *production* para comparar com o corpus.
 
-**[`030_request_log_histograms`](../030_request_log_histograms/README.md)** —
+**[`013_request_log_histograms`](../013_request_log_histograms/README.md)** —
 Agrega o log e expõe histogramas de production ao lado dos do corpus, com
 exercitador de carga. Serve para *olhar* o afastamento; o cartão de alerta
 didático vem no Ato III.
 
-**[`040_ks_production_vs_corpus`](../040_ks_production_vs_corpus/README.md)** —
+**[`014_ks_production_vs_corpus`](../014_ks_production_vs_corpus/README.md)** —
 Expõe no HTTP a estatística de Kolmogorov–Smirnov entre production e corpus
 (D, valor-p, tamanhos efetivos). É o contrato de números no serviço — não
 substitui o painel e o semáforo da `003`.
@@ -159,19 +160,19 @@ substitui o painel e o semáforo da `003`.
 Âncora do arco: HTTP pode estar verde e a latência aceitável, enquanto as
 luminâncias dos pedidos já não parecem o treino. Fluxo L → histograma → CDF
 → D → alerta (com regra de amostra inconclusiva). Volta aqui depois dos
-tijolos `010`–`040`.
+tijolos `011`–`014`.
 
-**[`005_ks_anomaly_detection_streamlit`](../005_ks_anomaly_detection_streamlit/README.md)** —
+**[`004_ks_anomaly_detection_streamlit`](../004_ks_anomaly_detection_streamlit/README.md)** —
 Mesmo aparelho da `003`, outra escala: um candidato (uma imagem) ou uma
 **janela** temporal de pedidos versus a referência. É o objetivo «detecção
 de anomalias» em cena.
 
-**[`006_ks_input_output_streamlit`](../006_ks_input_output_streamlit/README.md)** —
+**[`005_ks_input_output_streamlit`](../005_ks_input_output_streamlit/README.md)** —
 Dois alertas sobre D: luminância das imagens **submetidas** e das imagens
 **devolvidas**. Mostra quando entrada e saída contam a mesma história — ou
 quando o filtro as separa.
 
-**[`007_ks_mixed_landscape_streamlit`](../007_ks_mixed_landscape_streamlit/README.md)** —
+**[`006_ks_mixed_landscape_streamlit`](../006_ks_mixed_landscape_streamlit/README.md)** —
 Tráfego misto (metade ainda «parece» treino, metade de outro mundo visual).
 Pergunta: o alerta ainda dispara? Com que intensidade frente a controles
 puros?
