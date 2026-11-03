@@ -108,35 +108,83 @@ lote, janela, entrada/saída, tráfego misto e, por fim, outro instrumento
 
 ## Índice das aulas
 
-| Pasta | Em uma frase |
-| :--- | :--- |
-| [`001_histogram_cdf_cli`](../001_histogram_cdf_cli/README.md) | Histograma e CDF na linha de comando |
-| [`002_histogram_cdf_streamlit`](../002_histogram_cdf_streamlit/README.md) | O mesmo objeto num painel |
-| [`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md) | Drift com KS e cartão de alerta |
-| [`004_prometheus_histcdf_streamlit`](../004_prometheus_histcdf_streamlit/README.md) | Saúde: latência e PromQL |
-| [`005_ks_anomaly_detection_streamlit`](../005_ks_anomaly_detection_streamlit/README.md) | Anomalia KS em janela ou candidato |
-| [`006_ks_input_output_streamlit`](../006_ks_input_output_streamlit/README.md) | KS na entrada e na saída |
-| [`007_ks_mixed_landscape_streamlit`](../007_ks_mixed_landscape_streamlit/README.md) | Tráfego misto praia/floresta |
-| [`008_psi_drift_alert_streamlit`](../008_psi_drift_alert_streamlit/README.md) | Drift com PSI (irmã da 003) |
-| [`010_corpus_histograms_model`](../010_corpus_histograms_model/README.md) | Corpus e modelo no serviço |
-| [`020_grayscale_request_logging`](../020_grayscale_request_logging/README.md) | Log das features do pedido |
-| [`030_request_log_histograms`](../030_request_log_histograms/README.md) | Histogramas production vs corpus |
-| [`040_ks_production_vs_corpus`](../040_ks_production_vs_corpus/README.md) | KS no endpoint do serviço |
+Catálogo por pasta. Para **estudar**, use a ordem dos quatro atos acima; a
+numeração dos nomes não é o roteiro.
 
-## Figuras e comandos
+### Ato 0 — Vocabulário
 
-Instale as dependências desta pasta com `just sync`. Abra as três figuras do
-projetor com `just open-diagram` (pipelines), `just open-target` (BentoML →
-Prometheus → Grafana) e `just open-goals-map` (objetivos → pastas). Confira os
-ativos e o texto do handout com `just test`.
+**[`001_histogram_cdf_cli`](../001_histogram_cdf_cli/README.md)** —
+Aprende o que é um histograma (contagens por faixa) e uma CDF (fração
+acumulada), com um microexemplo na linha de comando. Você produz JSON, CSV
+ou PNG a partir de uma lista de números. É a base matemática de quase tudo
+que vem depois — inclusive buckets de latência e luminância de imagens.
 
-```bash
-just sync
-just open-diagram
-just open-target
-just open-goals-map
-just test
-```
+**[`002_histogram_cdf_streamlit`](../002_histogram_cdf_streamlit/README.md)** —
+O mesmo objeto da `001`, agora num painel: cola valores (ou amostra), ajusta
+bins e intervalo, vê tabela e gráfico juntos. Consolida a intuição antes de
+falar de alertas ou Prometheus.
+
+### Ato I — Saúde do servidor
+
+**[`004_prometheus_histcdf_streamlit`](../004_prometheus_histcdf_streamlit/README.md)** —
+Pergunta: a tubulação responde com latência interpretável? Você lê séries e
+labels, distingue contador de taxa, reconstrói histograma/CDF a partir de
+buckets do Prometheus, estima um p95 e redige um relato com limites. Não
+mede qualidade de imagem nem drift de conteúdo — isso é o Ato III. Pré-req:
+vocabulário `001`–`002` e o serviço/coleta dos tutoriais de Prometheus e
+Grafana.
+
+### Ato II — Tijolos no serviço
+
+**[`010_corpus_histograms_model`](../010_corpus_histograms_model/README.md)** —
+O serviço deixa de ser só filtro HTTP: entra um corpus de treino, um modelo
+picklable de tons de cinza e rotas que reportam histogramas do corpus. Você
+vê onde o «mundo de referência» mora no runtime.
+
+**[`020_grayscale_request_logging`](../020_grayscale_request_logging/README.md)** —
+Cada pedido a `/inference-grayscale` grava features em disco **antes** da
+conversão para cinza (canais R/G/B ainda existem). Sem esse log, não há
+*production* para comparar com o corpus.
+
+**[`030_request_log_histograms`](../030_request_log_histograms/README.md)** —
+Agrega o log e expõe histogramas de production ao lado dos do corpus, com
+exercitador de carga. Serve para *olhar* o afastamento; o cartão de alerta
+didático vem no Ato III.
+
+**[`040_ks_production_vs_corpus`](../040_ks_production_vs_corpus/README.md)** —
+Expõe no HTTP a estatística de Kolmogorov–Smirnov entre production e corpus
+(D, valor-p, tamanhos efetivos). É o contrato de números no serviço — não
+substitui o painel e o semáforo da `003`.
+
+### Ato III — Drift e anomalias
+
+**[`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md)** —
+Âncora do arco: HTTP pode estar verde e a latência aceitável, enquanto as
+luminâncias dos pedidos já não parecem o treino. Fluxo L → histograma → CDF
+→ D → alerta (com regra de amostra inconclusiva). Volta aqui depois dos
+tijolos `010`–`040`.
+
+**[`005_ks_anomaly_detection_streamlit`](../005_ks_anomaly_detection_streamlit/README.md)** —
+Mesmo aparelho da `003`, outra escala: um candidato (uma imagem) ou uma
+**janela** temporal de pedidos versus a referência. É o objetivo «detecção
+de anomalias» em cena.
+
+**[`006_ks_input_output_streamlit`](../006_ks_input_output_streamlit/README.md)** —
+Dois alertas sobre D: luminância das imagens **submetidas** e das imagens
+**devolvidas**. Mostra quando entrada e saída contam a mesma história — ou
+quando o filtro as separa.
+
+**[`007_ks_mixed_landscape_streamlit`](../007_ks_mixed_landscape_streamlit/README.md)** —
+Tráfego misto (metade ainda «parece» treino, metade de outro mundo visual).
+Pergunta: o alerta ainda dispara? Com que intensidade frente a controles
+puros?
+
+**[`008_psi_drift_alert_streamlit`](../008_psi_drift_alert_streamlit/README.md)** —
+Irmã da `003`: mesma parábola operacional, outro instrumento (PSI e faixas
+clássicas de monitoramento). Fecha o Ato III mostrando que trocar a métrica
+não apaga a pergunta sobre o mundo dos dados.
+
+---
 
 Próximo passo:
 [`001_histogram_cdf_cli`](../001_histogram_cdf_cli/README.md).

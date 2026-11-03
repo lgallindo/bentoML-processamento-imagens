@@ -33,6 +33,9 @@ INDEX_FOLDERS = (
     "003_ks_drift_alert_streamlit",
     "004_prometheus_histcdf_streamlit",
     "005_ks_anomaly_detection_streamlit",
+    "006_ks_input_output_streamlit",
+    "007_ks_mixed_landscape_streamlit",
+    "008_psi_drift_alert_streamlit",
     "010_corpus_histograms_model",
     "020_grayscale_request_logging",
     "030_request_log_histograms",
@@ -116,18 +119,9 @@ def test_readme_index() -> None:
         assert name in text, f"missing index folder: {name}"
 
 
-def test_readme_commands_section() -> None:
+def test_readme_has_no_figuras_e_comandos_section() -> None:
     text = README.read_text(encoding="utf-8")
-    assert "## Figuras e comandos" in text
-    section = text.split("## Figuras e comandos", 1)[1]
-    for recipe in (
-        "just sync",
-        "just open-diagram",
-        "just open-target",
-        "just open-goals-map",
-        "just test",
-    ):
-        assert recipe in section, f"missing recipe: {recipe}"
+    assert "## Figuras e comandos" not in text
 
 
 def test_justfile_has_open_goals_map() -> None:
