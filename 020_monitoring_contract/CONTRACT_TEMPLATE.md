@@ -5,7 +5,7 @@
 | Campo | Preenchimento |
 | :--- | :--- |
 | Sinal | |
-| Fonte (aula / ferramenta) | ex.: `010`, `016`, Prometheus, Grafana |
+| Fonte (aula `NNN_*`) | ex.: `010_prometheus_promql`, `016_grafana_dashboards` |
 | Limiar | |
 | Acção se violado | |
 | Dono / papel | |
@@ -15,7 +15,7 @@
 | Campo | Preenchimento |
 | :--- | :--- |
 | Sinal | |
-| Fonte (aula / ferramenta) | ex.: `003`, `008`, `014` |
+| Fonte (aula `NNN_*`) | ex.: `003_ks_drift_alert_streamlit`, `008_psi_drift_alert_streamlit`, `014_ks_production_vs_corpus` |
 | Limiar | |
 | Acção se violado | |
 | Dono / papel | |
@@ -25,12 +25,12 @@
 | Campo | Preenchimento |
 | :--- | :--- |
 | Sinal | |
-| Fonte (aula / ferramenta) | ex.: `004`, baseline Grafana |
+| Fonte (aula `NNN_*`) | ex.: `004_ks_anomaly_detection_streamlit` |
 | Limiar | |
 | Acção se violado | |
 | Dono / papel | |
 
 ## 4. Lacunas conscientes
 
-O que esta trilha ainda não cobre (ex.: lab Datadog sem chave, Kibana
-omitido no lab ES) e o impacto no contrato:
+O que esta trilha ainda não cobre no *seu* percurso (lab opcional em SKIP,
+harness sem disco, sinal que você não observou) e o impacto no contrato:
