@@ -1,0 +1,34 @@
+# Trecho didático (derivado do fixture da aula 010). Sem segredos.
+# HELP bentoml_service_request_total Total number of runner RPC
+# TYPE bentoml_service_request_total counter
+bentoml_service_request_total{endpoint="/inference-blur",http_response_code="200",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 0.0
+bentoml_service_request_total{endpoint="/inference-blur",http_response_code="500",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 0.0
+bentoml_service_request_total{endpoint="/inference-grayscale",http_response_code="200",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 5.0
+bentoml_service_request_total{endpoint="/inference-grayscale",http_response_code="500",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 0.0
+bentoml_service_request_total{endpoint="/inference-resize",http_response_code="200",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 0.0
+bentoml_service_request_total{endpoint="/inference-resize",http_response_code="500",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 0.0
+# HELP bentoml_service_request_in_progress Total number of runner RPC in progress now
+# TYPE bentoml_service_request_in_progress gauge
+bentoml_service_request_in_progress{endpoint="/inference-grayscale",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 0.0
+# HELP bentoml_service_last_request_timestamp_seconds Timestamp of the last received request
+# TYPE bentoml_service_last_request_timestamp_seconds gauge
+# HELP bentoml_service_request_duration_seconds runner RPC duration in seconds
+# TYPE bentoml_service_request_duration_seconds histogram
+bentoml_service_request_duration_seconds_sum{endpoint="/inference-grayscale",http_response_code="200",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 2.199846729869023
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",http_response_code="200",le="0.005",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 0.0
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",http_response_code="200",le="0.01",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 0.0
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",http_response_code="200",le="0.025",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 0.0
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",http_response_code="200",le="0.05",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 4.0
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",http_response_code="200",le="0.1",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 4.0
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",http_response_code="200",le="0.25",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 4.0
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",http_response_code="200",le="0.5",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 4.0
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",http_response_code="200",le="1.0",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 4.0
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",http_response_code="200",le="2.5",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 5.0
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",http_response_code="200",le="5.0",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 5.0
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",http_response_code="200",le="10.0",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 5.0
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",http_response_code="200",le="30.0",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 5.0
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",http_response_code="200",le="60.0",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 5.0
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",http_response_code="200",le="120.0",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 5.0
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",http_response_code="200",le="180.0",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 5.0
+bentoml_service_request_duration_seconds_bucket{endpoint="/inference-grayscale",http_response_code="200",le="+Inf",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 5.0
+bentoml_service_request_duration_seconds_count{endpoint="/inference-grayscale",http_response_code="200",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 5.0

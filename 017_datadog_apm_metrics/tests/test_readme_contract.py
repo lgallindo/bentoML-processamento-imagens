@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import subprocess
 import sys
@@ -40,10 +41,10 @@ def test_readme_brazilian_portuguese_not_european() -> None:
     assert "dialecto" not in README
     assert "## Objetivos" in README
     assert "Objectivos" not in README
-    assert "canônico" in README
     assert "canónico" not in README
     assert "arquivos" in README
     assert "ficheiros" not in README
+    assert "esqueleto" not in README.lower()
 
 
 def test_degrade001_documented() -> None:
@@ -89,9 +90,38 @@ def test_gate_run_with_key() -> None:
     assert "lab-not-a-real-key" not in out
 
 
-def test_openmetrics_example_exists() -> None:
-    assert (ROOT / "monitoring" / "openmetrics.example.yaml").is_file()
+def test_openmetrics_example_is_complete_yaml() -> None:
+    path = ROOT / "monitoring" / "openmetrics.example.yaml"
+    text = path.read_text(encoding="utf-8")
+    assert "openmetrics_endpoint:" in text
+    assert "http://127.0.0.1:3000/metrics" in text
+    assert "bentoml_service_request_total" in text
+    # Não pode permanecer só como bloco comentado («esqueleto»).
+    active = [
+        line
+        for line in text.splitlines()
+        if line.strip() and not line.lstrip().startswith("#")
+    ]
+    assert any("openmetrics_endpoint:" in line for line in active)
     assert (ROOT / "scripts" / "check_datadog_gate.py").is_file()
+
+
+def test_skip_fixtures_and_mapper() -> None:
+    assert (ROOT / "SAMPLE_DATA.md").is_file()
+    assert (ROOT / "fixtures" / "sample_metrics_snippet.txt").is_file()
+    assert (ROOT / "fixtures" / "label_tag_pairs.example.json").is_file()
+    assert (ROOT / "fixtures" / "gate_skip.example.txt").is_file()
+    mapper = ROOT / "scripts" / "map_labels_from_fixture.py"
+    assert mapper.is_file()
+    out = subprocess.check_output([sys.executable, str(mapper)], text=True)
+    payload = json.loads(out)
+    assert len(payload["pairs"]) >= 3
+
+
+def test_exit_checklist_not_stamp() -> None:
+    assert "## Checklist de saída" in README
+    assert "Conclusão (autoavaliação)" not in README
+    assert "Marque **Sim** ou **Não** sozinho" not in README
 
 
 def test_illustrations() -> None:

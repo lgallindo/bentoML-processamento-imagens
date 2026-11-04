@@ -1,0 +1,1 @@
+DATADOG_LAB=SKIP  # DD_API_KEY omitida ou em branco — DEGRADE-001

@@ -1,0 +1,21 @@
+{
+  "source": "fixtures/sample_metrics_snippet.txt",
+  "note": "Mesma dimensão: label Prometheus ↔ tag Datadog. Sem segredos.",
+  "pairs": [
+    {
+      "prometheus_label": "endpoint=\"/inference-grayscale\"",
+      "datadog_tag": "endpoint:/inference-grayscale",
+      "metric_hint": "bentoml_service_request_total"
+    },
+    {
+      "prometheus_label": "http_response_code=\"200\"",
+      "datadog_tag": "http_response_code:200",
+      "metric_hint": "bentoml_service_request_total"
+    },
+    {
+      "prometheus_label": "runner_name=\"ImageProcessor\"",
+      "datadog_tag": "runner_name:ImageProcessor",
+      "metric_hint": "bentoml_service_request_total"
+    }
+  ]
+}

@@ -5,8 +5,8 @@
 dimensão com outro dialeto; o lab OpenMetrics é **opcional** e obedece a
 DEGRADE-001 (sem chave, salta-se o SaaS sem partir o resto do curso).
 
-O trio canônico **3000 / 9090 / 4000** não é substituído: o Agent (quando
-houver chave) raspa `http://127.0.0.1:3000/metrics` em paralelo.
+O Agent (quando houver chave) raspa `http://127.0.0.1:3000/metrics` em
+paralelo ao Prometheus e ao Grafana do curso (**3000 / 9090 / 4000**).
 
 ![Pipeline conceptual](illustrations/00_pipeline_datadog.png)
 
@@ -80,9 +80,9 @@ O Agent raspa o **mesmo** texto que um scrape Prometheus leria em
 
 1. Instale o [Datadog Agent](https://docs.datadoghq.com/agent/) no lab.
 2. Configure um check OpenMetrics apontando a
-   `http://127.0.0.1:3000/metrics` — esqueleto em
+   `http://127.0.0.1:3000/metrics` — exemplo completo em
    [`monitoring/openmetrics.example.yaml`](monitoring/openmetrics.example.yaml)
-   (copie para a conf. do agent **fora** do Git).
+   (copie para a conf. do Agent **fora** do Git).
 3. Confirme no site Datadog (região da sua conta) que as métricas `bentoml.*`
    aparecem com tags `endpoint`, `job`, etc.
 4. Monte um dashboard mínimo: **taxa** e **latência/p95** (ou distribuição)
@@ -117,36 +117,49 @@ local.
 
 ### Sempre (SKIP ou RUN)
 
-1. Tabela com 3 pares label→tag (inventados a partir do `/metrics` real).
-2. Parágrafo «o que o Prometheus local ainda faz melhor» (≥2 argumentos).
+1. Tabela com 3 pares label→tag — a partir de
+   `python3 scripts/map_labels_from_fixture.py` **ou** de um `/metrics` real
+   em `:3000`.
+2. Parágrafo «o que o Prometheus local ainda faz melhor» (pelo menos dois
+   argumentos).
 3. Saída de `python3 scripts/check_datadog_gate.py` (só a linha
    `DATADOG_LAB=…`).
 
 ### Só se RUN
 
 4. Screenshot do dashboard Datadog (taxa + latência) e do monitor.
-5. Confirmação de que o trio 3000/9090/4000 **continua** a funcionar em
-   paralelo (não desligue o Prometheus «porque o DD chegou»).
+5. Confirmação de que BentoML **3000**, Prometheus **9090** e Grafana **4000**
+   seguem respondendo em paralelo (não desligue o Prometheus «porque o DD
+   chegou»).
 
 ## 6. Materiais
 
 | Arquivo | Papel |
 | :--- | :--- |
+| [`SAMPLE_DATA.md`](SAMPLE_DATA.md) | Modo SKIP e artefatos locais |
+| [`fixtures/sample_metrics_snippet.txt`](fixtures/sample_metrics_snippet.txt) | Trecho OpenMetrics didático |
+| [`fixtures/label_tag_pairs.example.json`](fixtures/label_tag_pairs.example.json) | Pares label→tag de referência |
 | [`scripts/check_datadog_gate.py`](scripts/check_datadog_gate.py) | Portão DEGRADE-001 |
-| [`monitoring/openmetrics.example.yaml`](monitoring/openmetrics.example.yaml) | Esqueleto do check |
+| [`scripts/map_labels_from_fixture.py`](scripts/map_labels_from_fixture.py) | Mapa label→tag sem SaaS |
+| [`monitoring/openmetrics.example.yaml`](monitoring/openmetrics.example.yaml) | Check OpenMetrics completo |
 | [`scripts/generate_comparison_figures.py`](scripts/generate_comparison_figures.py) | Figuras |
 
 ~~~bash
-uv run --no-active --with matplotlib python scripts/generate_comparison_figures.py
+cd 017_datadog_apm_metrics
 python3 scripts/check_datadog_gate.py
+python3 scripts/map_labels_from_fixture.py
+uv run --no-active --with matplotlib python scripts/generate_comparison_figures.py
 ~~~
 
-## Critério de conclusão
+## Checklist de saída
 
-- [ ] Gate DEGRADE-001 compreendido (SKIP sem chave).
-- [ ] Contraste labels/tags + parágrafo Prom local.
-- [ ] Se RUN: dashboard+monitor Datadog **e** trio local intacto.
-- [ ] Nenhuma chave no Git; Grafana do curso nunca em `:3000`.
+| Verificação | Sim / Não |
+| :--- | :---: |
+| `check_datadog_gate.py` imprime `DATADOG_LAB=SKIP` ou `RUN` conforme a chave | |
+| `map_labels_from_fixture.py` devolve pelo menos três pares label→tag | |
+| Redigi o contraste Prometheus local vs Datadog (pelo menos dois argumentos) | |
+| Nenhuma chave no Git; Grafana do curso não usa a porta **3000** | |
+| Se RUN: dashboard+monitor Datadog e portas 3000/9090/4000 ainda respondem | |
 
 ## Roteiro
 

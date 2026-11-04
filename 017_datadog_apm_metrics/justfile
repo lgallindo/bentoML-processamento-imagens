@@ -7,5 +7,8 @@ generate-figures:
 check-gate:
     python3 scripts/check_datadog_gate.py
 
+map-labels:
+    python3 scripts/map_labels_from_fixture.py
+
 test:
     python3 -m pytest -q
