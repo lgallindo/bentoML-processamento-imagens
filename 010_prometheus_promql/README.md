@@ -41,7 +41,7 @@ local** desta pasta: um gerador de métricas em **8010** e um Prometheus só
 dessa demo em **9100**. Os valores inventados passam por três fases (tráfego
 normal, depois lento, depois de volta ao normal) para você treinar as mesmas
 consultas. Passo a passo: [SAMPLE_DATA.md](SAMPLE_DATA.md). A demo **não**
-substitui BentoML@3000 nem Prometheus@9090 quando o ambiente canónico estiver
+substitui BentoML@3000 nem Prometheus@9090 quando o ambiente canônico estiver
 disponível.
 
 | Papel (demo) | Onde escuta | URL típica |
@@ -234,10 +234,10 @@ Se `_count` valesse 3 e o bucket `+Inf` valesse 2 sob os mesmos labels, a
 família estaria inconsistente: falta uma observação no infinito cumulativo
 (ou sobrou uma no `count`).
 
-O label `le` responde *quantas observações foram ≤ este limiar*; o contador
-HTTP `…_request_total` responde *quantas requisições ocorreram* — são
-métricas distintas. A família do histograma é `_bucket` + `_sum` + `_count`,
-com monotonia em `le`.
+O label `le` responde *quantas observações ficaram neste limiar ou abaixo
+dele*; o contador HTTP `…_request_total` responde *quantas requisições
+ocorreram*. São métricas distintas. A família do histograma é `_bucket` +
+`_sum` + `_count`, com monotonia em `le`.
 
 Os nomes típicos desta aula (counter, gauge, buckets, `count`, `sum`, `up`)
 aparecem na tabela abaixo.
@@ -274,16 +274,21 @@ forma plena a partir de `le="2.5"`. Isso já antecipa uma cauda: a média
 outra região da distribuição. O contraste média versus cauda reaparece no
 cálculo do p95 (seção 5).
 
-### 1.5 Escopo negativo: o que `/metrics` não é
+### 1.5 Escopo Negativo
 
-- Não é log de auditoria.
-- Não guarda o corpo das imagens.
-- Não substitui tracing distribuído.
-- Não prova corretude do modelo (acerto, vieses, regressão de acurácia).
-- Resume custos operacionais observáveis: volume, concorrência, duração.
-- Qualidade semântica da predição exige outros instrumentos.
-- Manter a fronteira evita alertas que misturam “o serviço ficou lento” com
-  “o modelo errou a classe”.
+| Fora do `/metrics` | O que isso evita misturar |
+| :--- | :--- |
+| Log de auditoria ou corpo das imagens | Tratar scrape como registro forense do pedido |
+| Tracing distribuído ponta a ponta | Confundir duração agregada com caminho de uma requisição |
+| Prova de corretude do modelo (acerto, viés, regressão de acurácia) | Alertar “modelo errou a classe” com sinal só de operação |
+| Tudo que não seja custo operacional observável | Julgar qualidade semântica da predição só pela latência |
+
+| Dentro do `/metrics` (nesta aula) | Exemplos |
+| :--- | :--- |
+| Volume, concorrência e duração | Contadores, gauges e histogramas de requisição |
+
+Assim, “o serviço ficou lento” e “o modelo errou a classe” permanecem
+perguntas diferentes, com instrumentos diferentes.
 
 ## 2. Confirme a coleta
 
