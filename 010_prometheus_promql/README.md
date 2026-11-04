@@ -144,7 +144,7 @@ verificar a si mesmo: se só há um ponto na série, ainda não há taxa
 legítima; se houve queda abrupta do contador, procure `resets` antes de
 confiar no gráfico.
 
-![Reinício do contador: subtração ingénua versus rate/increase](illustrations/06_counter_reset_rate.png)
+![Reinício do contador: subtração ingênua versus rate/increase](illustrations/06_counter_reset_rate.png)
 
 *A linha tracejada vermelha marca o reinício; `rate`/`increase` somam apenas
 os trechos monótonos (azul e verde).*
@@ -196,7 +196,7 @@ que um `le` menor (mesmo conjunto de labels restantes), há inconsistência de
 exposição ou de agregação — sinal de que a leitura ou a soma por labels
 quebrou o contrato cumulativo.
 
-**Exemplo didáctico (números inventados).** Escada curta
+**Exemplo didático (números inventados).** Escada curta
 `le ∈ {0,01; 0,05; 0,10; +Inf}` e três durações `{0,008; 0,040; 0,090}` s.
 Antes de qualquer observação, todos os buckets estão em zero. Depois das
 três observações:

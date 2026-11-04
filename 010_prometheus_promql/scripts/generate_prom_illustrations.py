@@ -1,4 +1,4 @@
-"""Gera ilustrações didácticas Prometheus → hist/CDF → illustrations/."""
+"""Gera ilustrações didáticas Prometheus → hist/CDF → illustrations/."""
 
 from __future__ import annotations
 
@@ -73,7 +73,7 @@ def _write_counter_scrapes_odometer(plt, np) -> None:
 
 
 def _write_counter_reset_rate(plt, np) -> None:
-    """Reinício: subtração ingénua negativa vs trechos monótonos."""
+    """Reinício: subtração ingênua negativa vs trechos monótonos."""
     times = np.array([0, 15, 30, 45, 60])
     values = np.array([100, 115, 130, 2, 20])
 
@@ -98,7 +98,7 @@ def _write_counter_reset_rate(plt, np) -> None:
         arrowprops=dict(arrowstyle="->", color="#c44e52"),
     )
     ax.annotate(
-        "ingénuo: 20 − 100 = −80\n(absurdo)",
+        "ingênuo: 20 − 100 = −80\n(absurdo)",
         xy=(60, 20),
         xytext=(48, 45),
         fontsize=9,
@@ -308,7 +308,7 @@ def main() -> int:
         }
     )
 
-    # --- 5–8) Figuras didácticas da §1.2 e §2.1 ---
+    # --- 5–8) Figuras didáticas da §1.2 e §2.1 ---
     _write_counter_scrapes_odometer(plt, np)
     _write_counter_reset_rate(plt, np)
     _write_gauge_in_progress(plt, np)
