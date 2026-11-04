@@ -81,16 +81,23 @@ def test_readme_no_bloom_taxonomy() -> None:
         assert label not in README, f"Bloom label leaked into student README: {label}"
 
 
-def test_ops_fields_integrated_in_readme() -> None:
+def test_ops_and_filosofia_in_readme() -> None:
     assert "Campos *Ops*" in README or "Campos Ops" in README
+    assert "## Filosofia DevOps" in README
+    assert "O que a tabela guarda e o gráfico não" in README
     for label in ("DevOps", "MLOps", "CVOps", "LLMOps", "AIOps"):
         assert label in README
     assert "CAMPOS_OPS.md" not in README
     assert not (ROOT / "CAMPOS_OPS.md").exists()
+    assert "## Portas" not in README
 
 
 def test_no_fecho_vocabulary() -> None:
-    """«fecho» is not in the course shared vocabulary (pt_BR)."""
+    """fecho is not in the course shared vocabulary (pt_BR)."""
     for name, text in (("README", README), ("TEMPLATE", TEMPLATE)):
         hits = re.findall(r"(?i)\bfecho\b", text)
         assert not hits, f"{name} still uses fecho: {hits}"
+
+
+def test_no_european_guillemets_in_readme() -> None:
+    assert "«" not in README and "»" not in README

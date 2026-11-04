@@ -20,7 +20,7 @@ mundo de entrada mudou.
 
 Se o limiar existe sem **ação** e sem **dono**, os dois eventos viram o mesmo
 aviso órfão: alguém vê o número, ninguém decide o próximo passo, e o pipeline
-segue «saudável» na superfície. O contrato existe para impedir esse vazio —
+segue "saudável" na superfície. O contrato existe para impedir esse vazio —
 uma linha por fim, com responsável nomeado.
 
 ## Quatro campos
@@ -28,13 +28,68 @@ uma linha por fim, com responsável nomeado.
 | Campo | Pergunta que responde | Eco na bibliografia |
 | :--- | :--- | :--- |
 | **Sinal** | O que se mede, com nome de série ou estatística? | Página de sintoma (B1): o que o operador vê primeiro |
-| **Limiar** | A partir de qual valor e janela isso está errado? | Alerta acionável (B6, B9): quando agir, não «algo mudou» |
+| **Limiar** | A partir de qual valor e janela isso está errado? | Alerta acionável (B6, B9): quando agir, não "algo mudou" |
 | **Ação** | Qual o próximo passo concreto se o limiar for cruzado? | Mesma linha: o alerta muda uma decisão |
-| **Dono** | Quem executa essa ação (pessoa ou papel real)? | Filosofia de alerta (B9): alguém atende; «a equipe» não atende |
+| **Dono** | Quem executa essa ação (pessoa ou papel real)? | Filosofia de alerta (B9): alguém atende; "a equipe" não atende |
 
 Cada fim da trilha (saúde, drift, anomalia) recebe **uma** linha com esses
-quatro campos. «Muito alto» e «anormal» não bastam — o dono ficaria sem
+quatro campos.
+
+## Filosofia DevOps
+
+Um sistema operável é aquele em que alguém sabe, quando um número cruza uma
+linha, o que fazer a seguir. Uma demonstração funciona enquanto o autor está
+presente. Um serviço funciona quando a resposta a "o que fazemos agora?"
+está escrita.
+
+Cinco hábitos que o texto precisa carregar:
+
+1. Um sinal só é útil quando alguém o interpreta no contexto deste serviço
+   BentoML de imagens.
+2. Um limiar indica **quando agir**, não apenas que "algo mudou".
+3. Toda ação nomeia um responsável identificável e um próximo passo
+   executável.
+4. Se o alerta não muda uma decisão, reveja o sinal ou retire o alerta do
+   contrato.
+5. Depois de agir, anote o resultado; ajuste o contrato quando a evidência
+   mostrar que ele falhou.
+
+O campo **dono** é o que mais falha na prática: limiar sem dono vira aviso
+que todos veem e ninguém atende. Escreva um nome ou um papel real. Mantenha
+o contrato no repositório, ao lado do código — quem assume o serviço lê o
+mesmo texto, e cada mudança de limiar deixa commit com data e motivo.
+
+Admitir lacunas faz parte do contrato. Se um lab ficou de fora (chave SaaS
+ausente, disco insuficiente para um harness), escreva "não disponível" —
+não invente cobertura. Uma linha honesta informa mais do que um limiar
+falso.
+
+## Objetivos de MLOps nesta trilha
+
+O fio condutor é o **Runtime** BentoML de processamento de imagens: o mundo
+envia pedidos HTTP; o serviço responde; o monitoramento pergunta se a
+máquina, os dados e o comportamento ainda merecem confiança. Os três fins
+anunciados em
+[`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md)
+viram três perguntas que o contrato **responde com uma linha cada**:
+
+1. **Saúde do servidor** — o serviço responde; taxa de erro e latência
+   (p95, alertas) estão em faixa aceitável?
+2. **Drift de dados** — a distribuição dos pedidos (ou das features) se
+   afastou do corpus de referência?
+3. **Detecção de anomalias** — uma janela ou um candidato foge da linha de
+   base a ponto de merecer inspeção?
+
+Cada pergunta pede: sinal + fonte (`NNN_*`) + limiar (número e janela) +
+ação + dono. "Muito alto" e "anormal" não bastam — o dono ficaria sem
 critério.
+
+## O que a tabela guarda e o gráfico não
+
+Um gráfico mostra o valor de um sinal. Não registra por que o limiar está
+onde está, quem responde quando ele é cruzado, nem o que se faz depois. A
+tabela em Markdown carrega o que o gráfico omite: cabe em diff, em revisão
+e no clone do repositório.
 
 ## Campos *Ops* — de onde vêm os rótulos
 
@@ -56,7 +111,7 @@ comum; *Ops* nomeia **quem** costuma falar cada idioma.
 
 Patrick Debois e Andrew Shafer discutem *Agile Infrastructure* (2008). Em
 2009, no O’Reilly Velocity, John Allspaw e Paul Hammond (Flickr) apresentam
-[«10+ Deploys Per Day»](https://www.youtube.com/watch?v=LdOe18KhtT4);
+["10+ Deploys Per Day"](https://www.youtube.com/watch?v=LdOe18KhtT4);
 Debois organiza o primeiro
 [devopsdays](https://devopsdays.org/)
 em Ghent. Relatos:
@@ -72,8 +127,8 @@ dono compartilhado. Nesta trilha = **saúde do pipeline**
 ### MLOps (débito técnico 2015 → termo c. 2017–2018 → )
 
 Sculley et al.,
-[«Hidden Technical Debt in Machine Learning Systems»](https://proceedings.neurips.cc/paper_files/paper/2015/file/86df7dcfd896fcaf2674f757a2463eba-Paper.pdf)
-(NeurIPS 2015), descrevem o custo fora do retângulo do «modelo». O léxico
+["Hidden Technical Debt in Machine Learning Systems"](https://proceedings.neurips.cc/paper_files/paper/2015/file/86df7dcfd896fcaf2674f757a2463eba-Paper.pdf)
+(NeurIPS 2015), descrevem o custo fora do retângulo do "modelo". O léxico
 **MLOps** espalha-se depois; síntese:
 [Kreuzberger et al., IEEE Access 2023](https://ieeexplore.ieee.org/document/10069172),
 [NVIDIA — MLOps](https://www.nvidia.com/en-us/glossary/mlops/).
@@ -89,12 +144,12 @@ e os fins **drift** / **anomalia**
 
 ### CVOps (final dos anos 2010 → )
 
-Rótulo de mercado para «MLOps quando o dado é imagem/vídeo»: arquivos
+Rótulo de mercado para "MLOps quando o dado é imagem/vídeo": arquivos
 grandes, anotação, GPU, drift visual —
 [Picsellia](https://www.picsellia.com/post/how-to-apply-mlops-to-computer-vision-cvops),
 [Xailient](https://xailient.com/blog/xailient-created-cvops-for-edge-computer-vision-at-scale/).
 Este curso **é** laboratório de visão (grayscale, L, beaches/forests), mas
-o handout quase não escreve «CVOps»: o conteúdo fica sob MLOps + DevOps,
+o handout quase não escreve "CVOps": o conteúdo fica sob MLOps + DevOps,
 com o contrato preenchível.
 
 ### LLMOps (c. 2022–2024 → )
@@ -134,8 +189,8 @@ convertendo é a fronteira DevOps × MLOps/CVOps.
 | Montar ou polir um Dashboard | Dashboard mostra séries; não registra dono nem ação |
 | Colar o dump de `GET /metrics` | O texto cru lista famílias; o contrato escolhe **um** sinal por fim |
 | Preencher formulário sem sinal praticado | Inventar limiar elegante sem ter visto o gráfico ou o painel |
-| Subir Container, Prometheus ou Grafana nesta pasta | Exercício só textual; portas e Scrape ficam nas aulas que os operam |
-| Cumprir «cinco hábitos» genéricos | O critério de saída é o artefato preenchido, não um sermão |
+| Subir Container, Prometheus ou Grafana nesta pasta | Exercício textual; Scrape e Dashboard ficam nas aulas que os operam |
+| Recitar os cinco hábitos sem aplicá-los a cada linha | Os hábitos servem para revisar o artefato; o critério é o preenchimento |
 | Memorizar a cronologia *Ops* | História contextualiza; o critério Sim/Não é o artefato |
 
 ## Como proceder
@@ -150,7 +205,9 @@ convertendo é a fronteira DevOps × MLOps/CVOps.
    - Drift: `003_ks_drift_alert_streamlit` ou `008_psi_drift_alert_streamlit`
    - Anomalia: `004_ks_anomaly_detection_streamlit`
 3. Na seção de lacunas, declare o que ficou de fora (lab SKIP, sinal não
-   observado) e o impacto — escreva «não disponível»; não invente cobertura.
+   observado) e o impacto — escreva "não disponível"; não invente cobertura.
+4. Releia os cinco hábitos da Filosofia DevOps: cada linha do contrato deve
+   sobreviver a essa lista.
 
 ### Exemplo trabalhado (saúde)
 
@@ -160,7 +217,7 @@ convertendo é a fronteira DevOps × MLOps/CVOps.
 | Fonte | `010_prometheus_promql` |
 | Limiar | p95 acima da linha de base da regra do repositório por pelo menos 1 min |
 | Ação | Investigar Endpoint lento; reduzir carga; checar Container |
-| Dono | Papel «plantão do serviço» (nomeie uma pessoa da turma ou do lab) |
+| Dono | Papel "plantão do serviço" (nomeie uma pessoa da turma ou do lab) |
 
 ### Exemplo trabalhado (drift)
 
@@ -168,9 +225,9 @@ convertendo é a fronteira DevOps × MLOps/CVOps.
 | :--- | :--- |
 | Sinal | Estatística D (KS) do lote frente à referência — ou PSI na faixa da aula |
 | Fonte | `003_ks_drift_alert_streamlit` ou `008_psi_drift_alert_streamlit` |
-| Limiar | D maior ou igual a 0,10 com o n mínimo da aula — ou PSI na faixa «mudança» / «forte» |
+| Limiar | D maior ou igual a 0,10 com o n mínimo da aula — ou PSI na faixa "mudança" / "forte" |
 | Ação | Congelar promoção do lote; inspecionar tema das imagens |
-| Dono | Papel «dados / qualidade de entrada» |
+| Dono | Papel "dados / qualidade de entrada" |
 
 ## Checklist de saída
 
@@ -178,9 +235,10 @@ convertendo é a fronteira DevOps × MLOps/CVOps.
 | :--- | :---: |
 | As três linhas têm sinal + limiar + ação + dono | |
 | Cada limiar é numérico ou faixa nomeada da aula (ex. PSI), com janela quando couber | |
-| Cada dono é pessoa ou papel identificável (não «a equipe») | |
+| Cada dono é pessoa ou papel identificável (não "a equipe") | |
 | Cada sinal aponta a uma pasta `NNN_*` praticada, ou a lacuna está explícita | |
 | A seção de lacunas está escrita sem inventar cobertura | |
+| Cada linha do contrato passa pelos cinco hábitos da Filosofia DevOps | |
 
 ## Bibliografia
 
