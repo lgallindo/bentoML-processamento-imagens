@@ -38,7 +38,7 @@ def _chrome(ax, title: str, state: str, state_color: str) -> None:
 
 def save_pending() -> Path:
     fig, ax = plt.subplots(figsize=(9, 5.5), dpi=140)
-    _chrome(ax, "Página /alerts — regra verdadeira, for: ainda a contar", "pending", "#ca8a04")
+    _chrome(ax, "Página /alerts — regra verdadeira, for: ainda contando", "pending", "#ca8a04")
     ax.text(5.0, 1.2,
             "A expressão já é verdadeira; o Prometheus espera o intervalo for: 1m.",
             ha="center", fontsize=9, color="#27272a")

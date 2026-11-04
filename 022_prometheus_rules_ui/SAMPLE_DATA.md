@@ -1,8 +1,8 @@
 # Dados e portas da demo (aula 022)
 
 Quando `:3000` / `:9090` no Host estão ocupados por outros processos, use
-esta demo **auxiliar**. Ela não substitui o BentoML canónico nem o
-Prometheus do curso documentados em [`docs/ports.md`](../docs/ports.md).
+esta demo **auxiliar**. O BentoML e o Prometheus do curso continuam
+documentados em [`docs/ports.md`](../docs/ports.md).
 
 | Papel | Porta | URL |
 | :--- | ---: | :--- |

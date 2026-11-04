@@ -51,11 +51,15 @@ def test_wrong_prometheus_documented() -> None:
     assert "outro" in README.lower() or "outra" in README.lower()
 
 
-def test_self_checkable_conclusion() -> None:
-    assert "Conclusão (autoavaliação)" in README
+def test_self_checkable_exit_checklist() -> None:
+    assert "## Checklist de saída" in README
+    assert "Conclusão (autoavaliação)" not in README
+    assert "Marque **Sim** ou **Não** sozinho" not in README
+    assert "ainda a contar" not in README
     assert "Sim / Não" in README
     assert "colega" not in README.lower()
     assert "instrutor" not in README.lower()
+    assert "## Escopo Negativo" in README
 
 
 def test_illustrations_and_fixtures() -> None:

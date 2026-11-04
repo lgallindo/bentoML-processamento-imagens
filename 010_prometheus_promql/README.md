@@ -1228,9 +1228,7 @@ Fim do handout da aula 010. O domínio dos buckets no papel e do
 recalcular.
 
 
-## Conclusão (autoavaliação)
-
-Marque **Sim** ou **Não** sozinho.
+## Checklist de saída
 
 | Verificação | Sim / Não |
 | :--- | :---: |

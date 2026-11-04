@@ -47,7 +47,7 @@ Detalhe da demo: [`SAMPLE_DATA.md`](SAMPLE_DATA.md). Mapa do curso:
    [`monitoring/bentoml.rules.yml`](../monitoring/bentoml.rules.yml).
 3. Job `bentoml-imagens` **UP** em `/targets` (curso ou demo).
 
-## Escopo negativo
+## Escopo Negativo
 
 | Isto | Não é isto |
 | :--- | :--- |
@@ -101,7 +101,7 @@ arquivo) materializa o p95 que a expressão do alerta consulta.
 | Estado na UI / em `ALERTS` | Significado |
 | :--- | :--- |
 | inactive (ou ausente) | Expressão falsa, ou ainda sem avaliação positiva |
-| pending | Expressão verdadeira; `for:` ainda a contar |
+| pending | Expressão verdadeira; o intervalo `for:` ainda está contando |
 | firing | Expressão verdadeira pelo intervalo `for:` |
 
 ![Esquema — pending](illustrations/01_alerts_pending.png)
@@ -154,9 +154,7 @@ do TSDB (pouca história); a 010 discute essa fragilidade.
 Firing na UI **não** envia notificação sozinho: falta Alertmanager (fora do
 escopo desta aula).
 
-## Conclusão (autoavaliação)
-
-Marque **Sim** ou **Não** sozinho.
+## Checklist de saída
 
 | Verificação | Sim / Não |
 | :--- | :---: |

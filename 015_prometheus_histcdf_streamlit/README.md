@@ -715,9 +715,7 @@ Outros materiais do repositório: [índice MLOps](../000_mlops_pipelines_goals/R
 e [apresentação do repositório](../README.md).
 
 
-## Conclusão (autoavaliação)
-
-Marque **Sim** ou **Não** sozinho.
+## Checklist de saída
 
 | Verificação | Sim / Não |
 | :--- | :---: |

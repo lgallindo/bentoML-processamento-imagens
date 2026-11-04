@@ -12,14 +12,12 @@ dos arquivos em `rule_files`.
 
 ## Objetivos
 
-Pratique até conseguir:
-
-- confirmar que a UI em `:9090` é a do curso (`job` `bentoml-imagens` em
-  `/targets`);
-- abrir `/rules` e apontar o grupo, o arquivo e as duas regras do repositório;
-- distinguir recording rule de alerting rule na mesma página;
-- dizer o que muda entre `/rules`, Graph/Table e `/alerts`;
-- cruzar um trecho de
+- Confirmar que a UI em `:9090` é a do curso (`job` `bentoml-imagens` em
+  `/targets`).
+- Abrir `/rules` e apontar o grupo, o arquivo e as duas regras do repositório.
+- Distinguir recording rule de alerting rule na mesma página.
+- Dizer o que muda entre `/rules`, Graph/Table e `/alerts`.
+- Cruzar um trecho de
   [`monitoring/bentoml.rules.yml`](../monitoring/bentoml.rules.yml) com a
   linha correspondente na UI.
 
@@ -33,8 +31,7 @@ Mapa completo: [`docs/ports.md`](../docs/ports.md).
 | **Prometheus** do curso | **9090** | <http://127.0.0.1:9090/rules> |
 
 Demo auxiliar (exporter + Prometheus só desta pasta): portas **8022** /
-**9112** — ver [`SAMPLE_DATA.md`](SAMPLE_DATA.md). Não substitui o trio
-canónico.
+**9112** — ver [`SAMPLE_DATA.md`](SAMPLE_DATA.md).
 
 ## Pré-requisitos
 
@@ -165,8 +162,9 @@ ALERTS{alertname="BentoMLResponseTimeAnomaly"}
 | pending | Expressão verdadeira; `for:` ainda não cumprido |
 | firing | Expressão verdadeira pelo intervalo `for:` |
 
-**OK** em `/rules` ≠ `firing` em `/alerts`. OK = a regra foi avaliada sem
-erro de execução. O alerta pode permanecer inactive com health OK.
+O badge **OK** em `/rules` não é o mesmo que `firing` em `/alerts`. OK
+significa que a regra foi avaliada sem erro de execução. O alerta pode
+permanecer inactive com health OK.
 
 ## 4. Ritual (cheque sozinho)
 
@@ -200,16 +198,14 @@ bash scripts/capture_screenshots.sh
 uv run --no-active --with matplotlib python scripts/generate_schematic_figures.py
 ~~~
 
-## Conclusão (autoavaliação)
-
-Marque **Sim** ou **Não** sozinho.
+## Checklist de saída
 
 | Verificação | Sim / Não |
 | :--- | :---: |
 | Em `/targets`, o job `bentoml-imagens` aparece (curso `:9090` ou demo `:9112`) | |
 | Em `/rules`, vejo o grupo `bentoml-response-time` e as duas regras (recording + alerting) | |
 | Relacionei `record:` / `alert:` do YAML com as linhas da UI | |
-| Expliquei a diferença entre `/rules`, Graph/Table e `/alerts` (OK ≠ firing) | |
+| Expliquei a diferença entre `/rules`, Graph/Table e `/alerts` (OK na regra não é firing) | |
 | Consultei a série da recording rule na Table (ou registrei ausência com causa) | |
 
 ## Roteiro da trilha

@@ -245,15 +245,13 @@ citando as aulas já cursadas.
 ---
 
 
-## Conclusão (autoavaliação)
-
-Marque **Sim** ou **Não** sozinho.
+## Checklist de saída
 
 | Verificação | Sim / Não |
 | :--- | :---: |
-| Consigo citar os três fins de monitoramento (saúde, drift, anomalia) sem olhar o texto | |
-| Sei qual pasta abrir a seguir (`001`) pelo roteiro | |
-| Sei onde está o mapa de portas do curso (`docs/ports.md`) | |
+| Nomeio os três fins de monitoramento desta trilha: saúde do servidor, drift de dados, detecção de anomalias | |
+| O roteiro desta pasta aponta **Seguinte** para `001_histogram_cdf_cli` | |
+| Abro [`docs/ports.md`](../docs/ports.md) e localizo a tabela de portas do curso | |
 
 ## Roteiro da trilha
 

@@ -1,4 +1,4 @@
-"""Contrato textual e artefactos da aula 022 (LESSON-001)."""
+"""Contrato textual e artefatos da aula 022 (LESSON-001)."""
 
 from __future__ import annotations
 
@@ -70,12 +70,17 @@ def test_escopo_negativo_tables() -> None:
     assert "Fora desta aula" in README
 
 
-def test_self_checkable_conclusion() -> None:
-    assert "Conclusão (autoavaliação)" in README
+def test_self_checkable_exit_checklist() -> None:
+    assert "## Checklist de saída" in README
+    assert "Conclusão (autoavaliação)" not in README
+    assert "Marque **Sim** ou **Não** sozinho" not in README
     assert "Sim / Não" in README
     assert "colega" not in README.lower()
     assert "instrutor" not in README.lower()
     assert "professor" not in README.lower()
+    assert "≠" not in README
+    assert "canónico" not in README.lower()
+    assert "não substitui o trio" not in README.lower()
 
 
 def test_no_bloom_or_sausage() -> None:

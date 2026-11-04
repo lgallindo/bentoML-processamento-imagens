@@ -1,4 +1,4 @@
-"""Figuras didácticas (esquemáticas) da aula 021 — sausage sob scripts/."""
+"""Figuras esquemáticas da aula 022 (fluxo YAML→Rules e contraste de páginas)."""
 
 from __future__ import annotations
 

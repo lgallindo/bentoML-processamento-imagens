@@ -80,9 +80,7 @@ critério.
 | Ação | Congelar promoção do lote; inspecionar tema das imagens |
 | Dono | Papel «dados / qualidade de entrada» |
 
-## Conclusão (autoavaliação)
-
-Marque **Sim** ou **Não** sozinho — sobre o artefato que você preencheu.
+## Checklist de saída
 
 | Verificação | Sim / Não |
 | :--- | :---: |
