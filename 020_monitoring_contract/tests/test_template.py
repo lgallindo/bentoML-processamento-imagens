@@ -7,6 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 README = (ROOT / "README.md").read_text(encoding="utf-8")
 TEMPLATE = (ROOT / "CONTRACT_TEMPLATE.md").read_text(encoding="utf-8")
+CAMPOS_OPS = (ROOT / "CAMPOS_OPS.md").read_text(encoding="utf-8")
 
 PRIMARY_BIB_URLS = (
     "https://sre.google/sre-book/monitoring-distributed-systems/",
@@ -78,3 +79,10 @@ def test_readme_no_bloom_taxonomy() -> None:
     )
     for label in bloom_labels:
         assert label not in README, f"Bloom label leaked into student README: {label}"
+
+
+def test_campos_ops_companion_linked() -> None:
+    assert "CAMPOS_OPS.md" in README
+    for label in ("DevOps", "MLOps", "CVOps", "LLMOps", "AIOps"):
+        assert label in CAMPOS_OPS
+    assert "Planos e lacunas" in CAMPOS_OPS or "não fechou" in CAMPOS_OPS

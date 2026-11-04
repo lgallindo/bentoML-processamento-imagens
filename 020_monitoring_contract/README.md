@@ -126,6 +126,10 @@ Use estes textos ao preencher o contrato (links auditados em 2026-11-04):
 - **B10** — Datadog, *Monitoring 101: Alerting* —
   <https://www.datadoghq.com/blog/monitoring-101-alerting/>
 
+Cronologia e mapa DevOps / MLOps / CVOps / LLMOps / AIOps (leitura
+opcional, fora do checklist Sim/Não):
+[`CAMPOS_OPS.md`](CAMPOS_OPS.md).
+
 ## Roteiro
 
 | | Pasta |
