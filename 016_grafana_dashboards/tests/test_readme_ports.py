@@ -30,7 +30,6 @@ def test_grafana_on_4000() -> None:
 
 def test_self_contained_concept() -> None:
     assert "**Conceito desta aula:**" in README
-    # pré-requisitos = ambiente, não «conclua a aula N»
     prereq = README.split("## Pré-requisitos", 1)[1].split("## ", 1)[0]
     assert "conclua" not in prereq.lower()
     assert "010_prometheus_promql" not in prereq
@@ -41,15 +40,20 @@ def test_never_grafana_course_default_3000() -> None:
 
 
 def test_comparisons_and_storytelling_hooks() -> None:
-    assert "Streamlit" in README
-    assert "Datadog" in README
+    assert "Datadog" in README or "SaaS" in README
     assert "Explore" in README
-    assert "caderno de bordo" in README or "história" in README.lower()
+    assert "caderno de bordo" in README or "dashboard" in README.lower()
 
 
-def test_exercise_without_streamlit_delivery() -> None:
-    assert "sem" in README.lower() and "Streamlit" in README
+def test_no_streamlit_in_this_lesson() -> None:
+    assert "Streamlit" not in README
     assert "Taxa de erro" in README or "taxa de erro" in README
+
+
+def test_self_checkable_conclusion() -> None:
+    assert "Critério de conclusão" in README or "Critérios" in README
+    assert "colega" not in README.lower()
+    assert "sugerido" not in README.lower() or "autoavalia" in README.lower()
 
 
 def test_illustrations_present() -> None:

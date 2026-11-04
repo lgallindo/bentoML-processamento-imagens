@@ -24,7 +24,7 @@ expressão `histogram_quantile` e a interpretação de regras de linha de base.
 
 **Conceito desta aula:** ler o contrato de `/metrics`, confirmar o scrape e
 usar PromQL (taxa, buckets, `histogram_quantile`, linha de base) na UI do
-Prometheus — sem Streamlit e sem dashboard Grafana nesta pasta.
+Prometheus.
 
 Este documento espera os seguintes processos no host (mapa completo em
 [`docs/ports.md`](../docs/ports.md)):
@@ -33,26 +33,24 @@ Este documento espera os seguintes processos no host (mapa completo em
 | :--- | ---: | :--- |
 | **BentoML** (serviço real do curso) | **3000** | <http://127.0.0.1:3000/metrics> |
 | **Prometheus** (scrape + UI do curso) | **9090** | <http://127.0.0.1:9090> |
-| **Grafana** (quando a trilha o usar) | **4000** | <http://127.0.0.1:4000> |
 
-Demo **opcional** só desta pasta — não substitui o trio acima; isola uma
-sequência sintética estável → lenta → recuperação
-([SAMPLE_DATA.md](SAMPLE_DATA.md)):
+Se o serviço real ou o Prometheus do curso não estiverem no ar, use a **demo
+local** desta pasta: um gerador de métricas em **8010** e um Prometheus só
+dessa demo em **9100**. Os valores inventados passam por três fases (tráfego
+normal, depois lento, depois de volta ao normal) para você treinar as mesmas
+consultas. Passo a passo: [SAMPLE_DATA.md](SAMPLE_DATA.md). A demo **não**
+substitui BentoML@3000 nem Prometheus@9090 quando o ambiente canónico estiver
+disponível.
 
-| Papel | Onde escuta | URL típica |
+| Papel (demo) | Onde escuta | URL típica |
 | :--- | ---: | :--- |
 | Exporter sintético (`just demo-exporter`) | **8010** | <http://127.0.0.1:8010/metrics> |
 | Prometheus da demo (`just demo-prometheus`) | **9100** | <http://127.0.0.1:9100> |
 
-Ao longo das seções, o mesmo exemplo concreto — endpoints de inferência de
-imagem deste repositório — serve de fio condutor. Os números da fixture e da
-captura real de `/metrics` permitem verificar a conta à mão antes de confiar
-no resultado da UI. Essa ordem (papel → Table → Graph → regra) reduz o risco
-de aceitar um `NaN` ou um quantil espúrio como “latência medida”.
+Os endpoints de inferência de imagem deste repositório servem de fio
+condutor nas seções seguintes.
 
 ## Objetivos
-
-Pratique até conseguir, sem consultar a solução de um colega:
 
 - reconhecer no `/metrics` contadores, gauges, histogramas e labels, e
   explicar o papel de `# HELP` e `# TYPE`;
@@ -66,11 +64,6 @@ Pratique até conseguir, sem consultar a solução de um colega:
   uma regra de alerta no Prometheus, incluindo estados `pending` e `firing`;
 - articular por que uma linha de base de três desvios-padrão sobre janela
   curta é frágil no início da operação e sob tráfego sazonal ou multimodal.
-
-Critério de conclusão sugerido: entregar o relato do exercício (seção 9) com
-fonte, trecho de métricas ou Table, duas expressões PromQL com unidade, um
-cálculo manual de quantil e uma limitação explícita. O relato não exige
-capturas do Grafana nem do Streamlit.
 
 ## 1. Olhe o formato de `/metrics`
 
@@ -1037,7 +1030,7 @@ Ao discutir a regra, prefira formulações precisas:
 
 ## 9. Exercício
 
-Relato curto (até uma página), **sem** painel Streamlit:
+Relato curto (até uma página):
 
 1. Fonte (real `:9090` ou demo `:9100`), endpoint, janela.
 2. Trecho relevante de `/metrics` ou resultado Table de um seletor.

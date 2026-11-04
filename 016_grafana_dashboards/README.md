@@ -6,9 +6,8 @@ na cauda?» sem cada pessoa reabrir a UI do Prometheus e colar PromQL.
 
 O Grafana (**porta 4000**, nunca 3000 — essa fica do BentoML) **consulta** o
 Prometheus; não armazena séries e não substitui o texto cru de
-`GET /metrics`. Um painel Streamlit local sobre buckets é outra ferramenta
-(didáctica); um vendor SaaS é outra ainda. Aqui o objecto é só o dashboard
-OSS sobre a fonte Prometheus do curso.
+`GET /metrics`. Aqui o objecto é o dashboard OSS sobre a fonte Prometheus
+do curso.
 
 ![Do pedido HTTP ao painel](illustrations/00_pipeline_to_panel.png)
 
@@ -57,7 +56,6 @@ Imagine que a latência do `/inference-grayscale` «parece» lenta. Onde olha?
 | `GET /metrics` (BentoML) | Texto HELP/TYPE, contadores crus | Histórico longo; narrativa partilhada |
 | UI Prometheus | PromQL ad-hoc, Table/Graph, regras | Layout estável para a equipa toda manhã |
 | **Grafana (esta aula)** | Painéis versionáveis, várias queries, Explore | Armazenar séries (continua a ser o Prom) |
-| Painel Streamlit local | Histograma/CDF/p95 didáctico | Scrape operacional partilhado |
 | Vendor SaaS (ex.: Datadog) | APM/tags numa conta | Substituir o trio local 3000/9090/4000 |
 
 Regra de ouro:
@@ -154,7 +152,7 @@ só ilustra. Não peça ao Grafana para «ser» o Alertmanager nesta aula.
 
 ## 7. Exercício e entrega
 
-Relato curto (até uma página), **sem** Streamlit:
+Relato curto (até uma página):
 
 1. Fonte: Prometheus real `:9090` (ou a demo documentada) e Grafana `:4000`.
 2. Captura (ou export JSON) do dashboard com os quatro painéis.
