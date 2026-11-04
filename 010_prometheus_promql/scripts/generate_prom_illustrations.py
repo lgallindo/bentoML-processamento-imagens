@@ -254,6 +254,46 @@ def _write_legacy_hist_figures(plt, np) -> None:
     plt.close(fig)
 
 
+def _write_sample_path_flow(plt) -> None:
+    """Caminho da amostra: memória → /metrics → scrape → TSDB → PromQL."""
+    fig, ax = plt.subplots(figsize=(11.0, 3.4), constrained_layout=True)
+    ax.set_xlim(0, 11)
+    ax.set_ylim(0, 3.2)
+    ax.axis("off")
+    boxes = [
+        (0.15, 1.0, 1.9, 1.4, "BentoML\ncontadores\nem memória", "#dbeafe"),
+        (2.25, 1.0, 1.9, 1.4, "GET /metrics\ntexto tipado\n:3000", "#e0e7ff"),
+        (4.35, 1.0, 2.0, 1.4, "Prometheus\nscrape ~5 s\nlê o corpo", "#fef3c7"),
+        (6.55, 1.0, 2.0, 1.4, "TSDB local\n(série,\ntimestamp, value)", "#dcfce7"),
+        (8.75, 1.0, 2.0, 1.4, "PromQL\nlê o TSDB\n(não o vivo)", "#ede9fe"),
+    ]
+    for x, y, w, h, text, color in boxes:
+        ax.add_patch(
+            plt.Rectangle(
+                (x, y), w, h, facecolor=color, edgecolor="#334155", linewidth=1.5, zorder=2
+            )
+        )
+        ax.text(x + w / 2, y + h / 2, text, ha="center", va="center", fontsize=9, zorder=3)
+    for x0, x1 in [(2.05, 2.25), (4.15, 4.35), (6.35, 6.55), (8.55, 8.75)]:
+        ax.annotate(
+            "",
+            xy=(x1, 1.7),
+            xytext=(x0, 1.7),
+            arrowprops=dict(arrowstyle="->", color="#334155", lw=1.5),
+        )
+    ax.text(
+        5.5,
+        0.35,
+        "Navegador em :3000 = /metrics ao vivo; consultas na UI :9090 = TSDB",
+        ha="center",
+        fontsize=9,
+        color="#475569",
+    )
+    ax.set_title("Caminho de uma amostra: memória → exposição → scrape → TSDB → PromQL")
+    fig.savefig(OUT / "08_sample_path_memory_to_promql.png", dpi=160)
+    plt.close(fig)
+
+
 def main() -> int:
     import matplotlib.pyplot as plt
     import numpy as np
@@ -268,10 +308,11 @@ def main() -> int:
         }
     )
 
-    # --- 5–7) Contador / reinício / gauge (dados sintéticos da §1.2) ---
+    # --- 5–8) Figuras didácticas da §1.2 e §2.1 ---
     _write_counter_scrapes_odometer(plt, np)
     _write_counter_reset_rate(plt, np)
     _write_gauge_in_progress(plt, np)
+    _write_sample_path_flow(plt)
 
     try:
         _write_legacy_hist_figures(plt, np)

@@ -271,23 +271,28 @@ Na captura de exemplo, quatro das cinco observações caem no bucket `le="0.05"`
 (já acumuladas também em todos os `le` maiores), e a quinta só aparece de
 forma plena a partir de `le="2.5"`. Isso já antecipa uma cauda: a média
 (`sum/count`) pode ser puxada por um outlier, enquanto o p50 permaneceria em
-outra região da distribuição. Voltaremos a esse contraste na seção do p95.
+outra região da distribuição. O contraste média versus cauda reaparece no
+cálculo do p95 (seção 5).
 
-### 1.5 O que `/metrics` não é
+### 1.5 Escopo negativo: o que `/metrics` não é
 
-`/metrics` não é um log de auditoria, não guarda o corpo das imagens, não
-substitui tracing distribuído e não prova corretude do modelo. Ele resume
-custos operacionais observáveis (volume, concorrência, duração). Qualidade
-semântica da predição (acerto, vieses, regressão de acurácia) exige outros
-instrumentos. Manter essa fronteira evita alertas que misturam “o serviço
-ficou lento” com “o modelo errou a classe”.
+- Não é log de auditoria.
+- Não guarda o corpo das imagens.
+- Não substitui tracing distribuído.
+- Não prova corretude do modelo (acerto, vieses, regressão de acurácia).
+- Resume custos operacionais observáveis: volume, concorrência, duração.
+- Qualidade semântica da predição exige outros instrumentos.
+- Manter a fronteira evita alertas que misturam “o serviço ficou lento” com
+  “o modelo errou a classe”.
 
 ## 2. Confirme a coleta
 
-O BentoML **não** inicia sozinho: na raiz do repo, `just serve` (porta
-**3000**). O Prometheus da aula sobe com
-`monitoring/prometheus.yml` (job único `bentoml-imagens` → `127.0.0.1:3000`);
-veja o [tutorial](../docs/prometheus.md).
+- O BentoML **não** inicia sozinho.
+- Na raiz do repositório: `just serve` (porta **3000**).
+- O Prometheus da aula sobe com `monitoring/prometheus.yml`.
+- Job único: `bentoml-imagens` → `127.0.0.1:3000`.
+- Passo a passo de instalação e primeira coleta:
+  [tutorial](../docs/prometheus.md).
 
 Abra <http://127.0.0.1:9090/targets> **só se** for essa instância. O job
 `bentoml-imagens` deve estar `UP`. Se a página mostrar muitos targets
@@ -304,6 +309,11 @@ Na visualização **Table**, o valor `1` indica scrape bem-sucedido. Isso não
 mede qualidade do modelo; só acessibilidade do endpoint de métricas.
 
 ### 2.1 O caminho completo de uma amostra
+
+![Da memória do BentoML ao PromQL via scrape e TSDB](illustrations/08_sample_path_memory_to_promql.png)
+
+*A UI do Prometheus consulta o TSDB; o navegador em **3000** é o único
+caminho “ao vivo” para o texto de `/metrics`.*
 
 1. O processo BentoML mantém contadores em memória e os serializa quando
    alguém faz `GET /metrics`.
@@ -1146,6 +1156,7 @@ Critérios de autoavaliação:
 | [`illustrations/05_counter_scrapes_odometer.png`](illustrations/05_counter_scrapes_odometer.png) | Contador em scrapes (odômetro ≠ taxa) |
 | [`illustrations/06_counter_reset_rate.png`](illustrations/06_counter_reset_rate.png) | Reinício do contador e `rate`/`increase` |
 | [`illustrations/07_gauge_in_progress.png`](illustrations/07_gauge_in_progress.png) | Gauge em voo: pico curto vs platô |
+| [`illustrations/08_sample_path_memory_to_promql.png`](illustrations/08_sample_path_memory_to_promql.png) | Caminho memória → `/metrics` → scrape → TSDB → PromQL |
 
 ~~~bash
 just test
