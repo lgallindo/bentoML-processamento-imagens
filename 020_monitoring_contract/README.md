@@ -53,7 +53,8 @@ critério.
 2. Preencha **três linhas** — uma por fim — com sinais cuja **fonte** seja
    uma pasta `NNN_*` que você de fato praticou. Fontes típicas (não é
    inventário completo):
-   - Saúde: `010_prometheus_promql` (p95, `up`, taxa)
+   - Saúde: `010_prometheus_promql` (p95, `up`, taxa); `022_prometheus_rules_ui`
+     (`/rules`); `021_prometheus_alerts_ui` (`/alerts`)
    - Drift: `003_ks_drift_alert_streamlit` ou `008_psi_drift_alert_streamlit`
    - Anomalia: `004_ks_anomaly_detection_streamlit`
 3. Na seção de lacunas, declare o que ficou de fora (lab SKIP, sinal não

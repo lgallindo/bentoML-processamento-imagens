@@ -1,0 +1,11 @@
+default:
+    @just --list
+
+test:
+    uv run --no-active --with pytest pytest -q
+
+generate-schematics:
+    uv run --no-active --with matplotlib python scripts/generate_schematic_figures.py
+
+capture:
+    bash scripts/capture_screenshots.sh

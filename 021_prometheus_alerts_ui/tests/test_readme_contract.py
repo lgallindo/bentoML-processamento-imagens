@@ -31,10 +31,11 @@ def test_states_and_distinction() -> None:
 
 
 def test_links_neighbors_not_prereq_force() -> None:
-    assert "010_prometheus_promql" in README
+    assert "022_prometheus_rules_ui" in README
     assert "015_prometheus_histcdf_streamlit" in README
     prereq = README.split("## Pré-requisitos", 1)[1].split("## ", 1)[0]
     assert "015_prometheus_histcdf_streamlit" not in prereq
+    assert "022_prometheus_rules_ui" not in prereq
 
 
 def test_no_grafana_or_streamlit_course_urls() -> None:

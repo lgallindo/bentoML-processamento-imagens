@@ -1,0 +1,45 @@
+{
+  "status": "success",
+  "data": {
+    "groups": [
+      {
+        "name": "bentoml-response-time",
+        "file": "/etc/prometheus/bentoml.rules.yml",
+        "rules": [
+          {
+            "name": "bentoml:http_request_duration_seconds:p95_1m",
+            "query": "histogram_quantile(0.95, sum by (le, endpoint) (rate(bentoml_service_request_duration_seconds_bucket{endpoint=~\"/inference-(blur|grayscale|resize)\"}[1m])))",
+            "labels": {},
+            "health": "ok",
+            "evaluationTime": 0.000411451,
+            "lastEvaluation": "2026-11-04T18:30:09.746099678Z",
+            "type": "recording"
+          },
+          {
+            "state": "inactive",
+            "name": "BentoMLResponseTimeAnomaly",
+            "query": "bentoml:http_request_duration_seconds:p95_1m > avg_over_time(bentoml:http_request_duration_seconds:p95_1m[30m]) + 3 * stddev_over_time(bentoml:http_request_duration_seconds:p95_1m[30m])",
+            "duration": 60,
+            "keepFiringFor": 0,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "O p95 atual ultrapassou a média móvel de 30 min em três desvios-padrão.",
+              "summary": "Tempo de resposta anômalo no endpoint {{ $labels.endpoint }}"
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 8.75e-05,
+            "lastEvaluation": "2026-11-04T18:30:09.74651913Z",
+            "type": "alerting"
+          }
+        ],
+        "interval": 5,
+        "limit": 0,
+        "evaluationTime": 0.000551423,
+        "lastEvaluation": "2026-11-04T18:30:09.746057335Z"
+      }
+    ]
+  }
+}

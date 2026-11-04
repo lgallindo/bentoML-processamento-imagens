@@ -89,6 +89,7 @@ alcançável antes de consultar séries:
 **Ato I — Saúde do servidor.** Latência e séries no caminho BentoML →
 Prometheus → Grafana, depois logs/vendors:
 [`010_prometheus_promql`](../010_prometheus_promql/README.md) →
+[`022_prometheus_rules_ui`](../022_prometheus_rules_ui/README.md) →
 [`021_prometheus_alerts_ui`](../021_prometheus_alerts_ui/README.md) →
 [`015_prometheus_histcdf_streamlit`](../015_prometheus_histcdf_streamlit/README.md)
 (opcional) →
@@ -151,6 +152,11 @@ Não mede qualidade de imagem nem drift de conteúdo (Ato III).
 Pré-req: ponte `009`, vocabulário `001`–`002` e o
 [tutorial Prometheus](../docs/prometheus.md).
 
+**[`022_prometheus_rules_ui`](../022_prometheus_rules_ui/README.md)** —
+Página **Rules** (`/rules`): grupo `bentoml-response-time`, recording e
+alerting a partir de `monitoring/bentoml.rules.yml`, estado de avaliação
+(OK ≠ firing). Confirme o job `bentoml-imagens` (ou use a demo 9112).
+
 **[`021_prometheus_alerts_ui`](../021_prometheus_alerts_ui/README.md)** —
 Página **Alerts** (`/alerts`): pending e firing, regra
 `BentoMLResponseTimeAnomaly` em `monitoring/bentoml.rules.yml`, distinção
@@ -158,8 +164,8 @@ face a Graph/Table. Confirme o job `bentoml-imagens` (ou use a demo 9100).
 
 **[`015_prometheus_histcdf_streamlit`](../015_prometheus_histcdf_streamlit/README.md)** —
 Painel Streamlit (porta **8516**): histograma, CDF e Python ↔ PromQL sobre
-os mesmos buckets. Reforço visual **depois** da 010/021; a UI do Prometheus
-continua a ser a referência para PromQL ad-hoc.
+os mesmos buckets. Reforço visual **depois** da 010/022/021; a UI do
+Prometheus continua a ser a referência para PromQL ad-hoc.
 
 **[`016_grafana_dashboards`](../016_grafana_dashboards/README.md)** —
 Handout numerado sobre [`docs/grafana.md`](../docs/grafana.md): painéis de

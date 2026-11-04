@@ -1,0 +1,15 @@
+[project]
+name = "prometheus-rules-ui"
+version = "0.1.0"
+description = "Aula 022: página Rules do Prometheus (YAML ↔ UI)"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = []
+
+[tool.uv]
+package = false
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]

@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "data": {
+    "activeTargets": [
+      {
+        "discoveredLabels": {
+          "__address__": "bentoml-021-exp:8021",
+          "__always_scrape_classic_histograms__": "false",
+          "__convert_classic_histograms_to_nhcb__": "false",
+          "__metrics_path__": "/metrics",
+          "__scheme__": "http",
+          "__scrape_interval__": "5s",
+          "__scrape_native_histograms__": "false",
+          "__scrape_timeout__": "5s",
+          "job": "bentoml-imagens",
+          "source": "synthetic"
+        },
+        "labels": {
+          "instance": "bentoml-021-exp:8021",
+          "job": "bentoml-imagens",
+          "source": "synthetic"
+        },
+        "scrapePool": "bentoml-imagens",
+        "scrapeUrl": "http://bentoml-021-exp:8021/metrics",
+        "globalUrl": "http://bentoml-021-exp:8021/metrics",
+        "lastError": "",
+        "lastScrape": "2026-11-04T18:30:10.312480729Z",
+        "lastScrapeDuration": 0.001371884,
+        "health": "up",
+        "scrapeInterval": "5s",
+        "scrapeTimeout": "5s"
+      }
+    ],
+    "droppedTargets": [],
+    "droppedTargetCounts": {
+      "bentoml-imagens": 0
+    }
+  }
+}

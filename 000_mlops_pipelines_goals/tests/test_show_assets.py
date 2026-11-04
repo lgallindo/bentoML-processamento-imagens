@@ -33,6 +33,8 @@ INDEX_FOLDERS = (
     "009_bentoml_oci_runtime",
     "003_ks_drift_alert_streamlit",
     "010_prometheus_promql",
+    "022_prometheus_rules_ui",
+    "021_prometheus_alerts_ui",
     "015_prometheus_histcdf_streamlit",
     "016_grafana_dashboards",
     "017_datadog_apm_metrics",

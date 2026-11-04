@@ -186,5 +186,5 @@ just test
 
 | | Pasta |
 | :--- | :--- |
-| **Anterior** | [`010_prometheus_promql`](../010_prometheus_promql/README.md) |
+| **Anterior** | [`022_prometheus_rules_ui`](../022_prometheus_rules_ui/README.md) |
 | **Seguinte** | [`015_prometheus_histcdf_streamlit`](../015_prometheus_histcdf_streamlit/README.md) |

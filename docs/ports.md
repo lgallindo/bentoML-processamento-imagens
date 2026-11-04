@@ -50,6 +50,7 @@ O painel Streamlit **não** substitui o BentoML em 3000.
 | Aula | Porta(s) | Notas |
 | ---: | :--- | :--- |
 | 009 | 3000 | OCI/runtime |
+| 022 | 9090 (`/rules`); demo 8022/9112 | Página Rules; YAML ↔ UI |
 | 021 | 9090 (`/alerts`); demo 8010/9100 | Página Alerts; reutiliza demo da 010 se preciso |
 | 016 | 4000 | UI Grafana (handout; ver grafana.md) |
 | 017 | 8125 / 8126 | Datadog agent (auxiliar; DEGRADE-001 se sem DD_API_KEY) |
