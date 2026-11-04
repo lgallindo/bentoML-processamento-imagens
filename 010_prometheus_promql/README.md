@@ -88,37 +88,29 @@ quando puder, repita o `curl` na porta **3000** e compare. Diferenças de
 valores absolutos são esperadas (mais tráfego, reinícios); o que deve
 permanecer estável é a **forma**: nomes, tipos e labels principais.
 
-### 1.1 O que o cliente HTTP realmente recebe
+### 1.1 Como ler o texto de `/metrics`
 
-O endpoint responde com `Content-Type` tipicamente
-`text/plain; version=0.0.4` (ou variante compatível com a exposição Prometheus
-em texto). O corpo é uma sequência de linhas UTF-8. Linhas em branco separam
-grupos lógicos; linhas que começam com `#` são comentários estruturados
-(`HELP`, `TYPE`) ou comentários livres. Linhas sem `#` são **amostras**: nome
-da métrica, labels opcionais entre chaves, valor numérico e, em alguns
-exporters, um timestamp Unix em milissegundos.
+O corpo da resposta é texto linha a linha. Linhas que começam com `#` descrevem
+a métrica; as outras são **amostras** (nome, labels entre `{…}`, valor).
 
-Exemplo esquemático (não precisa coincidir com a captura):
+Trecho da mesma captura
+([`fixtures/metrics_bentoml_sample.txt`](fixtures/metrics_bentoml_sample.txt)):
 
 ~~~text
 # HELP bentoml_service_request_total Total number of runner RPC
 # TYPE bentoml_service_request_total counter
-bentoml_service_request_total{endpoint="/inference-grayscale",http_response_code="200",...} 5.0
+bentoml_service_request_total{endpoint="/inference-grayscale",http_response_code="200",runner_name="ImageProcessor",service_name="ImageProcessor",service_version="not available"} 5.0
 ~~~
-
-Três papéis distintos:
 
 | Elemento | Função |
 | :--- | :--- |
 | `# HELP nome …` | Descrição humana da métrica `nome` |
 | `# TYPE nome tipo` | Declara `counter`, `gauge`, `histogram`, `summary` ou `untyped` |
-| `nome{labels} valor` | Amostra observável no instante do GET |
+| `nome{labels} valor` | Amostra no instante do GET (aqui: 5 pedidos 200 em `/inference-grayscale`) |
 
-O Prometheus, ao fazer scrape, interpreta esse texto e grava o valor com o
-timestamp da coleta (salvo quando a linha traz timestamp próprio). O serviço
-não “empurra” métricas: o coletor **puxa**. Se o processo estiver parado ou a
-rota `/metrics` falhar, a série `up` cai para `0` e as demais séries daquele
-target deixam de receber amostras novas.
+O Prometheus **puxa** esse texto no scrape e grava o valor com o timestamp da
+coleta. Se o processo estiver parado ou `/metrics` falhar, a série `up` desse
+target cai para `0` e as demais séries deixam de receber amostras novas.
 
 ### 1.2 Contadores, gauges e o contrato de monotonia
 
