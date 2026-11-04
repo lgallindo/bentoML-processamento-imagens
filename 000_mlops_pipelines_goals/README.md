@@ -164,7 +164,7 @@ Prometheus.
 **[`016_grafana_dashboards`](../016_grafana_dashboards/README.md)** —
 Handout numerado sobre [`docs/grafana.md`](../docs/grafana.md): painéis de
 taxa, erro, p95 e linha de base na UI **4000**. Entrega com evidência do
-gráfico — sem Streamlit.
+gráfico.
 
 **[`019_loki_grafana_logs`](../019_loki_grafana_logs/README.md)** —
 Logs OSS: Promtail/push → Loki (**3100**) → Explore no Grafana (**4000**),
