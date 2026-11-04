@@ -104,13 +104,14 @@ arquivo) materializa o p95 que a expressão do alerta consulta.
 | pending | Expressão verdadeira; o intervalo `for:` ainda está contando |
 | firing | Expressão verdadeira pelo intervalo `for:` |
 
-![Esquema — pending](illustrations/01_alerts_pending.png)
+![Página /alerts — pending](illustrations/01_alerts_pending.png)
 
-![Esquema — firing](illustrations/02_alerts_firing.png)
+![Página /alerts — firing](illustrations/02_alerts_firing.png)
 
-As figuras acima são esquemas regeneráveis (`just generate-schematics`).
-Quando a demo ou o curso dispararem de verdade, compare com a UI viva e com
-os JSON em [`fixtures/`](fixtures/).
+As figuras acima são capturas reais da UI `/alerts` (badges pending e
+firing). A `expr:` canónica da aula continua em
+[`monitoring/bentoml.rules.yml`](../monitoring/bentoml.rules.yml); use a UI
+viva e os JSON em [`fixtures/`](fixtures/) para confrontar o Host.
 
 ## 4. Série `ALERTS` (Table) versus página Alerts
 
@@ -172,11 +173,10 @@ escopo desta aula).
 | [`monitoring/bentoml.rules.yml`](../monitoring/bentoml.rules.yml) | Recording + alerta do curso |
 | [`SAMPLE_DATA.md`](SAMPLE_DATA.md) | Demo 8010/9100 |
 | [`fixtures/`](fixtures/) | Exemplos JSON da série `ALERTS` |
-| [`illustrations/`](illustrations/) | Esquemas da página Alerts |
+| [`illustrations/`](illustrations/) | Capturas da página Alerts (pending / firing) |
 
 ```bash
 cd 021_prometheus_alerts_ui
-just generate-schematics
 just test
 ```
 

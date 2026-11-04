@@ -8,12 +8,28 @@
           "__name__": "ALERTS",
           "alertname": "BentoMLResponseTimeAnomaly",
           "alertstate": "pending",
-          "endpoint": "/inference-grayscale",
+          "endpoint": "/inference-blur",
           "severity": "warning"
         },
-        "value": [0, "1"]
+        "value": [
+          0,
+          "1"
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "ALERTS",
+          "alertname": "BentoMLResponseTimeAnomaly",
+          "alertstate": "pending",
+          "endpoint": "/inference-resize",
+          "severity": "warning"
+        },
+        "value": [
+          0,
+          "1"
+        ]
       }
     ]
   },
-  "_fixture_note": "Exemplo didático alinhado a illustrations/01_alerts_pending.png. Substitua por uma captura real da API /api/v1/query?query=ALERTS quando a demo 8010/9100 estiver a disparar."
+  "_fixture_note": "Captura real alinhada a illustrations/01_alerts_pending.png (Host :9090 com job bentoml-imagens)."
 }

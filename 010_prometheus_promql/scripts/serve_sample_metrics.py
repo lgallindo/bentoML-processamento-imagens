@@ -99,14 +99,19 @@ class MetricsHandler(BaseHTTPRequestHandler):
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--port", type=int, default=8010)
+    parser.add_argument(
+        "--bind",
+        default="127.0.0.1",
+        help="Endereço de escuta (use 0.0.0.0 para scrape a partir de Docker).",
+    )
     parser.add_argument("--phase-seconds", type=int, default=120,
                         help="Duração positiva de cada fase (padrão: 120 s).")
     args = parser.parse_args()
     MetricsHandler.started_at = time.monotonic()
     MetricsHandler.phase_duration = args.phase_seconds
-    print(f"Dados sintéticos em http://127.0.0.1:{args.port}/metrics", flush=True)
+    print(f"Dados sintéticos em http://{args.bind}:{args.port}/metrics", flush=True)
     print(f"Fases de {args.phase_seconds} s: estável → lenta → recuperação.", flush=True)
-    with HTTPServer(("127.0.0.1", args.port), MetricsHandler) as server:
+    with HTTPServer((args.bind, args.port), MetricsHandler) as server:
         server.serve_forever()
 
 
