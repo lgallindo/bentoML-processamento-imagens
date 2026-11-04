@@ -126,6 +126,11 @@ o início do processo (ou desde o último reset da série), e não “cinco por
 segundo”. A taxa (`rate`) só aparece depois de duas ou mais coletas espaçadas
 no tempo.
 
+![Contador em scrapes: valores absolutos e deltas entre coletas](illustrations/05_counter_scrapes_odometer.png)
+
+*Cada ponto é uma fotografia do odômetro; a taxa só nasce da diferença entre
+fotografias sucessivas.*
+
 Há de se tratar o número isolado na página `/metrics` como fotografia de um
 odômetro, não como velocímetro. Cinco é o acumulado até aquele scrape; o que
 interessa à operação — pedidos por segundo, erro relativo, volume na janela —
@@ -139,12 +144,22 @@ verificar a si mesmo: se só há um ponto na série, ainda não há taxa
 legítima; se houve queda abrupta do contador, procure `resets` antes de
 confiar no gráfico.
 
+![Reinício do contador: subtração ingénua versus rate/increase](illustrations/06_counter_reset_rate.png)
+
+*A linha tracejada vermelha marca o reinício; `rate`/`increase` somam apenas
+os trechos monótonos (azul e verde).*
+
 Um **gauge** representa um nível que sobe e desce: requisições em andamento,
 temperatura, uso de memória, último timestamp de evento.
 `bentoml_service_request_in_progress` é gauge; zero na captura indica que,
 naquele instante, nenhuma RPC daquele endpoint estava em voo. Um gauge
 travado em valor alto por minutos sugere saturação ou travamento; um pico
 curto pode ser apenas concorrência legítima.
+
+![Gauge in_progress: pico curto versus platô alto](illustrations/07_gauge_in_progress.png)
+
+*O eixo vertical é “em voo agora”: sobe e desce de propósito; um platô alto
+prolongado é o sinal que merece investigação.*
 
 Não se aplica `rate` da mesma forma que a um contador. O `rate` do PromQL
 pressupõe monotonia (acúmulo que só cresce, com correção de reinício); um
@@ -181,16 +196,48 @@ que um `le` menor (mesmo conjunto de labels restantes), há inconsistência de
 exposição ou de agregação — sinal de que a leitura ou a soma por labels
 quebrou o contrato cumulativo.
 
+**Exemplo didáctico (números inventados).** Escada curta
+`le ∈ {0,01; 0,05; 0,10; +Inf}` e três durações `{0,008; 0,040; 0,090}` s.
+Antes de qualquer observação, todos os buckets estão em zero. Depois das
+três observações:
+
+| `le` | Antes | Depois | Porquê |
+| :--- | ---: | ---: | :--- |
+| `0,01` | 0 | 1 | só 0,008 ≤ 0,01 |
+| `0,05` | 0 | 2 | 0,008 e 0,040 ≤ 0,05 |
+| `0,10` | 0 | 3 | as três ≤ 0,10 |
+| `+Inf` | 0 | 3 | toda duração finita ≤ ∞ |
+
+A observação de 0,040 s incrementa apenas os buckets com `le ≥ 0,05` (aqui
+`0,05`, `0,10`, `+Inf`) e **não** o `le="0,01"`. A sequência 1 → 2 → 3 → 3
+é não decrescente. Estaria **incorreto** se, sob os mesmos labels restantes,
+`le="0,10"` mostrasse 1 enquanto `le="0,05"` mostrasse 2: monotonia
+quebrada = exposição ou agregação inconsistente.
+
 `nome_sum` e `nome_count` fecham o quadro: a média aritmética das observações
 é `sum / count` (quando `count > 0`). Em exposição correta, `nome_count`
 coincide, em geral, com o bucket `le="+Inf"`, pois todo valor finito é ≤
 infinito. Há de se checar isso na fixture: se `_count` e o bucket `+Inf`
 divergirem sob os mesmos labels, a família do histograma está corrompida ou
-mal agregada. Mais adiante, essa mesma escada cumulativa de buckets servirá
-para reconstruir a CDF e estimar o p95; por ora, basta fixar a geometria —
-família `_bucket`/`_sum`/`_count`, monotonia em `le`, e a distinção entre
-“quantas observações caíram até este limiar” e o contador de requisições
-HTTP, que é outra métrica.
+mal agregada.
+
+**Mesmo exemplo.** Com as três durações acima:
+
+~~~text
+sum   = 0,008 + 0,040 + 0,090 = 0,138 s
+count = 3
+média = sum / count = 0,046 s
+bucket le="+Inf" = 3  (= count)
+~~~
+
+Se `_count` valesse 3 e o bucket `+Inf` valesse 2 sob os mesmos labels, a
+família estaria inconsistente: falta uma observação no infinito cumulativo
+(ou sobrou uma no `count`).
+
+O label `le` responde *quantas observações foram ≤ este limiar*; o contador
+HTTP `…_request_total` responde *quantas requisições ocorreram* — são
+métricas distintas. A família do histograma é `_bucket` + `_sum` + `_count`,
+com monotonia em `le`.
 
 Os nomes típicos desta aula (counter, gauge, buckets, `count`, `sum`, `up`)
 aparecem na tabela abaixo.
@@ -1096,6 +1143,9 @@ Critérios de autoavaliação:
 | [`illustrations/01_scrape_to_buckets.png`](illustrations/01_scrape_to_buckets.png) | Fluxo do scrape aos buckets |
 | [`illustrations/02_cumulative_to_density.png`](illustrations/02_cumulative_to_density.png) | Cumulativos e diferenças por faixa |
 | [`illustrations/03_python_vs_promql_quantile.png`](illustrations/03_python_vs_promql_quantile.png) | Histograma, CDF e quantil |
+| [`illustrations/05_counter_scrapes_odometer.png`](illustrations/05_counter_scrapes_odometer.png) | Contador em scrapes (odômetro ≠ taxa) |
+| [`illustrations/06_counter_reset_rate.png`](illustrations/06_counter_reset_rate.png) | Reinício do contador e `rate`/`increase` |
+| [`illustrations/07_gauge_in_progress.png`](illustrations/07_gauge_in_progress.png) | Gauge em voo: pico curto vs platô |
 
 ~~~bash
 just test

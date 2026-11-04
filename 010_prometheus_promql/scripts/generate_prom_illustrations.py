@@ -12,26 +12,167 @@ if str(ROOT) not in sys.path:
 OUT = ROOT / "illustrations"
 
 
-def main() -> int:
-    import matplotlib.pyplot as plt
-    import numpy as np
+def _write_counter_scrapes_odometer(plt, np) -> None:
+    """Odômetro em scrapes sucessivos: absoluto ≠ taxa."""
+    times = np.array([0, 15, 30, 45])
+    values = np.array([5, 8, 11, 14])
+    deltas = np.diff(values)
+
+    fig, ax = plt.subplots(figsize=(10.5, 4.0), constrained_layout=True)
+    ax.plot(times, values, color="#4c72b0", linewidth=2, marker="o", markersize=8, zorder=3)
+    for t, v in zip(times, values):
+        ax.annotate(
+            f"{v}",
+            xy=(t, v),
+            xytext=(0, 10),
+            textcoords="offset points",
+            ha="center",
+            fontsize=11,
+            fontweight="bold",
+            color="#1e3a5f",
+        )
+    for i, d in enumerate(deltas):
+        mid_t = 0.5 * (times[i] + times[i + 1])
+        mid_v = 0.5 * (values[i] + values[i + 1])
+        ax.annotate(
+            f"Δ = +{d}",
+            xy=(mid_t, mid_v),
+            xytext=(0, -22),
+            textcoords="offset points",
+            ha="center",
+            fontsize=10,
+            color="#55a868",
+        )
+    ax.axhline(5, color="#94a3b8", linestyle=":", linewidth=1, alpha=0.8)
+    ax.text(
+        46,
+        5.3,
+        "um scrape isolado = odômetro\n(não é velocímetro)",
+        fontsize=9,
+        color="#64748b",
+        va="bottom",
+        ha="right",
+    )
+    ax.set_xlabel("tempo do scrape (s)")
+    ax.set_ylabel("valor do contador")
+    ax.set_title("Contador em scrapes: absoluto 5 → 8 → 11 → 14; rate exige ≥ 2 pontos")
+    ax.set_ylim(0, 18)
+    ax.grid(True, alpha=0.3)
+    ax.text(
+        0.02,
+        0.98,
+        "rate ≈ Δ / Δt  (só após duas ou mais coletas)",
+        transform=ax.transAxes,
+        fontsize=9,
+        va="top",
+        color="#334155",
+        bbox=dict(boxstyle="round,pad=0.3", facecolor="#f1f5f9", edgecolor="#cbd5e1"),
+    )
+    fig.savefig(OUT / "05_counter_scrapes_odometer.png", dpi=160)
+    plt.close(fig)
+
+
+def _write_counter_reset_rate(plt, np) -> None:
+    """Reinício: subtração ingénua negativa vs trechos monótonos."""
+    times = np.array([0, 15, 30, 45, 60])
+    values = np.array([100, 115, 130, 2, 20])
+
+    fig, ax = plt.subplots(figsize=(10.5, 4.2), constrained_layout=True)
+    ax.plot(times[:3], values[:3], color="#4c72b0", linewidth=2, marker="o", zorder=3)
+    ax.plot(times[3:], values[3:], color="#4c72b0", linewidth=2, marker="o", zorder=3)
+    ax.plot(
+        [times[2], times[3]],
+        [values[2], values[3]],
+        color="#c44e52",
+        linewidth=2,
+        linestyle="--",
+        marker="o",
+        zorder=4,
+    )
+    ax.annotate(
+        "reinício\n(resets)",
+        xy=(37.5, 66),
+        xytext=(42, 90),
+        fontsize=10,
+        color="#c44e52",
+        arrowprops=dict(arrowstyle="->", color="#c44e52"),
+    )
+    ax.annotate(
+        "ingénuo: 20 − 100 = −80\n(absurdo)",
+        xy=(60, 20),
+        xytext=(48, 45),
+        fontsize=9,
+        color="#c44e52",
+        arrowprops=dict(arrowstyle="->", color="#c44e52", ls=":"),
+    )
+    ax.annotate(
+        "rate/increase:\n+30 + +18 = +48\n(só trechos ↑)",
+        xy=(15, 115),
+        xytext=(2, 145),
+        fontsize=9,
+        color="#55a868",
+        arrowprops=dict(arrowstyle="->", color="#55a868"),
+    )
+    ax.fill_between([0, 30], 0, 160, color="#dbeafe", alpha=0.35, label="trecho monótono 1")
+    ax.fill_between([45, 60], 0, 160, color="#dcfce7", alpha=0.35, label="trecho monótono 2")
+    ax.set_xlabel("tempo do scrape (s)")
+    ax.set_ylabel("valor do contador")
+    ax.set_title("Reinício do processo: odômetro zera; rate soma só os trechos monótonos")
+    ax.set_ylim(0, 160)
+    ax.grid(True, alpha=0.3)
+    ax.legend(loc="upper right", fontsize=9)
+    fig.savefig(OUT / "06_counter_reset_rate.png", dpi=160)
+    plt.close(fig)
+
+
+def _write_gauge_in_progress(plt, np) -> None:
+    """Gauge em voo: pico curto vs platô alto."""
+    times = np.array([0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120])
+    values = np.array([0, 1, 3, 1, 0, 0, 2, 5, 5, 5, 5, 4, 5])
+
+    fig, ax = plt.subplots(figsize=(10.5, 4.2), constrained_layout=True)
+    ax.plot(times, values, color="#7c3aed", linewidth=2, marker="o", markersize=6, zorder=3)
+    ax.fill_between(times, values, color="#ede9fe", alpha=0.5)
+    ax.annotate(
+        "pico curto\n(concorrência legítima)",
+        xy=(20, 3),
+        xytext=(5, 6.5),
+        fontsize=9,
+        color="#5b21b6",
+        arrowprops=dict(arrowstyle="->", color="#5b21b6"),
+    )
+    ax.axhspan(4.5, 5.5, xmin=0.52, xmax=0.92, facecolor="#fecaca", alpha=0.45, zorder=1)
+    ax.annotate(
+        "platô alto por minutos\n(saturação / travamento?)",
+        xy=(90, 5),
+        xytext=(70, 7.2),
+        fontsize=9,
+        color="#b91c1c",
+        arrowprops=dict(arrowstyle="->", color="#b91c1c"),
+    )
+    ax.set_xlabel("tempo (s)")
+    ax.set_ylabel("em voo agora (gauge)")
+    ax.set_title("Gauge bentoml_service_request_in_progress: sobe e desce de propósito")
+    ax.set_ylim(-0.3, 8.5)
+    ax.grid(True, alpha=0.3)
+    fig.savefig(OUT / "07_gauge_in_progress.png", dpi=160)
+    plt.close(fig)
+
+
+def _write_legacy_hist_figures(plt, np) -> None:
+    """Regenera 01–03 quando plotting/prom_* estão importáveis (aula 015 no path)."""
+    lesson_015 = ROOT.parent / "015_prometheus_histcdf_streamlit"
+    for path in (ROOT, lesson_015):
+        path_s = str(path)
+        if path_s not in sys.path:
+            sys.path.insert(0, path_s)
 
     from plotting import plot_histogram_cdf
     from prom_client import fetch_duration_buckets_from_fixture
     from prom_hist import payload_from_samples
     from promql_compare import compare_quantiles
 
-    OUT.mkdir(parents=True, exist_ok=True)
-    plt.rcParams.update(
-        {
-            "font.size": 11,
-            "axes.titlesize": 12,
-            "figure.facecolor": "white",
-            "axes.facecolor": "white",
-        }
-    )
-
-    # --- 1) Fluxo scrape → app ---
+    # --- 1) Fluxo scrape → buckets ---
     fig, ax = plt.subplots(figsize=(10.5, 3.2), constrained_layout=True)
     ax.set_xlim(0, 10)
     ax.set_ylim(0, 3)
@@ -39,7 +180,7 @@ def main() -> int:
     boxes = [
         (0.2, 1.0, 2.0, 1.2, "Bento raiz\n/metrics", "#dbeafe"),
         (2.6, 1.0, 2.0, 1.2, "Prometheus\nbuckets le", "#fef3c7"),
-        (5.0, 1.0, 2.2, 1.2, "App Streamlit\nfixture ou live", "#dcfce7"),
+        (5.0, 1.0, 2.2, 1.2, "Consulta\nfixture ou live", "#dcfce7"),
         (7.7, 1.0, 2.0, 1.2, "Tabela +\nhist/CDF +\nquantil", "#ede9fe"),
     ]
     for x, y, w, h, text, color in boxes:
@@ -56,7 +197,7 @@ def main() -> int:
             xytext=(x0, 1.6),
             arrowprops=dict(arrowstyle="->", color="#334155", lw=1.5),
         )
-    ax.set_title("Da latência observada ao gráfico no app")
+    ax.set_title("Da latência observada ao gráfico")
     fig.savefig(OUT / "01_scrape_to_buckets.png", dpi=160)
     plt.close(fig)
 
@@ -111,6 +252,31 @@ def main() -> int:
     )
     fig.savefig(OUT / "03_python_vs_promql_quantile.png", dpi=160)
     plt.close(fig)
+
+
+def main() -> int:
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    OUT.mkdir(parents=True, exist_ok=True)
+    plt.rcParams.update(
+        {
+            "font.size": 11,
+            "axes.titlesize": 12,
+            "figure.facecolor": "white",
+            "axes.facecolor": "white",
+        }
+    )
+
+    # --- 5–7) Contador / reinício / gauge (dados sintéticos da §1.2) ---
+    _write_counter_scrapes_odometer(plt, np)
+    _write_counter_reset_rate(plt, np)
+    _write_gauge_in_progress(plt, np)
+
+    try:
+        _write_legacy_hist_figures(plt, np)
+    except Exception as exc:  # noqa: BLE001 — regeneração opcional de 01–03
+        print(f"aviso: não regenerou 01–03 ({exc}); PNGs existentes preservados")
 
     print(f"wrote illustrations under {OUT}")
     return 0
