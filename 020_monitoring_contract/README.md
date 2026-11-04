@@ -36,6 +36,97 @@ Cada fim da trilha (saúde, drift, anomalia) recebe **uma** linha com esses
 quatro campos. «Muito alto» e «anormal» não bastam — o dono ficaria sem
 critério.
 
+## Campos *Ops* — de onde vêm os rótulos
+
+Desde o fim dos anos 2000 a indústria anexou o sufixo **Ops** a quase toda
+especialidade que precisa entregar e manter um artefato em produção. Os
+cinco rótulos abaixo **não** formam uma escada oficial; sobrepõem-se. Os
+quatro campos desta aula (sinal / limiar / ação / dono) são a gramática
+comum; *Ops* nomeia **quem** costuma falar cada idioma.
+
+| Rótulo | Objeto típico | Pergunta-mãe |
+| :--- | :--- | :--- |
+| **DevOps** | Serviço (código + infra) | O pipeline responde e se libera com segurança? |
+| **MLOps** | Modelo + dados + serving | O comportamento aprendido ainda merece confiança? |
+| **CVOps** | Pipeline de visão | O mundo visual mudou (anotação, GPU, drift de pixels)? |
+| **LLMOps** | Produto com modelo de linguagem | Prompt, contexto, custo e qualidade ainda cabem no contrato? |
+| **AIOps** | Telemetria da operação de TI | Dá para correlacionar e priorizar o dilúvio de alertas? |
+
+### DevOps (c. 2007–2009 → )
+
+Patrick Debois e Andrew Shafer discutem *Agile Infrastructure* (2008). Em
+2009, no O’Reilly Velocity, John Allspaw e Paul Hammond (Flickr) apresentam
+[«10+ Deploys Per Day»](https://www.youtube.com/watch?v=LdOe18KhtT4);
+Debois organiza o primeiro
+[devopsdays](https://devopsdays.org/)
+em Ghent. Relatos:
+[Origins of DevOps](https://devops.com/the-origins-of-devops-whats-in-a-name/),
+[Convergence of DevOps](https://itrevolution.com/articles/the-convergence-of-devops/).
+Não é um produto: é liberar software com frequência, com observação e
+dono compartilhado. Nesta trilha = **saúde do pipeline**
+([`003`](../003_ks_drift_alert_streamlit/README.md) / [`008`](../008_psi_drift_alert_streamlit/README.md)
+§ DevOps;
+[`010`](../010_prometheus_promql/README.md),
+[`016`](../016_grafana_dashboards/README.md)).
+
+### MLOps (débito técnico 2015 → termo c. 2017–2018 → )
+
+Sculley et al.,
+[«Hidden Technical Debt in Machine Learning Systems»](https://proceedings.neurips.cc/paper_files/paper/2015/file/86df7dcfd896fcaf2674f757a2463eba-Paper.pdf)
+(NeurIPS 2015), descrevem o custo fora do retângulo do «modelo». O léxico
+**MLOps** espalha-se depois; síntese:
+[Kreuzberger et al., IEEE Access 2023](https://ieeexplore.ieee.org/document/10069172),
+[NVIDIA — MLOps](https://www.nvidia.com/en-us/glossary/mlops/).
+O paper de 2015 descreve a dívida; **não** batiza o campo
+([Last Dictionary](https://lastdictionary.com/mlops)).
+Nesta trilha = título da
+[`000`](../000_mlops_pipelines_goals/README.md)
+e os fins **drift** / **anomalia**
+([`003`](../003_ks_drift_alert_streamlit/README.md)–[`006`](../006_ks_mixed_landscape_streamlit/README.md),
+[`008`](../008_psi_drift_alert_streamlit/README.md),
+[`004`](../004_ks_anomaly_detection_streamlit/README.md),
+[`011`](../011_corpus_histograms_model/README.md)–[`014`](../014_ks_production_vs_corpus/README.md)).
+
+### CVOps (final dos anos 2010 → )
+
+Rótulo de mercado para «MLOps quando o dado é imagem/vídeo»: arquivos
+grandes, anotação, GPU, drift visual —
+[Picsellia](https://www.picsellia.com/post/how-to-apply-mlops-to-computer-vision-cvops),
+[Xailient](https://xailient.com/blog/xailient-created-cvops-for-edge-computer-vision-at-scale/).
+Este curso **é** laboratório de visão (grayscale, L, beaches/forests), mas
+o handout quase não escreve «CVOps»: o conteúdo fica sob MLOps + DevOps,
+com o contrato preenchível.
+
+### LLMOps (c. 2022–2024 → )
+
+Operação de produtos com modelos de linguagem (prompt, contexto, custo,
+avaliação) —
+[NVIDIA — LLMOps](https://developer.nvidia.com/blog/mastering-llm-techniques-llmops/).
+**Fora de escopo** desta trilha: não há pasta `NNN_*` de prompt/RAG/LLM.
+
+### AIOps (Gartner, 2017 → )
+
+Plataformas de *algorithmic IT operations* sobre telemetria de TI —
+[comunicado Gartner (2017-04-11)](https://www.gartner.com/en/newsroom/press-releases/2017-04-11-gartner-says-algorithmic-it-operations-drives-digital-business);
+contraste com MLOps:
+[Opensource.com](https://opensource.com/article/21/2/aiops-vs-mlops).
+Nesta trilha há só **eco** didático (aula
+[`004`](../004_ks_anomaly_detection_streamlit/README.md),
+alertas Prometheus): não há correlacionador multi-fonte nem plataforma
+AIOps.
+
+### Como o contrato corta o mapa
+
+| Linha do contrato | Eco *Ops* | Fonte típica |
+| :--- | :--- | :--- |
+| Saúde | DevOps (+ SRE/Prometheus) | `010`, `021`, `022` |
+| Drift | MLOps (CVOps implícito) | `003`, `008`, `014` |
+| Anomalia | MLOps; eco fraco de AIOps | `004` |
+| Lacunas | Honestidade operacional | lab SKIP, sinal não visto |
+
+A parábola do p95 `firing` com HTTP 200 e do lote KS/PSI com serviço ainda
+convertendo é a fronteira DevOps × MLOps/CVOps.
+
 ## Escopo Negativo
 
 | Isto **não** é o contrato | Por quê |
@@ -45,6 +136,7 @@ critério.
 | Preencher formulário sem sinal praticado | Inventar limiar elegante sem ter visto o gráfico ou o painel |
 | Subir Container, Prometheus ou Grafana nesta pasta | Exercício só textual; portas e Scrape ficam nas aulas que os operam |
 | Cumprir «cinco hábitos» genéricos | O critério de saída é o artefato preenchido, não um sermão |
+| Memorizar a cronologia *Ops* | História contextualiza; o critério Sim/Não é o artefato |
 
 ## Como proceder
 
@@ -125,10 +217,18 @@ Use estes textos ao preencher o contrato (links auditados em 2026-11-04):
   <https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/>
 - **B10** — Datadog, *Monitoring 101: Alerting* —
   <https://www.datadoghq.com/blog/monitoring-101-alerting/>
-
-Cronologia e mapa DevOps / MLOps / CVOps / LLMOps / AIOps (leitura
-opcional, fora do checklist Sim/Não):
-[`CAMPOS_OPS.md`](CAMPOS_OPS.md).
+- Allspaw & Hammond (Velocity 2009) —
+  <https://www.youtube.com/watch?v=LdOe18KhtT4>
+- Sculley et al. (2015) —
+  <https://proceedings.neurips.cc/paper_files/paper/2015/file/86df7dcfd896fcaf2674f757a2463eba-Paper.pdf>
+- Gartner AIOps (2017) —
+  <https://www.gartner.com/en/newsroom/press-releases/2017-04-11-gartner-says-algorithmic-it-operations-drives-digital-business>
+- Kreuzberger et al. (2023) —
+  <https://ieeexplore.ieee.org/document/10069172>
+- NVIDIA LLMOps —
+  <https://developer.nvidia.com/blog/mastering-llm-techniques-llmops/>
+- Picsellia CVOps —
+  <https://www.picsellia.com/post/how-to-apply-mlops-to-computer-vision-cvops>
 
 ## Roteiro
 

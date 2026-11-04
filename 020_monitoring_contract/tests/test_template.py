@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 README = (ROOT / "README.md").read_text(encoding="utf-8")
 TEMPLATE = (ROOT / "CONTRACT_TEMPLATE.md").read_text(encoding="utf-8")
-CAMPOS_OPS = (ROOT / "CAMPOS_OPS.md").read_text(encoding="utf-8")
 
 PRIMARY_BIB_URLS = (
     "https://sre.google/sre-book/monitoring-distributed-systems/",
@@ -81,17 +81,16 @@ def test_readme_no_bloom_taxonomy() -> None:
         assert label not in README, f"Bloom label leaked into student README: {label}"
 
 
-def test_campos_ops_companion_linked() -> None:
-    assert "CAMPOS_OPS.md" in README
+def test_ops_fields_integrated_in_readme() -> None:
+    assert "Campos *Ops*" in README or "Campos Ops" in README
     for label in ("DevOps", "MLOps", "CVOps", "LLMOps", "AIOps"):
-        assert label in CAMPOS_OPS
-    assert "Planos e lacunas" in CAMPOS_OPS
+        assert label in README
+    assert "CAMPOS_OPS.md" not in README
+    assert not (ROOT / "CAMPOS_OPS.md").exists()
 
 
 def test_no_fecho_vocabulary() -> None:
     """«fecho» is not in the course shared vocabulary (pt_BR)."""
-    import re
-
-    for name, text in (("README", README), ("CAMPOS_OPS", CAMPOS_OPS), ("TEMPLATE", TEMPLATE)):
+    for name, text in (("README", README), ("TEMPLATE", TEMPLATE)):
         hits = re.findall(r"(?i)\bfecho\b", text)
         assert not hits, f"{name} still uses fecho: {hits}"
