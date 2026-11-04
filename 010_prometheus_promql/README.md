@@ -26,7 +26,9 @@ expressão `histogram_quantile` e a interpretação de regras de linha de base.
 usar PromQL (taxa, buckets, `histogram_quantile`, linha de base) na UI do
 Prometheus.
 
-Este documento espera os seguintes processos no host (mapa completo em
+## Portas que esta aula espera no Host
+
+Este documento espera os seguintes processos no Host (mapa completo em
 [`docs/ports.md`](../docs/ports.md)):
 
 | Papel | Onde escuta | URL típica |
@@ -117,48 +119,81 @@ target cai para `0` e as demais séries deixam de receber amostras novas.
 Um **contador** representa uma quantidade acumulada que, em operação normal,
 só cresce (ou permanece constante). Exemplos: total de requisições, total de
 bytes enviados, total de erros. Quando o processo reinicia, o contador volta
-a um valor baixo (em geral zero). O PromQL oferece `rate`, `increase` e
-`resets` precisamente porque o valor absoluto isolado não conta a história:
-importa a **derivada** ao longo do tempo, corrigida para reinícios.
+a um valor baixo (em geral zero). No exemplo da captura,
+`bentoml_service_request_total` para `/inference-grayscale` com código HTTP
+200 vale **5**. Isso significa cinco requisições bem-sucedidas contadas desde
+o início do processo (ou desde o último reset da série), e não “cinco por
+segundo”. A taxa (`rate`) só aparece depois de duas ou mais coletas espaçadas
+no tempo.
+
+Há de se tratar o número isolado na página `/metrics` como fotografia de um
+odômetro, não como velocímetro. Cinco é o acumulado até aquele scrape; o que
+interessa à operação — pedidos por segundo, erro relativo, volume na janela —
+só se reconstitui pela diferença entre fotografias sucessivas. Cumpre
+observar, outrossim, que um reinício do processo “zera o odômetro”: a série
+desce de golpe e uma subtração ingênua entre amostras vizinhas produziria
+taxa negativa, absurda. O PromQL oferece precisamente `rate`, `increase` e
+`resets` porque o valor absoluto isolado não conta a história: importa a
+derivada ao longo do tempo, corrigida para reinícios. Na prática, você há de
+verificar a si mesmo: se só há um ponto na série, ainda não há taxa
+legítima; se houve queda abrupta do contador, procure `resets` antes de
+confiar no gráfico.
 
 Um **gauge** representa um nível que sobe e desce: requisições em andamento,
-temperatura, uso de memória, último timestamp de evento. Não se aplica `rate`
-da mesma forma que a um contador; faz-se sentido falar em valor atual,
-média temporal (`avg_over_time`) ou variação (`delta`) conforme o caso.
-
-No exemplo da captura, `bentoml_service_request_total` para
-`/inference-grayscale` com código 200 vale **5**. Isso significa “cinco
-requisições bem-sucedidas contadas desde o início do processo (ou desde o
-último reset da série)”, não “cinco requisições por segundo”. A taxa só
-aparece depois de duas ou mais coletas espaçadas no tempo.
-
-`bentoml_service_request_in_progress` é gauge: zero na captura indica que,
+temperatura, uso de memória, último timestamp de evento.
+`bentoml_service_request_in_progress` é gauge; zero na captura indica que,
 naquele instante, nenhuma RPC daquele endpoint estava em voo. Um gauge
 travado em valor alto por minutos sugere saturação ou travamento; um pico
 curto pode ser apenas concorrência legítima.
 
+Não se aplica `rate` da mesma forma que a um contador. O `rate` do PromQL
+pressupõe monotonia (acúmulo que só cresce, com correção de reinício); um
+nível que oscila sobe e desce de propósito, e tratar essa oscilação como
+“taxa de eventos” costuma distorcer o sinal — picos legítimos viram artefato,
+e o valor médio da “taxa” deixa de corresponder a throughput. Faz-se sentido,
+conforme o caso, falar em valor atual (quantos estão em voo agora?), em média
+temporal (`avg_over_time`) quando se deseja suavizar ruído de amostragem ao
+longo de uma janela, ou em variação (`delta`) quando a pergunta é “quanto o
+nível mudou entre o início e o fim do intervalo”. Cumpre observar o
+autoexame: se a métrica sobe e desce no texto de `/metrics` entre scrapes sem
+reinício do processo, trate-a como gauge; reserve `rate`/`increase` aos
+counters (e aos `_bucket`/`_count` do histograma, que também são contadores
+cumulativos).
+
 ### 1.3 Histogramas: sum, count e buckets com `le`
 
-O tipo `histogram` no formato de exposição não é uma única série. O
-instrumentador emite:
+O tipo `histogram` no formato de exposição **não** é uma única série. O
+instrumentador emite uma família coerente:
 
 - `nome_bucket{le="…"}` — contadores cumulativos por limite superior;
 - `nome_sum` — soma das observações (durações, tamanhos, …);
-- `nome_count` — número de observações (equivalente, em geral, ao bucket
-  `le="+Inf"`).
+- `nome_count` — número de observações.
 
-O label `le` (*less than or equal*) é o limite superior cumulativo do bucket.
-Na captura real, `…_duration_seconds_bucket` usa `le` de `0.005` até `+Inf`.
-Uma observação de 0,04 s incrementa todos os buckets cujo `le` é ≥ 0,04 s.
-Por isso a sequência de valores ao longo de `le` crescente é **não
-decrescente**. Se você encontrar um `le` maior com contagem menor que um `le`
-menor (mesmo conjunto de labels restantes), há inconsistência de exposição ou
-de agregação.
+O label `le` (*less than or equal*) é o limite superior cumulativo do bucket:
+a amostra em `le="0.05"` conta todas as observações cujo valor foi ≤ 0,05 s
+(e assim por diante). Na captura real, `…_duration_seconds_bucket` usa `le`
+de `0.005` até `+Inf`. Uma observação de 0,04 s incrementa **todos** os
+buckets cujo `le` é ≥ 0,04 s — tipicamente `0.05`, `0.075`, …, `+Inf` —, e
+**não** incrementa os de `le` estritamente menor (por exemplo `0.005`,
+`0.01`, `0.025`). Por isso a sequência de valores ao longo de `le` crescente
+é **não decrescente**. Se você encontrar um `le` maior com contagem menor
+que um `le` menor (mesmo conjunto de labels restantes), há inconsistência de
+exposição ou de agregação — sinal de que a leitura ou a soma por labels
+quebrou o contrato cumulativo.
 
-Nos histogramas de duração, o label `le` (*less than or equal*) é o limite
-superior cumulativo do bucket. No exemplo, `bentoml_service_request_total`
-para `/inference-grayscale` com código 200 vale **5**; os buckets
-`…_duration_seconds_bucket` usam `le` de `0.005` até `+Inf`.
+`nome_sum` e `nome_count` fecham o quadro: a média aritmética das observações
+é `sum / count` (quando `count > 0`). Em exposição correta, `nome_count`
+coincide, em geral, com o bucket `le="+Inf"`, pois todo valor finito é ≤
+infinito. Há de se checar isso na fixture: se `_count` e o bucket `+Inf`
+divergirem sob os mesmos labels, a família do histograma está corrompida ou
+mal agregada. Mais adiante, essa mesma escada cumulativa de buckets servirá
+para reconstruir a CDF e estimar o p95; por ora, basta fixar a geometria —
+família `_bucket`/`_sum`/`_count`, monotonia em `le`, e a distinção entre
+“quantas observações caíram até este limiar” e o contador de requisições
+HTTP, que é outra métrica.
+
+Os nomes típicos desta aula (counter, gauge, buckets, `count`, `sum`, `up`)
+aparecem na tabela abaixo.
 
 | Métrica típica | Tipo |
 | :--- | :--- |
@@ -1125,6 +1160,18 @@ Fim do handout da aula 010. O domínio dos buckets no papel e do
 `histogram_quantile` na UI é o pré-requisito conceitual para painéis
 (aulas 015 e 016) e para discutir SLOs com números que o time consiga
 recalcular.
+
+
+## Conclusão (autoavaliação)
+
+Marque **Sim** ou **Não** sozinho.
+
+| Verificação | Sim / Não |
+| :--- | :---: |
+| `up{job="bentoml-imagens"}` (ou o job da demo) devolve `1` na UI Prometheus desta aula | |
+| Uma consulta `rate(...)` por `endpoint` devolve série(s) | |
+| `histogram_quantile` (p95) devolve valor numérico ou NaN explicável | |
+| Consigo ver `pending` ou `firing` (ou ausência) para o alerta documentado | |
 
 ## Roteiro da trilha
 
