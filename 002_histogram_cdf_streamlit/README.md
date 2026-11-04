@@ -130,12 +130,7 @@ pontos da CDF.
 
 ## Roteiro da trilha
 
-Ordem de estudo em quatro atos: ver
-[`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md).
-Depois do vocabulário, a ponte é entregar o runtime (BentoML / imagem OCI);
-em seguida o Ato I cobre a **saúde** do servidor — não o alerta KS da `003`.
-
 | | Pasta |
 | :--- | :--- |
 | **Anterior** | [`001_histogram_cdf_cli`](../001_histogram_cdf_cli/README.md) |
-| **Seguinte** | [`009_bentoml_oci_runtime`](../009_bentoml_oci_runtime/README.md) (ponte BentoML → OCI); depois [`010_prometheus_promql`](../010_prometheus_promql/README.md) |
+| **Seguinte** | [`009_bentoml_oci_runtime`](../009_bentoml_oci_runtime/README.md) |

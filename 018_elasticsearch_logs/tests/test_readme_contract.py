@@ -21,9 +21,16 @@ REQUIRED_FIGS = (
 
 def test_ports_and_prereqs() -> None:
     assert "9200" in README
-    assert "019_loki_grafana_logs" in README
     assert "_bulk" in README
     assert "_search" in README
+
+
+def test_self_contained_concept() -> None:
+    assert "**Conceito desta aula:**" in README
+    prereq = README.split("## Pré-requisitos", 1)[1].split("## ", 1)[0]
+    assert "conclua" not in prereq.lower()
+    assert "019_loki_grafana_logs" not in prereq
+    assert "012_grayscale" not in prereq
 
 
 def test_comparisons() -> None:

@@ -4,13 +4,13 @@ Uma API pode responder HTTP 200 enquanto seus usuários esperam cada vez mais.
 Para investigar essa situação, precisamos saber **o que foi medido, em qual
 período e como a consulta transformou as medidas**.
 
-Pré-requisito: conclua a [aula 010](../010_prometheus_promql/README.md)
-(`/metrics` + PromQL na UI do Prometheus) e, se ainda não o fez, o
-[tutorial de instalação](../docs/prometheus.md).
+**Conceito desta aula:** o mesmo histograma de latência pode ser lido como
+barras, como CDF e como quantil — e a conta em Python deve bater com o
+PromQL sobre os **mesmos** buckets.
 
-Nesta aula você usa um **painel Streamlit** para ver histograma, CDF e a
-comparação Python ↔ PromQL sobre os mesmos buckets — reforço visual do que a
-010 já pediu no papel e na UI do Prometheus.
+Pré-requisitos de ambiente: texto `/metrics` (BentoML **3000** ou demo) e
+Prometheus com PromQL ([tutorial](../docs/prometheus.md)). Não é obrigatório
+ter concluído outro handout numerado.
 
 ## Sumário
 

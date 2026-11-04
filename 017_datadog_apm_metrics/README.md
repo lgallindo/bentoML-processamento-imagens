@@ -1,35 +1,40 @@
 # Aula 017 — Datadog: o mesmo serviço, outro dialecto
 
-Até aqui a trilha de saúde foi **local e OSS**: `/metrics` → Prometheus →
-Grafana (`010`/`016`), depois logs Loki (`019`) e documentos Elasticsearch
-(`018`). O Datadog entra como **vendor SaaS** que observa o *mesmo* BentoML —
-sem substituir o trio canónico **3000 / 9090 / 4000**.
+**Conceito desta aula:** o mesmo endpoint BentoML pode ser observado por um
+*vendor* SaaS. Labels Prometheus e **tags** Datadog são a mesma ideia de
+dimensão com outro dialecto; o lab OpenMetrics é **opcional** e obedece a
+DEGRADE-001 (sem chave, salta-se o SaaS sem partir o resto do curso).
+
+O trio canónico **3000 / 9090 / 4000** não é substituído: o Agent (quando
+houver chave) raspa `http://127.0.0.1:3000/metrics` em paralelo.
 
 ![Pipeline conceptual](illustrations/00_pipeline_datadog.png)
 
 Esta aula é deliberadamente **dual**:
 
-1. **Pedagogia sempre disponível** — labels vs tags, contraste com Prom/Loki/ES,
-   esquema de dashboard.
+1. **Pedagogia sempre disponível** — labels vs tags, contraste com stack
+   local, esquema de dashboard.
 2. **Lab SaaS opcional** — só corre se existir `DD_API_KEY` no ambiente local
-   (**nunca** no Git). Sem chave, **salta-se** o lab (DEGRADE-001); as aulas
-   anteriores continuam válidas.
+   (**nunca** no Git). Sem chave, **salta-se** o lab (DEGRADE-001).
 
 Portas auxiliares do agent (quando o lab correr): **8125** (DogStatsD),
 **8126** (APM) — [`docs/ports.md`](../docs/ports.md).
 
 ## Objectivos
 
-- Explicar **label Prometheus** ↔ **tag Datadog**.
+- Explicar **label** (Prometheus / OpenMetrics) ↔ **tag** (Datadog).
 - Descrever (e, se houver chave, executar) um caminho OpenMetrics contra
   `http://127.0.0.1:3000/metrics`.
-- Redigir o contraste: o que o Prometheus local ainda faz melhor nesta trilha.
+- Redigir o contraste: o que um Prometheus local ainda faz melhor no
+  laboratório.
 - Aplicar DEGRADE-001 sem inventar híbridos partidos.
 
 ## Pré-requisitos
 
-1. [`010`](../010_prometheus_promql/README.md) (e de preferência `016`).
-2. BentoML a expor `/metrics` na **3000** (contrato do curso).
+1. BentoML (ou outro processo) a expor texto OpenMetrics / Prometheus em
+   `http://127.0.0.1:3000/metrics`.
+2. Noção de que uma série tem **nome + dimensões** (chame-lhes labels ou
+   tags — a aula fixa o vocabulário).
 3. Para o lab SaaS: conta trial + `DD_API_KEY` só em `.env` local / shell
    (ficheiros `.env` **não** entram no commit).
 
@@ -58,7 +63,7 @@ python3 scripts/check_datadog_gate.py
 
 ![Tabela label ↔ tag](illustrations/08_labels_vs_tags.png)
 
-No Prometheus você escreveu:
+No dialecto Prometheus / OpenMetrics escreve-se tipicamente:
 
 ~~~promql
 sum by (endpoint) (rate(bentoml_service_request_total{job="bentoml-imagens"}[1m]))
@@ -70,7 +75,8 @@ corte) é a mesma; a sintaxe e o armazenamento não.
 
 ## 3. Caminho OpenMetrics (lab RUN)
 
-Preferência desta trilha: o Agent raspa o texto que a `010` já ensinou a ler.
+O Agent raspa o **mesmo** texto que um scrape Prometheus leria em
+`:3000/metrics`.
 
 1. Instale o [Datadog Agent](https://docs.datadoghq.com/agent/) no lab.
 2. Configure um check OpenMetrics apontando a
@@ -94,17 +100,18 @@ bloqueiam o critério mínimo OpenMetrics.
 
 ## 4. O que o Prometheus local ainda faz melhor
 
-Traga para o relatório **pelo menos duas** vantagens da trilha OSS, por
+Traga para o relatório **pelo menos duas** vantagens do stack local, por
 exemplo:
 
 - contrato de portas e scrape **reproduzível** sem conta;
 - recording rules + alertas versionados em
   [`monitoring/bentoml.rules.yml`](../monitoring/bentoml.rules.yml);
-- correlação Grafana↔Loki (`019`) sem sair do stack local;
-- custo zero de vendor no laboratório da disciplina.
+- correlação métricas↔logs num Grafana local sem sair do laboratório;
+- custo zero de vendor na disciplina.
 
 O Datadog brilha quando a organização já padronizou tags, monitors e APM num
-único SaaS — isso é contexto industrial, não substituição silenciosa da `010`.
+único SaaS — contexto industrial, não substituição silenciosa do Prometheus
+local.
 
 ## 5. Exercício e entrega
 
@@ -146,4 +153,4 @@ python3 scripts/check_datadog_gate.py
 | | Pasta |
 | :--- | :--- |
 | **Anterior** | [`018_elasticsearch_logs`](../018_elasticsearch_logs/README.md) |
-| **Seguinte** | Ato II — [`011_corpus_histograms_model`](../011_corpus_histograms_model/README.md) |
+| **Seguinte** | [`011_corpus_histograms_model`](../011_corpus_histograms_model/README.md) |

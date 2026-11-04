@@ -24,8 +24,15 @@ def test_ports_and_prereqs() -> None:
     assert "8125" in README
     assert "8126" in README
     assert "3000" in README
-    assert "010_prometheus_promql" in README or "`010`" in README
     assert "OpenMetrics" in README
+
+
+def test_self_contained_concept() -> None:
+    assert "**Conceito desta aula:**" in README
+    prereq = README.split("## Pré-requisitos", 1)[1].split("## ", 1)[0]
+    assert "conclua" not in prereq.lower()
+    assert "010_prometheus_promql" not in prereq
+    assert "`010`" not in prereq
 
 
 def test_degrade001_documented() -> None:
@@ -39,7 +46,6 @@ def test_comparisons() -> None:
     assert "Prometheus" in README
     assert "label" in README.lower()
     assert "tag" in README.lower()
-    assert "Loki" in README or "016" in README
 
 
 def test_never_commit_api_key_instruction() -> None:

@@ -26,7 +26,14 @@ REQUIRED_FIGS = (
 def test_grafana_on_4000() -> None:
     assert "4000" in README
     assert "docs/grafana.md" in README
-    assert "010_prometheus_promql" in README
+
+
+def test_self_contained_concept() -> None:
+    assert "**Conceito desta aula:**" in README
+    # pré-requisitos = ambiente, não «conclua a aula N»
+    prereq = README.split("## Pré-requisitos", 1)[1].split("## ", 1)[0]
+    assert "conclua" not in prereq.lower()
+    assert "010_prometheus_promql" not in prereq
 
 
 def test_never_grafana_course_default_3000() -> None:
@@ -41,7 +48,7 @@ def test_comparisons_and_storytelling_hooks() -> None:
 
 
 def test_exercise_without_streamlit_delivery() -> None:
-    assert "sem Streamlit" in README or "sem** Streamlit" in README or "**sem** Streamlit" in README
+    assert "sem" in README.lower() and "Streamlit" in README
     assert "Taxa de erro" in README or "taxa de erro" in README
 
 

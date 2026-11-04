@@ -361,9 +361,6 @@ just test
 
 ## Roteiro da trilha
 
-Ordem de estudo em quatro atos: ver
-[`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md).
-
 | | Pasta |
 | :--- | :--- |
 | **Anterior** | [`005_ks_input_output_streamlit`](../005_ks_input_output_streamlit/README.md) |

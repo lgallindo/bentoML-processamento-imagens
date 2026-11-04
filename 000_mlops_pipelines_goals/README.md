@@ -238,5 +238,9 @@ citando as aulas já cursadas.
 
 ---
 
-Próximo passo:
-[`001_histogram_cdf_cli`](../001_histogram_cdf_cli/README.md).
+## Roteiro da trilha
+
+| | Pasta |
+| :--- | :--- |
+| **Anterior** | — |
+| **Seguinte** | [`001_histogram_cdf_cli`](../001_histogram_cdf_cli/README.md) |

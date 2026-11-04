@@ -277,9 +277,6 @@ Funções em `histcdf.py`: `histogram_from_values`, `cdf_from_counts`,
 
 ## Roteiro da trilha
 
-Ordem de estudo em quatro atos: ver
-[`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md).
-
 | | Pasta |
 | :--- | :--- |
 | **Anterior** | [`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md) |

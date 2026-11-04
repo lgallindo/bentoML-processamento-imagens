@@ -755,12 +755,7 @@ python scripts/workflow_boxes/box_01_massas.py
 
 ## Roteiro da trilha
 
-Ordem de estudo em quatro atos: ver
-[`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md).
-Esta pasta encerra o Ato III: mesma parábola da `003`, outro instrumento (PSI).
-
 | | Pasta |
 | :--- | :--- |
 | **Anterior** | [`006_ks_mixed_landscape_streamlit`](../006_ks_mixed_landscape_streamlit/README.md) |
-| **Seguinte** | [`020_monitoring_contract`](../020_monitoring_contract/README.md) (fecho; releia os três fins em [`000`](../000_mlops_pipelines_goals/README.md)) |
-| Irmã (KS) | [`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md) |
+| **Seguinte** | [`020_monitoring_contract`](../020_monitoring_contract/README.md) |

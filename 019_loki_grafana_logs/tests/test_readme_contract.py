@@ -24,14 +24,21 @@ REQUIRED_FIGS = (
 def test_ports_and_prereqs() -> None:
     assert "3100" in README
     assert "4000" in README
-    assert "016_grafana_dashboards" in README
     assert "LogQL" in README
+
+
+def test_self_contained_concept() -> None:
+    assert "**Conceito desta aula:**" in README
+    prereq = README.split("## Pré-requisitos", 1)[1].split("## ", 1)[0]
+    assert "conclua" not in prereq.lower()
+    assert "016_grafana_dashboards" not in prereq
+    assert "012_grayscale" not in prereq
 
 
 def test_comparisons() -> None:
     assert "Prometheus" in README
     assert "Elasticsearch" in README
-    assert "Datadog" in README
+    assert "SaaS" in README or "Datadog" in README
 
 
 def test_never_grafana_on_3000_as_course_url() -> None:

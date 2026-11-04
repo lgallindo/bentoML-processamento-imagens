@@ -219,11 +219,7 @@ de alerta e mostra quando os dois lados divergem.
 
 ## Roteiro da trilha
 
-Ordem de estudo em quatro atos: ver
-[`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md).
-
 | | Pasta |
 | :--- | :--- |
 | **Anterior** | [`004_ks_anomaly_detection_streamlit`](../004_ks_anomaly_detection_streamlit/README.md) |
 | **Seguinte** | [`006_ks_mixed_landscape_streamlit`](../006_ks_mixed_landscape_streamlit/README.md) |
-| Âncora KS | [`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md) |

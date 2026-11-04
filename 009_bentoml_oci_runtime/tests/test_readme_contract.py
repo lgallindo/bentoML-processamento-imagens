@@ -14,10 +14,15 @@ def test_ports_and_metrics() -> None:
     assert "OCI" in README or "oci" in README.lower()
 
 
-def test_build_and_next_lesson() -> None:
+def test_build_and_roteiro_neighbors() -> None:
     assert "bentoml build" in README or "just build" in README
+    assert "**Conceito desta aula:**" in README
+    # navegação apenas — não pré-requisito pedagógico
     assert "010_prometheus_promql" in README
     assert "002_histogram_cdf_streamlit" in README
+    prereq = README.split("## Pré-requisitos", 1)[1].split("## ", 1)[0]
+    assert "010_prometheus_promql" not in prereq
+    assert "002_histogram_cdf_streamlit" not in prereq
 
 
 def test_no_grafana_on_3000_as_course_url() -> None:

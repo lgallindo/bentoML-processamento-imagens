@@ -1,35 +1,31 @@
 # Aula 018 — Elasticsearch: logs de pedido como documentos
 
-Na [aula 019](../019_loki_grafana_logs/README.md) o Loki responde «quais
-**linhas** caíram na janela do pico?». O Elasticsearch responde a uma
-pergunta vizinha com outro aparelho: «quais **documentos** batem neste
-filtro — e como se agregam?»
-
-Aqui o eixo continua a ser **logs**, não métricas Prometheus. Indexamos o
-mesmo género de JSONL da `012` / fixture da `019`, consultamos com `_search`
-(estilo Dev Tools) e contrastamos com Loki e com o futuro vendor Datadog
-(`017`).
+**Conceito desta aula:** um *índice* Elasticsearch trata cada linha de log
+como **documento** tipado. Pergunta típica: «quais documentos batem neste
+filtro — e como se agregam?» — respondida com `_bulk`, `_search` e
+agregações, não com séries Prometheus.
 
 ![Pipeline JSONL → _bulk → _search](illustrations/00_pipeline_es.png)
 
 Portas: Elasticsearch auxiliar **9200** — [`docs/ports.md`](../docs/ports.md).
 Esta aula **não** exige Kibana (o harness evita a imagem por espaço em disco);
-a UI oficial Dev Tools / Discover segue a mesma DSL.
+a DSL é a mesma que Dev Tools / Discover usariam.
 
 ## Objectivos
 
 - Indexar N documentos via `_bulk` a partir de um JSONL.
 - Filtrar por `phase` / `endpoint` e agregar contagens.
-- Explicar ES ≠ Prometheus (eventos vs séries) e ES ≠ Loki (documento vs linha).
-- Entregar três queries interpretadas — **sem** misturar APM Datadog.
+- Explicar ES ≠ Prometheus (eventos vs séries) e ES ≠ Loki (documento
+  tipado vs linha com labels).
+- Entregar três queries interpretadas — sem misturar APM de vendor.
 
 ## Pré-requisitos
 
-1. Noção de log de pedido ([`012`](../012_grayscale_request_logging/README.md)).
-2. Preferível: [`019`](../019_loki_grafana_logs/README.md) (mesmo fixture mental).
-3. Docker com `elasticsearch:8.x` **ou** cluster local em `:9200`.
+1. Docker com `elasticsearch:8.x` **ou** cluster local em `:9200`.
+2. Familiaridade mínima com JSON (um objecto por linha no fixture).
+3. Disco livre suficiente para a imagem (~heap 512 MiB no lab).
 
-## 1. Onde o ES se senta na trilha
+## 1. Onde o Elasticsearch se encaixa
 
 ![Papéis](illustrations/08_roles_comparison.png)
 
@@ -38,10 +34,10 @@ a UI oficial Dev Tools / Discover segue a mesma DSL.
 | Prometheus | Séries | Taxa, p95, alertas |
 | Loki | Linhas + labels | Barato junto ao Grafana |
 | **Elasticsearch** | Documentos + mapping | Filtros, full-text, aggs |
-| Datadog | SaaS misto | Um painel vendor |
+| Vendor SaaS | Misto na nuvem | Um painel comercial |
 
 > Não reimplemente `histogram_quantile` no ES nesta aula. Se a pergunta é
-> «quanto?», volte à `010`/`016`.
+> «quanto?» em séries temporais, use Prometheus — não este índice.
 
 ## 2. Fixture JSONL
 
@@ -52,7 +48,9 @@ python3 fixtures/generate_sample_log.py
 
 ![Amostra JSONL](illustrations/09_jsonl_sample.png)
 
-O bloco `phase=slow` (índices 20–24) é o mesmo pico didáctico da 019.
+Cada linha tem `logged_at`, `endpoint`, `latency_ms`, `phase`
+(`stable` / `slow`) e `message`. O bloco `phase=slow` (índices 20–24) é o
+pico didáctico desta pasta.
 
 ## 3. Suba o Elasticsearch e faça o bulk
 
@@ -113,10 +111,10 @@ Fixtures gravadas pelo harness:
 
 | Versus | ES ganha | ES perde / custa |
 | :--- | :--- | :--- |
-| `grep` no disco (`012`) | Filtro + agg sem varrer à mão | Precisa de processo ES |
-| Loki (`019`) | Mapping tipado, aggs ricas | Mais RAM; fora do Grafana por omissão |
+| `grep` no disco | Filtro + agg sem varrer à mão | Precisa de processo ES |
+| Loki | Mapping tipado, aggs ricas | Mais RAM; fora do Grafana por omissão |
 | Prometheus | Eventos textuais/estruturados | Não substitui p95 |
-| Datadog (`017`) | Local, sem conta | Sem APM vendor |
+| Datadog (SaaS) | Local, sem conta | Sem APM comercial |
 
 ## 6. Exercício e entrega
 
@@ -145,7 +143,8 @@ bash scripts/capture_screenshots.sh
 
 - [ ] Índice populado; health verde/amarelo aceitável no lab.
 - [ ] Três queries no relato.
-- [ ] Contraste explícito com Prometheus e com Loki.
+- [ ] Contraste explícito com Prometheus e com Loki (conceitos, não
+      «ter feito» outras pastas).
 - [ ] Sem misturar lab Datadog nesta pasta.
 
 ## Roteiro

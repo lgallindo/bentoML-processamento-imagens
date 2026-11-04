@@ -30,4 +30,4 @@ Cópia preenchida do modelo (Markdown). Rubrica mínima:
 | | Pasta |
 | :--- | :--- |
 | **Anterior** | [`008_psi_drift_alert_streamlit`](../008_psi_drift_alert_streamlit/README.md) |
-| **Seguinte** | — (releia os três fins em [`000`](../000_mlops_pipelines_goals/README.md)) |
+| **Seguinte** | — |

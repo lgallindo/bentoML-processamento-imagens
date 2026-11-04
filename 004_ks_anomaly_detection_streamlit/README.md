@@ -235,9 +235,6 @@ Ver bibliografia KS / drift no handout da
 
 ## Roteiro da trilha
 
-Ordem de estudo em quatro atos: ver
-[`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md).
-
 | | Pasta |
 | :--- | :--- |
 | **Anterior** | [`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md) |
