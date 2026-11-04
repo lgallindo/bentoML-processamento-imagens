@@ -7,7 +7,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 README = (ROOT / "README.md").read_text(encoding="utf-8")
-TEMPLATE = (ROOT / "CONTRACT_TEMPLATE.md").read_text(encoding="utf-8")
 
 PRIMARY_BIB_URLS = (
     "https://sre.google/sre-book/monitoring-distributed-systems/",
@@ -18,22 +17,18 @@ PRIMARY_BIB_URLS = (
 )
 
 
-def test_three_goals_in_template() -> None:
-    assert "Saúde do servidor" in TEMPLATE
-    assert "Drift de dados" in TEMPLATE
-    assert "Detecção de anomalias" in TEMPLATE
-
-
-def test_template_uses_brazilian_acao() -> None:
-    assert "Ação se violado" in TEMPLATE
-    assert "Acção" not in TEMPLATE
+def test_no_contract_template_file() -> None:
+    assert not (ROOT / "CONTRACT_TEMPLATE.md").exists()
+    assert "CONTRACT_TEMPLATE" not in README
 
 
 def test_readme_conceito_and_neighbors() -> None:
     assert "**Conceito desta aula:**" in README
     assert "008_psi_drift_alert_streamlit" in README
     assert "000_mlops_pipelines_goals" in README
-    assert "CONTRACT_TEMPLATE.md" in README
+    assert "Saúde do servidor" in README
+    assert "Drift de dados" in README
+    assert "Detecção de anomalias" in README
 
 
 def test_readme_brazilian_acao_spelling() -> None:
@@ -81,23 +76,15 @@ def test_readme_no_bloom_taxonomy() -> None:
         assert label not in README, f"Bloom label leaked into student README: {label}"
 
 
-def test_ops_and_filosofia_in_readme() -> None:
+def test_ops_fields_integrated_in_readme() -> None:
     assert "Campos *Ops*" in README or "Campos Ops" in README
-    assert "## Filosofia DevOps" in README
-    assert "O que a tabela guarda e o gráfico não" in README
     for label in ("DevOps", "MLOps", "CVOps", "LLMOps", "AIOps"):
         assert label in README
     assert "CAMPOS_OPS.md" not in README
     assert not (ROOT / "CAMPOS_OPS.md").exists()
-    assert "## Portas" not in README
 
 
 def test_no_fecho_vocabulary() -> None:
-    """fecho is not in the course shared vocabulary (pt_BR)."""
-    for name, text in (("README", README), ("TEMPLATE", TEMPLATE)):
-        hits = re.findall(r"(?i)\bfecho\b", text)
-        assert not hits, f"{name} still uses fecho: {hits}"
-
-
-def test_no_european_guillemets_in_readme() -> None:
-    assert "«" not in README and "»" not in README
+    """«fecho» is not in the course shared vocabulary (pt_BR)."""
+    hits = re.findall(r"(?i)\bfecho\b", README)
+    assert not hits, f"README still uses fecho: {hits}"

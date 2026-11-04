@@ -8,8 +8,6 @@ quatro campos: **sinal**, **limiar**, **ação** e **dono**. Esta pasta não
 sobe serviço novo e não pede Dashboard nem Scrape; você cita sinais que já
 praticou nas aulas anteriores.
 
-Modelo: [`CONTRACT_TEMPLATE.md`](CONTRACT_TEMPLATE.md).
-
 ## O que quebra sem dono
 
 Na aula de PromQL, o p95 do Endpoint de grayscale dispara (`firing`) enquanto
@@ -149,8 +147,7 @@ grandes, anotação, GPU, drift visual —
 [Picsellia](https://www.picsellia.com/post/how-to-apply-mlops-to-computer-vision-cvops),
 [Xailient](https://xailient.com/blog/xailient-created-cvops-for-edge-computer-vision-at-scale/).
 Este curso **é** laboratório de visão (grayscale, L, beaches/forests), mas
-o handout quase não escreve "CVOps": o conteúdo fica sob MLOps + DevOps,
-com o contrato preenchível.
+o handout quase não escreve "CVOps": o conteúdo fica sob MLOps + DevOps.
 
 ### LLMOps (c. 2022–2024 → )
 
@@ -195,19 +192,21 @@ convertendo é a fronteira DevOps × MLOps/CVOps.
 
 ## Como proceder
 
-1. Abra [`CONTRACT_TEMPLATE.md`](CONTRACT_TEMPLATE.md) (copie para um arquivo
-   local se quiser versionar a sua versão fora do Git do curso).
-2. Preencha **três linhas** — uma por fim — com sinais cuja **fonte** seja
-   uma pasta `NNN_*` que você de fato praticou. Fontes típicas (não é
-   inventário completo):
-   - Saúde: `010_prometheus_promql` (p95, `up`, taxa); `022_prometheus_rules_ui`
-     (`/rules`); `021_prometheus_alerts_ui` (`/alerts`)
-   - Drift: `003_ks_drift_alert_streamlit` ou `008_psi_drift_alert_streamlit`
-   - Anomalia: `004_ks_anomaly_detection_streamlit`
-3. Na seção de lacunas, declare o que ficou de fora (lab SKIP, sinal não
-   observado) e o impacto — escreva "não disponível"; não invente cobertura.
-4. Releia os cinco hábitos da Filosofia DevOps: cada linha do contrato deve
-   sobreviver a essa lista.
+Escreva **três linhas** (caderno, arquivo local ou o editor que preferir) —
+uma por fim — com sinal, limiar, ação e dono. A fonte deve ser uma pasta
+`NNN_*` que você de fato praticou. Fontes típicas (não é inventário
+completo):
+
+- Saúde: `010_prometheus_promql` (p95, `up`, taxa); `022_prometheus_rules_ui`
+  (`/rules`); `021_prometheus_alerts_ui` (`/alerts`)
+- Drift: `003_ks_drift_alert_streamlit` ou `008_psi_drift_alert_streamlit`
+- Anomalia: `004_ks_anomaly_detection_streamlit`
+
+Declare também as **lacunas**: o que ficou de fora (lab SKIP, sinal não
+observado) e o impacto — escreva "não disponível"; não invente cobertura.
+Não há formulário separado nesta pasta; os exemplos abaixo bastam como
+modelo. Releia os cinco hábitos da Filosofia DevOps: cada linha deve
+sobreviver a essa lista.
 
 ### Exemplo trabalhado (saúde)
 
