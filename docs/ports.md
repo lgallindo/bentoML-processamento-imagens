@@ -56,7 +56,7 @@ O painel Streamlit **não** substitui o BentoML em 3000.
 | 017 | 8125 / 8126 | Datadog agent (auxiliar; DEGRADE-001 se sem DD_API_KEY) |
 | 018 | 9200 | Elasticsearch (auxiliar; _bulk/_search; sem Kibana no lab) |
 | 019 | 3100 | Loki (auxiliar; Explore no Grafana 4000; handout completo) |
-| 020 | — | contrato de monitoramento (sem serviço) |
+| 020 | — | página sinal/limiar/ação/dono (sem serviço) |
 
 ## Demos sintéticas (opcionais)
 

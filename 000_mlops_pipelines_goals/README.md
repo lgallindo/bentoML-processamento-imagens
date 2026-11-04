@@ -114,7 +114,7 @@ lote, janela, entrada/saída, tráfego misto e, por fim, outro instrumento
 [`006_ks_mixed_landscape_streamlit`](../006_ks_mixed_landscape_streamlit/README.md) →
 [`008_psi_drift_alert_streamlit`](../008_psi_drift_alert_streamlit/README.md).
 
-**Contrato de monitoramento.** Uma página que amarra os três fins
+**Sinal, limiar, ação e dono.** Uma página que amarra os três fins
 desta aula 000 a sinais e limiares:
 [`020_monitoring_contract`](../020_monitoring_contract/README.md).
 
@@ -236,7 +236,7 @@ Irmã da `003`: mesma parábola operacional, outro instrumento (PSI e faixas
 clássicas de monitoramento). Fecha o Ato III mostrando que trocar a métrica
 não apaga a pergunta sobre o mundo dos dados.
 
-### Contrato de monitoramento
+### Sinal, limiar, ação e dono
 
 **[`020_monitoring_contract`](../020_monitoring_contract/README.md)** —
 Uma página que amarra saúde, drift e anomalia a sinais, limiares e dono,

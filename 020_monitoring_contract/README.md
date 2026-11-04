@@ -1,4 +1,4 @@
-# Aula 020 — Contrato de monitoramento
+# Aula 020 — Sinal, limiar, ação e dono
 
 **Conceito desta aula:** concluir a trilha preenchendo **uma página** que
 amarra os três fins de monitoramento da
@@ -10,16 +10,24 @@ praticou nas aulas anteriores.
 
 ## O que quebra sem dono
 
-Na aula de PromQL, o p95 do Endpoint de grayscale dispara (`firing`) enquanto
-o HTTP continua 200: a imagem sai, o cliente não vê erro, e o painel de
-sucesso permanece verde. No mesmo curso, um lote de paisagens em KS ou PSI
-cruza o limiar de drift frente ao corpus — o serviço ainda converte; só o
-mundo de entrada mudou.
+Duas cenas deste curso. Em ambas o serviço "parece bem" para quem só olha
+o sucesso do pedido — e mesmo assim há um aviso que pede dono e ação.
 
-Se o limiar existe sem **ação** e sem **dono**, os dois eventos viram o mesmo
-aviso órfão: alguém vê o número, ninguém decide o próximo passo, e o pipeline
-segue "saudável" na superfície. O contrato existe para impedir esse vazio —
-uma linha por fim, com responsável nomeado.
+![Duas cenas: latência lenta com HTTP 200, e lote de paisagens com drift](illustrations/01_duas_cenas.png)
+
+**Cena 1 — latência.** Você pede a conversão grayscale. A resposta volta
+com HTTP 200: a imagem chegou. Em paralelo, o alerta de **p95** (quase o
+pior tempo entre as requisições recentes) está `firing`: o Endpoint ficou
+lento. O cliente feliz e o alerta vermelho ao mesmo tempo.
+
+**Cena 2 — dados.** O serviço ainda converte. Só que o lote de fotos de
+praia ou floresta, medido com **KS** ou **PSI**, já cruzou o limiar frente
+ao corpus de referência. A API responde; o mundo de entrada mudou.
+
+Se o limiar existe sem **ação** e sem **dono**, os dois avisos ficam órfãos:
+alguém vê o número, ninguém decide o próximo passo, e o pipeline segue
+"saudável" na superfície. A página desta aula existe para impedir esse
+vazio — uma linha por fim, com responsável nomeado.
 
 ## Quatro campos
 
@@ -167,9 +175,9 @@ Nesta trilha há só **eco** didático (aula
 alertas Prometheus): não há correlacionador multi-fonte nem plataforma
 AIOps.
 
-### Como o contrato corta o mapa
+### Como a página corta o mapa
 
-| Linha do contrato | Eco *Ops* | Fonte típica |
+| Linha da página | Eco *Ops* | Fonte típica |
 | :--- | :--- | :--- |
 | Saúde | DevOps (+ SRE/Prometheus) | `010`, `021`, `022` |
 | Drift | MLOps (CVOps implícito) | `003`, `008`, `014` |
@@ -181,10 +189,10 @@ convertendo é a fronteira DevOps × MLOps/CVOps.
 
 ## Escopo Negativo
 
-| Isto **não** é o contrato | Por quê |
+| Isto **não** é a página desta aula | Por quê |
 | :--- | :--- |
 | Montar ou polir um Dashboard | Dashboard mostra séries; não registra dono nem ação |
-| Colar o dump de `GET /metrics` | O texto cru lista famílias; o contrato escolhe **um** sinal por fim |
+| Colar o dump de `GET /metrics` | O texto cru lista famílias; a página escolhe **um** sinal por fim |
 | Preencher formulário sem sinal praticado | Inventar limiar elegante sem ter visto o gráfico ou o painel |
 | Subir Container, Prometheus ou Grafana nesta pasta | Exercício textual; Scrape e Dashboard ficam nas aulas que os operam |
 | Recitar os cinco hábitos sem aplicá-los a cada linha | Os hábitos servem para revisar o artefato; o critério é o preenchimento |
@@ -237,11 +245,11 @@ sobreviver a essa lista.
 | Cada dono é pessoa ou papel identificável (não "a equipe") | |
 | Cada sinal aponta a uma pasta `NNN_*` praticada, ou a lacuna está explícita | |
 | A seção de lacunas está escrita sem inventar cobertura | |
-| Cada linha do contrato passa pelos cinco hábitos da Filosofia DevOps | |
+| Cada linha da página passa pelos cinco hábitos da Filosofia DevOps | |
 
 ## Bibliografia
 
-Use estes textos ao preencher o contrato (links auditados em 2026-11-04):
+Use estes textos ao preencher a página (links auditados em 2026-11-04):
 
 1. **B1** — Google SRE, *Monitoring Distributed Systems* —
    <https://sre.google/sre-book/monitoring-distributed-systems/> —
