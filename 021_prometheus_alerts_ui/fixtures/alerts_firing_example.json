@@ -1,0 +1,19 @@
+{
+  "status": "success",
+  "data": {
+    "resultType": "vector",
+    "result": [
+      {
+        "metric": {
+          "__name__": "ALERTS",
+          "alertname": "BentoMLResponseTimeAnomaly",
+          "alertstate": "firing",
+          "endpoint": "/inference-grayscale",
+          "severity": "warning"
+        },
+        "value": [0, "1"]
+      }
+    ]
+  },
+  "_fixture_note": "Exemplo didático alinhado a illustrations/02_alerts_firing.png. O for: 1m da regra em monitoring/bentoml.rules.yml já foi cumprido."
+}

@@ -11,18 +11,12 @@ observabilidade é BentoML → Prometheus → Grafana; a instalação está nos
 tutoriais de [Prometheus](../docs/prometheus.md) e
 [Grafana](../docs/grafana.md).
 
-## Portas locais padrão
+## Portas nesta aula
 
-Contrato do curso (detalhe em [`docs/ports.md`](../docs/ports.md)):
-
-| Serviço | Porta |
-| :--- | ---: |
-| **BentoML** | **3000** |
-| **Prometheus** | **9090** |
-| **Grafana** | **4000** |
-
-Painéis Streamlit das aulas: **8501 + N** (exemplo: `003` → `8504`;
-`015` → `8516`). A **8501** permanece livre.
+Esta pasta é mapa e leitura: **nenhum** processo precisa estar à escuta no
+Host só para cumprir o handout. O contrato de portas das aulas seguintes
+está em [`docs/ports.md`](../docs/ports.md) (BentoML **3000**, Prometheus
+**9090**, Grafana **4000**, painéis Streamlit **8501 + N**).
 
 ## Objetivos finais de monitoramento
 
@@ -95,6 +89,7 @@ alcançável antes de consultar séries:
 **Ato I — Saúde do servidor.** Latência e séries no caminho BentoML →
 Prometheus → Grafana, depois logs/vendors:
 [`010_prometheus_promql`](../010_prometheus_promql/README.md) →
+[`021_prometheus_alerts_ui`](../021_prometheus_alerts_ui/README.md) →
 [`015_prometheus_histcdf_streamlit`](../015_prometheus_histcdf_streamlit/README.md)
 (opcional) →
 [`016_grafana_dashboards`](../016_grafana_dashboards/README.md) →
@@ -151,15 +146,20 @@ irá consultar. Inclui leitura rasa do workflow de CI — sem editar YAML.
 **[`010_prometheus_promql`](../010_prometheus_promql/README.md)** —
 Pergunta: o pipeline responde com latência interpretável? Você lê o
 formato de `/metrics`, confirma o scrape, usa Table/Graph do Prometheus
-(`rate`, buckets, `histogram_quantile`) e estima um p95 **no papel** — sem
-Streamlit. Não mede qualidade de imagem nem drift de conteúdo (Ato III).
+(`rate`, buckets, `histogram_quantile`) e estima um p95 **no papel**.
+Não mede qualidade de imagem nem drift de conteúdo (Ato III).
 Pré-req: ponte `009`, vocabulário `001`–`002` e o
 [tutorial Prometheus](../docs/prometheus.md).
 
+**[`021_prometheus_alerts_ui`](../021_prometheus_alerts_ui/README.md)** —
+Página **Alerts** (`/alerts`): pending e firing, regra
+`BentoMLResponseTimeAnomaly` em `monitoring/bentoml.rules.yml`, distinção
+face a Graph/Table. Confirme o job `bentoml-imagens` (ou use a demo 9100).
+
 **[`015_prometheus_histcdf_streamlit`](../015_prometheus_histcdf_streamlit/README.md)** —
 Painel Streamlit (porta **8516**): histograma, CDF e Python ↔ PromQL sobre
-os mesmos buckets. Reforço visual **depois** da 010; não substitui a UI do
-Prometheus.
+os mesmos buckets. Reforço visual **depois** da 010/021; a UI do Prometheus
+continua a ser a referência para PromQL ad-hoc.
 
 **[`016_grafana_dashboards`](../016_grafana_dashboards/README.md)** —
 Handout numerado sobre [`docs/grafana.md`](../docs/grafana.md): painéis de
@@ -237,6 +237,17 @@ Uma página que amarra saúde, drift e anomalia a sinais, limiares e dono,
 citando as aulas já cursadas.
 
 ---
+
+
+## Conclusão (autoavaliação)
+
+Marque **Sim** ou **Não** sozinho.
+
+| Verificação | Sim / Não |
+| :--- | :---: |
+| Consigo citar os três fins de monitoramento (saúde, drift, anomalia) sem olhar o texto | |
+| Sei qual pasta abrir a seguir (`001`) pelo roteiro | |
+| Sei onde está o mapa de portas do curso (`docs/ports.md`) | |
 
 ## Roteiro da trilha
 

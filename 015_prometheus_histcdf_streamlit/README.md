@@ -25,7 +25,7 @@ ter concluído outro handout numerado.
 9. [7. Traduza a conta para PromQL](#7-traduza-a-conta-para-promql)
 10. [8. Laboratório](#8-laboratório-hipótese-consulta-e-evidência)
 11. [9. Linha de base e alerta](#9-leia-a-linha-de-base-e-o-alerta)
-12. [10. Exercício e entrega](#10-exercício-e-entrega)
+12. [10. Exercício (cheque sozinho)](#10-exercício-cheque-sozinho)
 13. [11. Código e materiais](#11-código-e-materiais)
 14. [Glossário](#glossário)
 15. [Referências](#referências-para-consulta)
@@ -55,18 +55,16 @@ A fixture é um retrato único: não contém o histórico necessário a `rate`.
 Os dados sintéticos permitem estudar consultas; seus valores não medem o
 desempenho do BentoML.
 
-**Portas (não confundir).** Mapa do curso: [`docs/ports.md`](../docs/ports.md).
-O trio canônico é BentoML **3000**, Prometheus **9090**, Grafana **4000**.
-Esta aula acrescenta auxiliares (Streamlit **8516**; demo **8010**/**9100**) —
-eles **não** substituem o trio.
+## Portas que esta aula espera no Host
+
+Mapa completo do curso: [`docs/ports.md`](../docs/ports.md).
 
 | Porta | Processo | Papel |
 | ---: | :--- | :--- |
-| **3000** | BentoML (`just serve` na raiz) | API + `GET /metrics` (canônico) |
-| **9090** | Prometheus do tutorial | UI/API sobre o serviço real (canônico) |
-| **4000** | Grafana | Painéis do curso (canônico; nunca 3000) |
-| **8516** | Painel desta aula (`just app`) | Streamlit auxiliar |
-| **8010** / **9100** | Exporter + Prometheus sintéticos | Demo auxiliar (opcional) |
+| **8516** | Painel desta aula (`just app`) | Streamlit — histograma/CDF |
+| **3000** | BentoML (`just serve` na raiz) | API + `GET /metrics` (modo serviço real) |
+| **9090** | Prometheus do curso | UI/API sobre o serviço real (opcional neste painel) |
+| **8010** / **9100** | Exporter + Prometheus sintéticos | Demo auxiliar (`just demo-*`) |
 
 Na pasta da aula, instale as dependências e abra o painel:
 
@@ -607,21 +605,21 @@ as curvas, mas não garante que essa regra adaptativa dispara em todo ciclo.
 **Decisão:** um alerta de latência orienta uma investigação. A causa e a
 próxima ação (inclusive sobre o modelo) exigem outras evidências.
 
-## 10. Exercício e entrega
+## 10. Exercício (cheque sozinho)
 
-Entregue um relatório de até uma página, com uma figura e as expressões usadas:
+Confirme no painel e nas consultas, com uma figura e as expressões usadas:
 
 1. Declare fonte — fixture, sintético ou serviço real —, endpoint, período e
-   unidade. No live, registre também a URL do Prometheus.
-2. Mostre uma conta manual: taxa do exemplo da seção 5 ou p99 da fixture.
-3. No cenário temporal, apresente taxa, p95 e quantidade estimada de
+   unidade. No live, anote também a URL do Prometheus.
+2. Faça uma conta manual: taxa do exemplo da seção 5 ou p99 da fixture.
+3. No cenário temporal, anote taxa, p95 e quantidade estimada de
    observações da mesma rota e janela.
 4. Compare a consulta acumulada com a consulta de janela recente.
 5. Explique uma limitação e proponha a próxima observação ou ação.
 6. Responda: `up=1` e ausência de alerta demonstram que o modelo continua
    adequado às imagens recebidas?
 
-Modelo de relato:
+Modelo de anotações:
 
 > Analisei [fonte e rota] entre [instantes]. A consulta [expressão] resume
 > [população e janela], em [unidade]. Observei [resultado], apoiado por
@@ -629,13 +627,13 @@ Modelo de relato:
 > indica [interpretação]. O resultado é limitado por [limitação]. Proponho
 > verificar [próxima observação] antes de decidir [ação].
 
-| Critério | O que deve aparecer |
-|---|---|
-| Fonte e escopo | Dado sintético identificado, rota, período e labels coerentes |
-| Cálculo | Denominador, unidade, janela e conta reproduzível |
-| Consulta | `rate` antes da soma, `le` preservado no quantil e agrupamento explicado |
-| Interpretação | Diferença entre acumulado, janela recente, média e p95 |
-| Decisão | Próxima ação sustentada pela evidência e limite declarado |
+| Verificação | Sim / Não |
+| :--- | :---: |
+| Fonte e escopo coerentes (rota, período, labels) | |
+| Conta manual reproduzível (denominador, unidade, janela) | |
+| Consulta: `rate` antes da soma; `le` preservado no quantil | |
+| Interpretação: acumulado vs janela recente; média vs p95 | |
+| Próxima ação sustentada pela evidência | |
 
 ### Resolução comentada
 
@@ -716,11 +714,22 @@ just generate-prom-illustrations
 Outros materiais do repositório: [índice MLOps](../000_mlops_pipelines_goals/README.md)
 e [apresentação do repositório](../README.md).
 
+
+## Conclusão (autoavaliação)
+
+Marque **Sim** ou **Não** sozinho.
+
+| Verificação | Sim / Não |
+| :--- | :---: |
+| `just app` abre o painel na porta do `justfile` (8516) | |
+| Vejo histograma/CDF alinhados a buckets Prometheus (fixture ou scrape) | |
+| Uma consulta PromQL do painel devolve dados interpretáveis | |
+
 ## Roteiro da trilha
 
 | | Pasta |
 | :--- | :--- |
-| **Anterior** | [`010_prometheus_promql`](../010_prometheus_promql/README.md) |
+| **Anterior** | [`021_prometheus_alerts_ui`](../021_prometheus_alerts_ui/README.md) |
 | **Seguinte** | [`016_grafana_dashboards`](../016_grafana_dashboards/README.md) |
 
 ## Glossário

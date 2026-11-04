@@ -1,0 +1,15 @@
+default:
+    @just --list
+
+test:
+    uv run --no-active pytest -q
+
+generate-schematics:
+    uv run --no-active --with matplotlib python scripts/generate_alerts_schematics.py
+
+# Atalhos: a demo vive na 010 (exporter / config)
+demo-exporter:
+    cd ../010_prometheus_promql && just demo-exporter
+
+demo-prometheus:
+    cd ../010_prometheus_promql && just demo-prometheus

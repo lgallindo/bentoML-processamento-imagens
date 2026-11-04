@@ -49,7 +49,8 @@ O painel Streamlit **não** substitui o BentoML em 3000.
 
 | Aula | Porta(s) | Notas |
 | ---: | :--- | :--- |
-| 009 | 3000 | OCI/runtime; sem painel Streamlit |
+| 009 | 3000 | OCI/runtime |
+| 021 | 9090 (`/alerts`); demo 8010/9100 | Página Alerts; reutiliza demo da 010 se preciso |
 | 016 | 4000 | UI Grafana (handout; ver grafana.md) |
 | 017 | 8125 / 8126 | Datadog agent (auxiliar; DEGRADE-001 se sem DD_API_KEY) |
 | 018 | 9200 | Elasticsearch (auxiliar; _bulk/_search; sem Kibana no lab) |

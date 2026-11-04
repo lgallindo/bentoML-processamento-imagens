@@ -1,0 +1,19 @@
+{
+  "status": "success",
+  "data": {
+    "resultType": "vector",
+    "result": [
+      {
+        "metric": {
+          "__name__": "ALERTS",
+          "alertname": "BentoMLResponseTimeAnomaly",
+          "alertstate": "pending",
+          "endpoint": "/inference-grayscale",
+          "severity": "warning"
+        },
+        "value": [0, "1"]
+      }
+    ]
+  },
+  "_fixture_note": "Exemplo didático alinhado a illustrations/01_alerts_pending.png. Substitua por uma captura real da API /api/v1/query?query=ALERTS quando a demo 8010/9100 estiver a disparar."
+}
