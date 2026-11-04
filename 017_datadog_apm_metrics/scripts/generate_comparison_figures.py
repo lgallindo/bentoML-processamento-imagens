@@ -63,7 +63,7 @@ def main() -> None:
         ("endpoint=\"/inference-…\"", "endpoint:/inference-…", "PromQL rate()", "metric + tag filter"),
         ("Recording rule", "Monitor / notebook", "Local :9090", "SaaS us1/eu1/…"),
     ]
-    ax.text(0.02, 0.92, "Label ≠ tag — mesmo conceito, outro dialecto", fontsize=13, fontweight="bold")
+    ax.text(0.02, 0.92, "Label ≠ tag — mesmo conceito, outro dialeto", fontsize=13, fontweight="bold")
     y = 0.75
     for a, b, c, d in rows:
         ax.text(0.02, y, f"• Prom: {a}  →  DD: {b}", fontsize=10)

@@ -1,11 +1,11 @@
-# Aula 017 — Datadog: o mesmo serviço, outro dialecto
+# Aula 017 — Datadog: o mesmo serviço, outro dialeto
 
 **Conceito desta aula:** o mesmo endpoint BentoML pode ser observado por um
 *vendor* SaaS. Labels Prometheus e **tags** Datadog são a mesma ideia de
-dimensão com outro dialecto; o lab OpenMetrics é **opcional** e obedece a
+dimensão com outro dialeto; o lab OpenMetrics é **opcional** e obedece a
 DEGRADE-001 (sem chave, salta-se o SaaS sem partir o resto do curso).
 
-O trio canónico **3000 / 9090 / 4000** não é substituído: o Agent (quando
+O trio canônico **3000 / 9090 / 4000** não é substituído: o Agent (quando
 houver chave) raspa `http://127.0.0.1:3000/metrics` em paralelo.
 
 ![Pipeline conceptual](illustrations/00_pipeline_datadog.png)
@@ -20,7 +20,7 @@ Esta aula é deliberadamente **dual**:
 Portas auxiliares do agent (quando o lab correr): **8125** (DogStatsD),
 **8126** (APM) — [`docs/ports.md`](../docs/ports.md).
 
-## Objectivos
+## Objetivos
 
 - Explicar **label** (Prometheus / OpenMetrics) ↔ **tag** (Datadog).
 - Descrever (e, se houver chave, executar) um caminho OpenMetrics contra
@@ -36,7 +36,7 @@ Portas auxiliares do agent (quando o lab correr): **8125** (DogStatsD),
 2. Noção de que uma série tem **nome + dimensões** (chame-lhes labels ou
    tags — a aula fixa o vocabulário).
 3. Para o lab SaaS: conta trial + `DD_API_KEY` só em `.env` local / shell
-   (ficheiros `.env` **não** entram no commit).
+   (arquivos `.env` **não** entram no commit).
 
 ## 1. O portão DEGRADE-001
 
@@ -63,13 +63,13 @@ python3 scripts/check_datadog_gate.py
 
 ![Tabela label ↔ tag](illustrations/08_labels_vs_tags.png)
 
-No dialecto Prometheus / OpenMetrics escreve-se tipicamente:
+No dialeto Prometheus / OpenMetrics escreve-se tipicamente:
 
 ~~~promql
 sum by (endpoint) (rate(bentoml_service_request_total{job="bentoml-imagens"}[1m]))
 ~~~
 
-No Datadog o dialecto típico usa **tags** (`endpoint:/inference-grayscale`)
+No Datadog o dialeto típico usa **tags** (`endpoint:/inference-grayscale`)
 sobre uma métrica namespaced pelo check OpenMetrics. A *ideia* (dimensão de
 corte) é a mesma; a sintaxe e o armazenamento não.
 

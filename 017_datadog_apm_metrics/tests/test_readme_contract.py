@@ -1,4 +1,4 @@
-"""Contrato textual e artefactos da aula 017 (DEGRADE-001)."""
+"""Contrato textual e artefatos da aula 017 (DEGRADE-001)."""
 
 from __future__ import annotations
 
@@ -33,6 +33,17 @@ def test_self_contained_concept() -> None:
     assert "conclua" not in prereq.lower()
     assert "010_prometheus_promql" not in prereq
     assert "`010`" not in prereq
+
+
+def test_readme_brazilian_portuguese_not_european() -> None:
+    assert "dialeto" in README
+    assert "dialecto" not in README
+    assert "## Objetivos" in README
+    assert "Objectivos" not in README
+    assert "canônico" in README
+    assert "canónico" not in README
+    assert "arquivos" in README
+    assert "ficheiros" not in README
 
 
 def test_degrade001_documented() -> None:

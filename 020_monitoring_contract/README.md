@@ -1,7 +1,7 @@
-# Aula 020 — Contrato de monitoramento (fecho)
+# Aula 020 — Contrato de monitoramento
 
-**Conceito desta aula:** fechar a trilha preenchendo **uma página** que amarra
-os três fins de monitoramento da
+**Conceito desta aula:** concluir a trilha preenchendo **uma página** que
+amarra os três fins de monitoramento da
 [`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md) —
 **saúde do servidor**, **drift de dados**, **detecção de anomalias** — a
 quatro campos: **sinal**, **limiar**, **ação** e **dono**. Esta pasta não
@@ -43,7 +43,7 @@ critério.
 | Montar ou polir um Dashboard | Dashboard mostra séries; não registra dono nem ação |
 | Colar o dump de `GET /metrics` | O texto cru lista famílias; o contrato escolhe **um** sinal por fim |
 | Preencher formulário sem sinal praticado | Inventar limiar elegante sem ter visto o gráfico ou o painel |
-| Subir Container, Prometheus ou Grafana nesta pasta | Fecho textual; portas e Scrape ficam nas aulas que os operam |
+| Subir Container, Prometheus ou Grafana nesta pasta | Exercício só textual; portas e Scrape ficam nas aulas que os operam |
 | Cumprir «cinco hábitos» genéricos | O critério de saída é o artefato preenchido, não um sermão |
 
 ## Como proceder

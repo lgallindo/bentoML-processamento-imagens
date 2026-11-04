@@ -33,7 +33,7 @@ vocabulário que se sobrepõem:
 | **LLMOps** | Produto com modelo de linguagem | Prompt, contexto, custo e qualidade da geração ainda cabem no contrato? |
 | **AIOps** | Telemetria da própria operação de TI | Dá para correlacionar e priorizar o dilúvio de alertas com algoritmos? |
 
-Neste curso, o fecho da trilha
+Neste curso, a aula final da trilha
 ([aula 020](README.md))
 amarra três fins já anunciados na
 [aula 000](../000_mlops_pipelines_goals/README.md)
@@ -168,7 +168,7 @@ O curso **é** um laboratório de visão enxuto (grayscale, luminância L,
 histogramas, beaches/forests), mas o handout estudante **quase nunca
 escreve a palavra CVOps**. O conteúdo CVOps está implícito nos sinais de
 drift sobre imagens; a nomenclatura pública do repo permanece **MLOps** +
-DevOps. Isso é intencional: menos jargão novo no fecho; mais contrato
+DevOps. Isso é intencional: menos jargão novo nesta aula; mais contrato
 preenchível.
 
 ---
@@ -251,11 +251,11 @@ do pipeline versus adequação do mundo de entrada.
 
 ---
 
-## 8. Planos e lacunas — o que o trabalho interno ainda não fechou
+## 8. Planos e lacunas — o que o trabalho interno ainda não concluiu
 
 Varredura em arquivos **locais** do clone (`.local/plans/`,
 `.local/handoff/`, `.local/AGENT_PLANS.md` — gitignored; não aparecem no
-GitHub), em 2026-11-04, filtrada aos cinco campos e ao fecho 020.
+GitHub), em 2026-11-04, filtrada aos cinco campos e à aula 020.
 
 ### 8.1 Explicitamente diferido ou só proposta
 
@@ -264,7 +264,7 @@ GitHub), em 2026-11-04, filtrada aos cinco campos e ao fecho 020.
 | `.local/plans/PLAN_20261104T141331Z_semver_service_version_and_lesson001.md` | **deferred** — aguarda ordem «execute o plano» | DevOps/MLOps de serving: `service_version` real em `/metrics`; sweep LESSON-001 em 000–020 |
 | `.local/plans/PLAN_20261028T140500Z_003_worked_examples_all_sections.md` | **proposta** («implementação completa = onda futura»); §12 parcial | Exemplos trabalhados DevOps (§2) e MLOps (§3) na 003 ainda não como onda completa |
 | `.local/plans/005/PLAN_anomaly_production.md` | esqueleto de produção (job + janela real) | Anomalia MLOps «de verdade» além do teatro Streamlit — não fechado como pipeline de produção |
-| Livrinho 020 com «Filosofia DevOps» + cinco hábitos + catálogo mega | **superseded** pelo fecho concreto (`8c40b35`) | DevOps-sermão removido do README estudante de propósito |
+| Livrinho 020 com «Filosofia DevOps» + cinco hábitos + catálogo mega | **superseded** pelo contrato concreto (`8c40b35`) | DevOps-sermão removido do README estudante de propósito |
 
 ### 8.2 Ausência de plano (não há *unimplemented plan* porque não há plan)
 
@@ -273,13 +273,13 @@ GitHub), em 2026-11-04, filtrada aos cinco campos e ao fecho 020.
 | **LLMOps** | Nenhum `PLAN_*` nem pasta `NNN_*` dedicada a prompt/RAG/LLM no monorepo |
 | **CVOps** como rótulo de handout | Nenhum plano para renomear a trilha; conteúdo visual existe sob rótulo MLOps |
 | **AIOps** como plataforma | Nenhum plano de correlacionador multi-fonte; só eco de anomalia/alerta |
-| Seção histórica dos cinco *Ops* na 020 | **Esta nota** (`CAMPOS_OPS.md`) — não existia antes; o README fecho permanece curto |
+| Seção histórica dos cinco *Ops* na 020 | **Esta nota** (`CAMPOS_OPS.md`) — não existia antes; o README da 020 permanece curto |
 
 ### 8.3 Já entregue (não confundir com pendência)
 
 | Item | Evidência |
 | :--- | :--- |
-| Fecho 020 (contrato sinal/limiar/ação/dono) | Commit `8c40b35`; [README](README.md) |
+| Aula 020 (contrato sinal/limiar/ação/dono) | Commit `8c40b35`; [README](README.md) |
 | Catálogo aula→sinal fora do handout | `.local/handoff/NOTE_20261104T182000Z_020_PROVENIENCIA_SINAIS.md` |
 | Arco DevOps→MLOps nas 003/008 | Seções 2–3 dos READMEs; uplift estrutural 008 portou a prosa |
 | Aulas 021/022 (UI regras/alertas Prometheus) | Pastas presentes na árvore; plano de screenshots 021 marcado done (Path B) |

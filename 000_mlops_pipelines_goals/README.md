@@ -74,7 +74,7 @@ Estude nesta ordem (atos, não lexicografia das pastas). `001`–`002`
 vocabulário; ponte `009` (BentoML → OCI); `010`–`015` PromQL (+ Streamlit
 opcional); `016` Grafana; depois logs/vendors `019` Loki → `018` ES →
 `017` Datadog (este último exige chave de laboratório); `011`–`014` tijolos;
-`003`–`006` teatro KS; `008` PSI; fecho `020` (contrato). A `003` e a `008`
+`003`–`006` teatro KS; `008` PSI; contrato `020`. A `003` e a `008`
 mantêm os paths estáveis (links e extratos Cloud).
 
 **Ato 0 — Vocabulário.** Histograma e CDF, as duas leituras de distribuição
@@ -114,7 +114,7 @@ lote, janela, entrada/saída, tráfego misto e, por fim, outro instrumento
 [`006_ks_mixed_landscape_streamlit`](../006_ks_mixed_landscape_streamlit/README.md) →
 [`008_psi_drift_alert_streamlit`](../008_psi_drift_alert_streamlit/README.md).
 
-**Fecho — Contrato de monitoramento.** Uma página que amarra os três fins
+**Contrato de monitoramento.** Uma página que amarra os três fins
 desta aula 000 a sinais e limiares:
 [`020_monitoring_contract`](../020_monitoring_contract/README.md).
 
@@ -236,7 +236,7 @@ Irmã da `003`: mesma parábola operacional, outro instrumento (PSI e faixas
 clássicas de monitoramento). Fecha o Ato III mostrando que trocar a métrica
 não apaga a pergunta sobre o mundo dos dados.
 
-### Fecho — Contrato de monitoramento
+### Contrato de monitoramento
 
 **[`020_monitoring_contract`](../020_monitoring_contract/README.md)** —
 Uma página que amarra saúde, drift e anomalia a sinais, limiares e dono,

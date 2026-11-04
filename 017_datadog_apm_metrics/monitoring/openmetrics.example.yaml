@@ -1,5 +1,5 @@
 # Exemplo de check OpenMetrics do Agent Datadog (NÃO versionar chaves).
-# Coloque um ficheiro equivalente sob a conf. do agent no lab (fora do Git).
+# Coloque um arquivo equivalente sob a conf. do agent no lab (fora do Git).
 #
 # init_config:
 #

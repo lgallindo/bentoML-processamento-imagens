@@ -85,4 +85,13 @@ def test_campos_ops_companion_linked() -> None:
     assert "CAMPOS_OPS.md" in README
     for label in ("DevOps", "MLOps", "CVOps", "LLMOps", "AIOps"):
         assert label in CAMPOS_OPS
-    assert "Planos e lacunas" in CAMPOS_OPS or "não fechou" in CAMPOS_OPS
+    assert "Planos e lacunas" in CAMPOS_OPS
+
+
+def test_no_fecho_vocabulary() -> None:
+    """«fecho» is not in the course shared vocabulary (pt_BR)."""
+    import re
+
+    for name, text in (("README", README), ("CAMPOS_OPS", CAMPOS_OPS), ("TEMPLATE", TEMPLATE)):
+        hits = re.findall(r"(?i)\bfecho\b", text)
+        assert not hits, f"{name} still uses fecho: {hits}"
