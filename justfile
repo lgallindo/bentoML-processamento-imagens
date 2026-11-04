@@ -116,6 +116,6 @@ verify-themed-samples:
 export-streamlit-cloud lesson *flags:
     python3 scripts/export_streamlit_cloud.py {{lesson}} {{flags}}
 
-# Audita o contrato de portas (docs/ports.md / aula 000): 3000/9090/4000 + Streamlit 8500+N.
+# Audita o contrato de portas (docs/ports.md / aula 000): 3000/9090/4000 + Streamlit 8501+N.
 check-ports:
     python3 scripts/check_default_ports.py

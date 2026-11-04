@@ -1,0 +1,18 @@
+# Exemplo de check OpenMetrics do Agent Datadog (NÃO versionar chaves).
+# Coloque um ficheiro equivalente sob a conf. do agent no lab (fora do Git).
+#
+# init_config:
+#
+# instances:
+#   - openmetrics_endpoint: http://127.0.0.1:3000/metrics
+#     namespace: bentoml
+#     metrics:
+#       - bentoml_service_request_total
+#       - bentoml_service_request_duration_seconds_bucket
+#       - bentoml_service_request_duration_seconds_count
+#       - bentoml_service_request_duration_seconds_sum
+#
+# Tags sugeridas (equivalentes a labels Prometheus):
+#   job:bentoml-imagens
+#   service:image-processor
+#   env:lab

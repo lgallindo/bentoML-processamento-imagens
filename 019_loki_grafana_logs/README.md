@@ -1,19 +1,18 @@
 # Aula 019 — Loki + Grafana: logs OSS ao lado das métricas
 
-Na [aula 016](../016_grafana_dashboards/README.md) o Grafana já conta a
-história das **séries**: taxa, erro, p95. Falta a outra metade da frase —
-as **linhas** que o serviço escreveu enquanto a latência subia.
+**Conceito desta aula:** *logs* como linhas com labels (Loki), consultáveis
+com LogQL no Explore do Grafana, respondem «o que foi escrito?» enquanto as
+métricas respondem «quanto / quão lento?». Os dois eixos complementam-se; um
+não substitui o outro.
 
-Esta aula fecha o caminho open-source de observabilidade: um ficheiro de
-log (no espírito da aula [`012`](../012_grayscale_request_logging/README.md))
-é lido pelo **Promtail**, indexado no **Loki** (porta auxiliar **3100**) e
-consultado no **Explore** do Grafana (**4000**), na mesma janela em que o
-Prometheus mostra o pico.
+Nesta pasta um JSONL didáctico é enviado ao **Loki** (porta auxiliar
+**3100**) — via HTTP push ou Promtail — e lido no **Explore** do Grafana
+(**4000**).
 
 ![Do JSONL ao Explore](illustrations/00_pipeline_logs.png)
 
-Portas: [`docs/ports.md`](../docs/ports.md). Instalação Grafana:
-[`docs/grafana.md`](../docs/grafana.md) / handout `016`.
+Portas: [`docs/ports.md`](../docs/ports.md). Grafana:
+[`docs/grafana.md`](../docs/grafana.md).
 
 ## Objectivos
 
@@ -27,36 +26,36 @@ Pratique até conseguir:
   `phase`);
 - no Grafana Explore, correlacionar um pico de latência (Prom / fixture)
   com linhas «slow» na **mesma** janela temporal;
-- explicar porque Elasticsearch (`018`) e Datadog (`017`) são caminhos
-  diferentes — não substitutos silenciosos desta aula.
+- explicar porque um índice de documentos ou um vendor SaaS são *outros*
+  aparelhos — não o objecto desta aula.
 
 ## Pré-requisitos
 
-1. Aula `016` (Grafana no ar em **4000**) — ou, no mínimo,
-   [`docs/grafana.md`](../docs/grafana.md).
-2. Noção de log de pedido da `012` (features em disco). Aqui usamos um
-   JSONL didáctico em [`fixtures/bentoml_requests.jsonl`](fixtures/bentoml_requests.jsonl).
-3. Docker disponível se for seguir o harness local
+1. Grafana acessível (curso: **4000**) — ver [`docs/grafana.md`](../docs/grafana.md).
+2. Docker disponível se for seguir o harness
    (`scripts/capture_screenshots.sh`).
+3. Aceitar o JSONL desta pasta
+   ([`fixtures/bentoml_requests.jsonl`](fixtures/bentoml_requests.jsonl));
+   gera-se aqui, sem outro handout.
 
-> No anfitrião de desenvolvimento, a porta **3100** pode já estar ocupada
+> No host de desenvolvimento, a porta **3100** pode já estar ocupada
 > (outro serviço). O contrato do curso continua 3100; o harness usa
-> **13100** efémero e documenta o desvio — o mesmo padrão da 016 com
-> Grafana em 14000.
+> **13100** efémero e documenta o desvio — o Grafana do harness pode ir a
+> **14000** pelo mesmo motivo.
 
 ## 1. A pergunta que a métrica não responde sozinha
 
-O painel de p95 da 016 diz: «a cauda ficou lenta». Não diz *qual* mensagem
+Um gráfico de p95 diz: «a cauda ficou lenta». Não diz *qual* mensagem
 o runtime emitiu, nem se foi o endpoint grayscale ou um filtro a jusante.
 
 ![Métricas versus logs](illustrations/08_metrics_vs_logs.png)
 
 | Instrumento | Pergunta natural | Unidade |
 | :--- | :--- | :--- |
-| Prometheus / Grafana 016 | Quanto? Quão lento? Com que taxa? | Séries numéricas |
+| Prometheus / Grafana (métricas) | Quanto? Quão lento? Com que taxa? | Séries numéricas |
 | **Loki / Explore (esta aula)** | O que foi escrito? Em que fase? | Linhas / eventos |
-| Elasticsearch 018 (stub) | Busca rica, agregações ad-hoc | Documentos |
-| Datadog 017 (stub) | Vendor único (métricas+logs+APM) | SaaS |
+| Elasticsearch | Busca rica, agregações ad-hoc | Documentos |
+| Vendor SaaS | Vendor único (métricas+logs+APM; DEGRADE-001) | SaaS |
 
 Regra de ouro:
 
@@ -79,7 +78,7 @@ Trecho típico (também em figura):
 
 Cada linha carrega `logged_at`, `endpoint`, `latency_ms`, `phase`
 (`stable` / `slow`) e `message`. Entre os índices 20–24 o fixture **força**
-um pico — a mesma parábola que um p95 a saltar na 016.
+um pico — a mesma parábola que um p95 a saltar.
 
 ![História do pico no fixture](illustrations/07_correlation_story.png)
 
@@ -153,7 +152,7 @@ reimplementar `histogram_quantile` em LogQL — isso continua no Prometheus.
 1. No Explore, escolha a janela que cobre o pico (no fixture: o bloco
    `phase=slow`).
 2. Abra outro painel Explore (ou split) com Prometheus:
-   `bentoml:http_request_duration_seconds:p95_1m` ou o `rate` da 016.
+   `bentoml:http_request_duration_seconds:p95_1m` ou um `rate` de latência.
 3. Responda: as linhas «slow» caem **dentro** do mesmo intervalo em que o
    p95 sobe?
 
@@ -169,10 +168,10 @@ Datasource Loki no Grafana (harness):
 
 | Versus | O que Loki ganha | O que perde |
 | :--- | :--- | :--- |
-| Só ficheiro em disco (`012`) | Busca por tempo/label sem `grep` manual | Precisa Promtail+Loki no ar |
+| Só ficheiro em disco | Busca por tempo/label sem `grep` manual | Precisa Promtail+Loki no ar |
 | Prometheus | Eventos textuais | Não agrega p95 |
-| Elasticsearch (`018`) | Operação mais leve na trilha OSS+Grafana | Busca/agregações menos ricas |
-| Datadog (`017`) | Sem conta SaaS; tudo local | Sem APM vendor único |
+| Elasticsearch | Operação mais leve junto ao Grafana OSS | Busca/agregações menos ricas |
+| Vendor SaaS | Sem conta; tudo local | Sem APM comercial |
 
 ## 7. Exercício e entrega
 
@@ -231,6 +230,4 @@ canónicas estão ocupadas; as figuras documentam a UI, não o número efémero.
 | | Pasta |
 | :--- | :--- |
 | **Anterior** | [`016_grafana_dashboards`](../016_grafana_dashboards/README.md) |
-| **Seguinte** | [`018_elasticsearch_logs`](../018_elasticsearch_logs/README.md) (stub) ou Ato II [`011`](../011_corpus_histograms_model/README.md) |
-
-Ordem completa: [`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md).
+| **Seguinte** | [`018_elasticsearch_logs`](../018_elasticsearch_logs/README.md) |

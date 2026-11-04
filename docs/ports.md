@@ -4,7 +4,10 @@ Mapa canónico para aulas e tutoriais. A abertura da trilha
 ([aula 000](../000_mlops_pipelines_goals/README.md)) reproduz o mesmo contrato.
 Tutoriais: [Prometheus](prometheus.md), [Grafana](grafana.md).
 Handouts: [009 OCI](../009_bentoml_oci_runtime/README.md),
-[016 Grafana](../016_grafana_dashboards/README.md).
+[016 Grafana](../016_grafana_dashboards/README.md),
+[019 Loki](../019_loki_grafana_logs/README.md),
+[018 ES](../018_elasticsearch_logs/README.md),
+[017 Datadog](../017_datadog_apm_metrics/README.md).
 
 ## Trio canónico (observabilidade)
 
@@ -24,17 +27,19 @@ upstream do Grafana colide com o BentoML). A UI do Prometheus permanece em
 
 ## Painéis Streamlit (por aula)
 
-Pasta `NNN_*` → porta **8500 + N** (N = número da aula).
+Pasta `NNN_*` → porta **8501 + N** (N = número da aula). A porta **8501**
+fica livre (padrão upstream do Streamlit / uso ad hoc).
 
 | Aula | Porta | Exemplo |
 | ---: | ---: | :--- |
-| 002 | 8502 | histograma+CDF |
-| 003 | 8503 | alerta KS |
-| 004 | 8504 | anomalia KS |
-| 005 | 8505 | KS entrada/saída |
-| 006 | 8506 | tráfego misto |
-| 008 | 8508 | alerta PSI |
-| 015 | 8515 | histograma/CDF Prometheus (após a 010) |
+| 002 | 8503 | histograma+CDF |
+| 003 | 8504 | alerta KS |
+| 004 | 8505 | anomalia KS |
+| 005 | 8506 | KS entrada/saída |
+| 006 | 8507 | tráfego misto |
+| 008 | 8509 | alerta PSI |
+| 015 | 8516 | histograma/CDF Prometheus (após a 010) |
+
 
 A aula **010** (`010_prometheus_promql`) não usa Streamlit.
 
@@ -46,8 +51,8 @@ O painel Streamlit **não** substitui o BentoML em 3000.
 | ---: | :--- | :--- |
 | 009 | 3000 | OCI/runtime; sem painel Streamlit |
 | 016 | 4000 | UI Grafana (handout; ver grafana.md) |
-| 017 | 8125 / 8126 | Datadog agent (auxiliar; omitir se sem lab) |
-| 018 | 9200 | Elasticsearch (auxiliar; eixo logs; stub) |
+| 017 | 8125 / 8126 | Datadog agent (auxiliar; DEGRADE-001 se sem DD_API_KEY) |
+| 018 | 9200 | Elasticsearch (auxiliar; _bulk/_search; sem Kibana no lab) |
 | 019 | 3100 | Loki (auxiliar; Explore no Grafana 4000; handout completo) |
 | 020 | — | contrato de monitoramento (sem serviço) |
 

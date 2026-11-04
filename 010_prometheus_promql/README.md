@@ -22,19 +22,27 @@ parte desse chão e aprofunda a leitura do formato, a seleção por labels, o
 cálculo de `rate`, a reconstrução manual de CDF e p95 a partir de buckets, a
 expressão `histogram_quantile` e a interpretação de regras de linha de base.
 
-Esta aula **não** usa Streamlit: o trabalho é no texto de `/metrics` e na
-interface do Prometheus (Table / Graph). O painel visual (histograma/CDF) fica
-na [aula 015](../015_prometheus_histcdf_streamlit/README.md), opcional para quem
-quiser um gráfico interativo depois de dominar a conta no papel e no PromQL.
-Quem já está confortável com buckets e quantis pode avançar à
-[aula 016](../016_grafana_dashboards/README.md) para montar painéis; o
-raciocínio estatístico e as expressões desta aula continuam válidos lá.
+**Conceito desta aula:** ler o contrato de `/metrics`, confirmar o scrape e
+usar PromQL (taxa, buckets, `histogram_quantile`, linha de base) na UI do
+Prometheus — sem Streamlit e sem dashboard Grafana nesta pasta.
 
-Portas do curso: [`docs/ports.md`](../docs/ports.md) (BentoML **3000**,
-Prometheus **9090**, Grafana **4000**). Demo opcional desta pasta: **8010** /
-**9100**. Mantenha essa distinção mental: o trio canônico observa o serviço
-real; as portas auxiliares isolam uma sequência sintética estável → lenta →
-recuperação, documentada em [SAMPLE_DATA.md](SAMPLE_DATA.md).
+Este documento espera os seguintes processos no host (mapa completo em
+[`docs/ports.md`](../docs/ports.md)):
+
+| Papel | Onde escuta | URL típica |
+| :--- | ---: | :--- |
+| **BentoML** (serviço real do curso) | **3000** | <http://127.0.0.1:3000/metrics> |
+| **Prometheus** (scrape + UI do curso) | **9090** | <http://127.0.0.1:9090> |
+| **Grafana** (quando a trilha o usar) | **4000** | <http://127.0.0.1:4000> |
+
+Demo **opcional** só desta pasta — não substitui o trio acima; isola uma
+sequência sintética estável → lenta → recuperação
+([SAMPLE_DATA.md](SAMPLE_DATA.md)):
+
+| Papel | Onde escuta | URL típica |
+| :--- | ---: | :--- |
+| Exporter sintético (`just demo-exporter`) | **8010** | <http://127.0.0.1:8010/metrics> |
+| Prometheus da demo (`just demo-prometheus`) | **9100** | <http://127.0.0.1:9100> |
 
 Ao longo das seções, o mesmo exemplo concreto — endpoints de inferência de
 imagem deste repositório — serve de fio condutor. Os números da fixture e da
@@ -1078,13 +1086,6 @@ gerador sintético. Falha em `just test` indica divergência entre a conta
 documentada e o código auxiliar — investigue antes de confiar num número do
 relatório que dependa de `prom_hist.py`.
 
-**Anterior:** ponte OCI —
-[aula 009](../009_bentoml_oci_runtime/README.md).
-
-**Seguinte (opcional):** painel Streamlit histograma/CDF —
-[aula 015](../015_prometheus_histcdf_streamlit/README.md); quem já domina
-buckets pode ir à [aula 016](../016_grafana_dashboards/README.md).
-
 ### 10.1 Comandos recorrentes (mapa rápido)
 
 | Objetivo | Onde | Comando ou URL |
@@ -1139,3 +1140,10 @@ Fim do handout da aula 010. O domínio dos buckets no papel e do
 `histogram_quantile` na UI é o pré-requisito conceitual para painéis
 (aulas 015 e 016) e para discutir SLOs com números que o time consiga
 recalcular.
+
+## Roteiro da trilha
+
+| | Pasta |
+| :--- | :--- |
+| **Anterior** | [`009_bentoml_oci_runtime`](../009_bentoml_oci_runtime/README.md) |
+| **Seguinte** | [`015_prometheus_histcdf_streamlit`](../015_prometheus_histcdf_streamlit/README.md) |

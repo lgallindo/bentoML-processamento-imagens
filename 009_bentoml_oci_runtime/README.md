@@ -1,24 +1,20 @@
 # Aula 009 — Runtime BentoML em imagem OCI
 
-Depois do vocabulário (`001`–`002`), o serviço precisa existir como
-**artefacto**: empacotado, reproduzível e alcançável na porta canónica
-**3000**, com `GET /metrics` raspável — antes de consultar séries no
-Prometheus (`010`).
-
-Esta aula é a **ponte** entre o Ato 0 e o Ato I. Não ensina PromQL nem
-drift.
+**Conceito desta aula:** o serviço como **artefacto** reproduzível — bento +
+imagem OCI — alcançável na porta canónica **3000**, com `GET /metrics`
+raspável. Não ensina PromQL nem drift; ensina empacotar e provar o runtime.
 
 ## Objectivos
 
 1. Empacotar o serviço com `bentoml build` (receita `just build` na raiz).
 2. Produzir uma imagem **OCI** (`just containerize`) e subi-la com Docker.
 3. Confirmar `http://127.0.0.1:3000/metrics` a partir do contêiner.
-4. Nomear três famílias de métricas que a aula `010` irá consultar.
+4. Nomear três famílias de métricas expostas em `/metrics`.
 5. Ler o fluxo raso de CI em [`.github/workflows/bentoml-oci.yml`](../.github/workflows/bentoml-oci.yml) — **sem** editar o YAML.
 
 ## Pré-requisitos
 
-- Docker Engine no anfitrião (para `containerize` / `docker run`).
+- Docker Engine no host (para `containerize` / `docker run`).
 - `uv` e as dependências da raiz (`just sync`).
 - Ficheiros da raiz: [`bentofile.yaml`](../bentofile.yaml),
   [`service.py`](../service.py), [`justfile`](../justfile).
@@ -62,13 +58,12 @@ curl --fail --silent --show-error http://127.0.0.1:3000/metrics | head
 Contrato de portas: BentoML permanece em **3000** ([`docs/ports.md`](../docs/ports.md)).
 Grafana **não** usa 3000 neste curso.
 
-## 4. Critério de saída da ponte
+## 4. Critério de saída
 
 Preencha [`CHECKLIST.md`](CHECKLIST.md): três famílias (ou nomes) de
-métricas visíveis em `/metrics` que a [`010_prometheus_promql`](../010_prometheus_promql/README.md)
-poderá seleccionar. Exemplos típicos neste serviço: contadores de pedido,
-histogramas de duração, séries auxiliares de processo — confirme no texto
-exposto, não invente.
+métricas visíveis em `/metrics`. Exemplos típicos neste serviço: contadores
+de pedido, histogramas de duração, séries auxiliares de processo — confirme
+no texto exposto, não invente.
 
 ## 5. CI raso (só leitura)
 
@@ -81,6 +76,4 @@ preciso alterar o fluxo nem publicar em GHCR nesta aula.
 | | Pasta |
 | :--- | :--- |
 | **Anterior** | [`002_histogram_cdf_streamlit`](../002_histogram_cdf_streamlit/README.md) |
-| **Seguinte** | [`010_prometheus_promql`](../010_prometheus_promql/README.md) ([`docs/prometheus.md`](../docs/prometheus.md)) |
-
-Ordem completa: [`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md).
+| **Seguinte** | [`010_prometheus_promql`](../010_prometheus_promql/README.md) |

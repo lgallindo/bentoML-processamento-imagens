@@ -32,5 +32,5 @@
 
 ## 4. Lacunas conscientes
 
-O que esta trilha ainda não cobre (ex.: stubs `017`–`019`) e o impacto no
-contrato:
+O que esta trilha ainda não cobre (ex.: lab Datadog sem chave, Kibana
+omitido no lab ES) e o impacto no contrato:

@@ -21,8 +21,8 @@ Contrato do curso (detalhe em [`docs/ports.md`](../docs/ports.md)):
 | **Prometheus** | **9090** |
 | **Grafana** | **4000** |
 
-Painéis Streamlit das aulas: **8500 + N** (exemplo: `003` → `8503`;
-`015` → `8515`).
+Painéis Streamlit das aulas: **8501 + N** (exemplo: `003` → `8504`;
+`015` → `8516`). A **8501** permanece livre.
 
 ## Objetivos finais de monitoramento
 
@@ -157,7 +157,7 @@ Pré-req: ponte `009`, vocabulário `001`–`002` e o
 [tutorial Prometheus](../docs/prometheus.md).
 
 **[`015_prometheus_histcdf_streamlit`](../015_prometheus_histcdf_streamlit/README.md)** —
-Painel Streamlit (porta **8515**): histograma, CDF e Python ↔ PromQL sobre
+Painel Streamlit (porta **8516**): histograma, CDF e Python ↔ PromQL sobre
 os mesmos buckets. Reforço visual **depois** da 010; não substitui a UI do
 Prometheus.
 
@@ -171,12 +171,14 @@ Logs OSS: Promtail/push → Loki (**3100**) → Explore no Grafana (**4000**),
 correlacionando picos de latência com linhas `phase=slow`.
 
 **[`018_elasticsearch_logs`](../018_elasticsearch_logs/README.md)** —
-Stub: índice de logs de pedido (eixo eventos, não séries Prom). Porta
-auxiliar típica **9200**.
+Logs como documentos: JSONL → `_bulk` → `_search` / agregações no
+Elasticsearch (**9200**). Contraste com Loki e Prometheus; lab sem Kibana
+(capturas via API + HTML).
 
 **[`017_datadog_apm_metrics`](../017_datadog_apm_metrics/README.md)** —
-Stub: vendor SaaS; chave só em `.env` local. Sem chave, salta-se o lab
-(DEGRADE-001).
+Vendor SaaS: labels Prometheus ↔ tags Datadog; OpenMetrics contra `:3000`.
+Chave só em `.env` local. Sem `DD_API_KEY`, salta-se o lab (DEGRADE-001);
+o trio 3000/9090/4000 permanece.
 
 ### Ato II — Tijolos no serviço
 
@@ -236,5 +238,9 @@ citando as aulas já cursadas.
 
 ---
 
-Próximo passo:
-[`001_histogram_cdf_cli`](../001_histogram_cdf_cli/README.md).
+## Roteiro da trilha
+
+| | Pasta |
+| :--- | :--- |
+| **Anterior** | — |
+| **Seguinte** | [`001_histogram_cdf_cli`](../001_histogram_cdf_cli/README.md) |

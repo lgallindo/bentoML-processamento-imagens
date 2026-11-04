@@ -4,8 +4,8 @@ default:
 sync:
     uv sync --no-active
 
-# 8515 = 8500 + 15 (Streamlit); demo exporter/prom ficam na aula 010 (8010/9100)
-app port="8515":
+# 8516 = 8501 + 15 (Streamlit); demo exporter/prom ficam na aula 010 (8010/9100)
+app port="8516":
     uv run --no-active streamlit run app.py --server.port {{port}} --server.headless true
 
 test:

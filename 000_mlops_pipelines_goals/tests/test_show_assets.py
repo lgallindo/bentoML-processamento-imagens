@@ -102,7 +102,7 @@ def test_readme_goals_path_and_runtime_label() -> None:
     assert "../docs/ports.md" in text
     assert "## Portas locais padrão" in text
     assert "**3000**" in text and "**9090**" in text and "**4000**" in text
-    assert "8500 + N" in text
+    assert "8501 + N" in text
 
 
 def test_readme_mermaid_architecture() -> None:

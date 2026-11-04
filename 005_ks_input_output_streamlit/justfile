@@ -24,7 +24,7 @@ verify-io-alerts:
 save-models:
     uv run --no-active python scripts/save_grayscale_models.py
 
-streamlit port="8505":
+streamlit port="8506":
     uv run --no-active streamlit run app.py --server.port {{port}} --server.headless true
 
 serve port="3335":

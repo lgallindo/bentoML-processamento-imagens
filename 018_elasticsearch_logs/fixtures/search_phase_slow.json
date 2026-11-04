@@ -1,0 +1,84 @@
+{
+  "took" : 187,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 5,
+      "relation" : "eq"
+    },
+    "max_score" : 2.0088239,
+    "hits" : [
+      {
+        "_index" : "bentoml-requests",
+        "_id" : "V4c1o6EBWPynRTWzSyyD",
+        "_score" : 2.0088239,
+        "_source" : {
+          "logged_at" : "2026-11-03T20:52:11.474360Z",
+          "endpoint" : "/inference-grayscale",
+          "http_response_code" : 200,
+          "latency_ms" : 420,
+          "phase" : "slow",
+          "message" : "inference grayscale slow path"
+        }
+      },
+      {
+        "_index" : "bentoml-requests",
+        "_id" : "WIc1o6EBWPynRTWzSyyD",
+        "_score" : 2.0088239,
+        "_source" : {
+          "logged_at" : "2026-11-03T20:52:26.474360Z",
+          "endpoint" : "/inference-grayscale",
+          "http_response_code" : 200,
+          "latency_ms" : 460,
+          "phase" : "slow",
+          "message" : "inference grayscale slow path"
+        }
+      },
+      {
+        "_index" : "bentoml-requests",
+        "_id" : "WYc1o6EBWPynRTWzSyyD",
+        "_score" : 2.0088239,
+        "_source" : {
+          "logged_at" : "2026-11-03T20:52:41.474360Z",
+          "endpoint" : "/inference-grayscale",
+          "http_response_code" : 200,
+          "latency_ms" : 500,
+          "phase" : "slow",
+          "message" : "inference grayscale slow path"
+        }
+      },
+      {
+        "_index" : "bentoml-requests",
+        "_id" : "Woc1o6EBWPynRTWzSyyD",
+        "_score" : 2.0088239,
+        "_source" : {
+          "logged_at" : "2026-11-03T20:52:56.474360Z",
+          "endpoint" : "/inference-grayscale",
+          "http_response_code" : 200,
+          "latency_ms" : 540,
+          "phase" : "slow",
+          "message" : "inference grayscale slow path"
+        }
+      },
+      {
+        "_index" : "bentoml-requests",
+        "_id" : "W4c1o6EBWPynRTWzSyyE",
+        "_score" : 2.0088239,
+        "_source" : {
+          "logged_at" : "2026-11-03T20:53:11.474360Z",
+          "endpoint" : "/inference-grayscale",
+          "http_response_code" : 200,
+          "latency_ms" : 580,
+          "phase" : "slow",
+          "message" : "inference grayscale slow path"
+        }
+      }
+    ]
+  }
+}

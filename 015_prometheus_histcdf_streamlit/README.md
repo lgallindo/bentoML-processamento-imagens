@@ -4,13 +4,13 @@ Uma API pode responder HTTP 200 enquanto seus usuários esperam cada vez mais.
 Para investigar essa situação, precisamos saber **o que foi medido, em qual
 período e como a consulta transformou as medidas**.
 
-Pré-requisito: conclua a [aula 010](../010_prometheus_promql/README.md)
-(`/metrics` + PromQL na UI do Prometheus) e, se ainda não o fez, o
-[tutorial de instalação](../docs/prometheus.md).
+**Conceito desta aula:** o mesmo histograma de latência pode ser lido como
+barras, como CDF e como quantil — e a conta em Python deve bater com o
+PromQL sobre os **mesmos** buckets.
 
-Nesta aula você usa um **painel Streamlit** para ver histograma, CDF e a
-comparação Python ↔ PromQL sobre os mesmos buckets — reforço visual do que a
-010 já pediu no papel e na UI do Prometheus.
+Pré-requisitos de ambiente: texto `/metrics` (BentoML **3000** ou demo) e
+Prometheus com PromQL ([tutorial](../docs/prometheus.md)). Não é obrigatório
+ter concluído outro handout numerado.
 
 ## Sumário
 
@@ -57,7 +57,7 @@ desempenho do BentoML.
 
 **Portas (não confundir).** Mapa do curso: [`docs/ports.md`](../docs/ports.md).
 O trio canônico é BentoML **3000**, Prometheus **9090**, Grafana **4000**.
-Esta aula acrescenta auxiliares (Streamlit **8515**; demo **8010**/**9100**) —
+Esta aula acrescenta auxiliares (Streamlit **8516**; demo **8010**/**9100**) —
 eles **não** substituem o trio.
 
 | Porta | Processo | Papel |
@@ -65,7 +65,7 @@ eles **não** substituem o trio.
 | **3000** | BentoML (`just serve` na raiz) | API + `GET /metrics` (canônico) |
 | **9090** | Prometheus do tutorial | UI/API sobre o serviço real (canônico) |
 | **4000** | Grafana | Painéis do curso (canônico; nunca 3000) |
-| **8515** | Painel desta aula (`just app`) | Streamlit auxiliar |
+| **8516** | Painel desta aula (`just app`) | Streamlit auxiliar |
 | **8010** / **9100** | Exporter + Prometheus sintéticos | Demo auxiliar (opcional) |
 
 Na pasta da aula, instale as dependências e abra o painel:
@@ -76,7 +76,7 @@ just sync
 just app
 ~~~
 
-O painel Streamlit fica em <http://127.0.0.1:8515>. Comece no modo **fixture**.
+O painel Streamlit fica em <http://127.0.0.1:8516>. Comece no modo **fixture**.
 
 Para gerar dados e carregá-los continuamente no Prometheus, mantenha três
 terminais abertos **nessa mesma pasta**:
@@ -85,7 +85,7 @@ terminais abertos **nessa mesma pasta**:
 |---|---|---|
 | 1 | `just demo-exporter` | Publica métricas sintéticas em `127.0.0.1:8010/metrics` |
 | 2 | `just demo-prometheus` | Coleta e armazena essas métricas; interface em `127.0.0.1:9100` |
-| 3 | `just app` | Abre o painel da aula em `127.0.0.1:8515` |
+| 3 | `just app` | Abre o painel da aula em `127.0.0.1:8516` |
 
 No painel, escolha **live** e informe `http://127.0.0.1:9100`. As primeiras
 coletas levam alguns segundos; deixe completar um minuto para explorar as

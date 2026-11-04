@@ -434,7 +434,7 @@ precisar mais do histórico.
 Com a coleta em `3000`/`9090` funcionando, a
 [aula 010](../010_prometheus_promql/README.md) trabalha `/metrics` e PromQL na
 UI do Prometheus (`9090`). O painel Streamlit (histograma/CDF) é a
-[aula 015](../015_prometheus_histcdf_streamlit/README.md) em `127.0.0.1:8515` —
+[aula 015](../015_prometheus_histcdf_streamlit/README.md) em `127.0.0.1:8516` —
 não substitui o BentoML em `3000` nem a UI do Prometheus.
 
 ## Referências

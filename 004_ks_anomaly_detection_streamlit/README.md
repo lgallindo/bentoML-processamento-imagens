@@ -195,7 +195,7 @@ just sync-demo-from-003
 # copia corpus_stats.json + batch_stats/ da aula 003
 
 just streamlit
-# http://localhost:8504
+# http://localhost:8505
 ```
 
 ```bash
@@ -234,9 +234,6 @@ Ver bibliografia KS / drift no handout da
 [aula 003](../003_ks_drift_alert_streamlit/README.md#18-bibliografia).
 
 ## Roteiro da trilha
-
-Ordem de estudo em quatro atos: ver
-[`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md).
 
 | | Pasta |
 | :--- | :--- |

@@ -1,24 +1,20 @@
 # Aula 016 — Dashboards Grafana sobre Prometheus
 
-Na [aula 010](../010_prometheus_promql/README.md) você aprendeu a **ler** o
-texto de `/metrics`, a confirmar o scrape e a escrever PromQL na interface do
-Prometheus. Isso basta para investigar. Não basta para **contar a história**
-todos os dias à equipa: cada pessoa teria de reabrir a UI, colar a expressão,
-escolher a janela.
+**Conceito desta aula:** um *dashboard* operacional é um caderno de bordo
+partilhável — painéis versionáveis que respondem «há tráfego? erro? latência
+na cauda?» sem cada pessoa reabrir a UI do Prometheus e colar PromQL.
 
-O Grafana entra aqui como o **caderno de bordo** do caminho de saúde — porta
-canónica **4000**, nunca 3000 (essa permanece do BentoML). Ele **não** substitui
-o Prometheus: consulta-o. Também não substitui o painel Streamlit da
-[aula 015](../015_prometheus_histcdf_streamlit/README.md), que é reforço
-didáctico local sobre buckets, não um dashboard operacional.
+O Grafana (**porta 4000**, nunca 3000 — essa fica do BentoML) **consulta** o
+Prometheus; não armazena séries e não substitui o texto cru de
+`GET /metrics`. Um painel Streamlit local sobre buckets é outra ferramenta
+(didáctica); um vendor SaaS é outra ainda. Aqui o objecto é só o dashboard
+OSS sobre a fonte Prometheus do curso.
 
 ![Do pedido HTTP ao painel](illustrations/00_pipeline_to_panel.png)
 
-Instalação e provisionamento passo a passo continuam em
-[`docs/grafana.md`](../docs/grafana.md). Esta pasta é o handout numerado:
-objectivos, comparações, figuras, exercício e entrega.
-
-Portas do curso: [`docs/ports.md`](../docs/ports.md).
+Instalação e provisionamento passo a passo:
+[`docs/grafana.md`](../docs/grafana.md). Portas:
+[`docs/ports.md`](../docs/ports.md).
 
 ## Objectivos
 
@@ -26,22 +22,25 @@ Pratique até conseguir:
 
 - ter Grafana em <http://127.0.0.1:4000> com a fonte Prometheus
   `127.0.0.1:9090` (YAML versionado em `monitoring/grafana/`);
-- distinguir o papel do Grafana face a `/metrics`, à UI do Prometheus, ao
-  Streamlit 015 e a um vendor SaaS (Datadog, aula `017`);
+- distinguir Grafana de `/metrics` cru, da UI ad-hoc do Prometheus e de um
+  vendor SaaS;
 - montar ou importar um dashboard com taxa por `endpoint`, **taxa de erro**,
   p95 e linha de base (média ± k·σ);
-- responder uma pergunta operacional **só** com o gráfico — sem Streamlit e
-  sem colar PromQL no relatório.
+- responder uma pergunta operacional **só** com o gráfico — sem colar
+  PromQL no relatório de entrega.
 
 ## Pré-requisitos
 
-1. Aula `010` concluída (PromQL e scrape). O reforço `015` é opcional.
-2. Trio canónico: BentoML **3000**, Prometheus **9090**, Grafana **4000**.
+1. Trio canónico a correr ou compreendido: BentoML **3000** (com
+   `/metrics`), Prometheus a raspar em **9090**, Grafana em **4000**.
+2. Noção mínima de PromQL (`up`, `rate`, labels) — basta o necessário para
+   ler as expressões dos painéis; o tutorial Prometheus do repo ajuda se
+   faltar base.
 3. Tutorial [`docs/grafana.md`](../docs/grafana.md) (secções 1–3) feito ou em
-   paralelo com a secção 2 abaixo.
-4. Tráfego de exemplo (tutorial §4) — senão os painéis ficam planos.
+   paralelo com a secção 3 abaixo.
+4. Algum tráfego de exemplo (tutorial §4) — senão os painéis ficam planos.
 
-Se no seu anfitrião a porta 4000 (ou 9090) já pertencer a **outro** serviço,
+Se no seu host a porta 4000 (ou 9090) já pertencer a **outro** serviço,
 suba o Grafana/Prometheus da aula noutro endereço **só** para laboratório e
 documente o desvio; o contrato do curso permanece 4000/9090. O harness de
 capturas desta pasta (`scripts/capture_screenshots.sh`) usa portas efémeras
@@ -56,19 +55,19 @@ Imagine que a latência do `/inference-grayscale` «parece» lenta. Onde olha?
 | Instrumento | O que vê | O que **não** faz |
 | :--- | :--- | :--- |
 | `GET /metrics` (BentoML) | Texto HELP/TYPE, contadores crus | Histórico longo; narrativa partilhada |
-| UI Prometheus (aula 010) | PromQL ad-hoc, Table/Graph, regras | Layout estável para a equipa toda manhã |
+| UI Prometheus | PromQL ad-hoc, Table/Graph, regras | Layout estável para a equipa toda manhã |
 | **Grafana (esta aula)** | Painéis versionáveis, várias queries, Explore | Armazenar séries (continua a ser o Prom) |
-| Streamlit 015 | Histograma/CDF/p95 didáctico | Scrape real, alertas, fonte Prometheus viva |
-| Datadog (`017`, stub) | Vendor SaaS, APM/tags | Substituir o trio local da trilha |
+| Painel Streamlit local | Histograma/CDF/p95 didáctico | Scrape operacional partilhado |
+| Vendor SaaS (ex.: Datadog) | APM/tags numa conta | Substituir o trio local 3000/9090/4000 |
 
-Regra de ouro (já na 010, agora com consequência visual):
+Regra de ouro:
 
 > O Grafana **consulta o Prometheus**. Não abre `http://127.0.0.1:3000/metrics`
 > directamente. Se o scrape falhar, o dashboard fica bonito e mentiroso.
 
 ## 2. Confirme a fonte antes do painel
 
-Na UI do Prometheus da aula (`:9090`, ou a demo `:9100` da pasta 010):
+Na UI do Prometheus (`:9090`):
 
 ~~~promql
 up{job="bentoml-imagens"}
@@ -82,8 +81,8 @@ Taxa por endpoint (a mesma família que o painel de volume no Grafana):
 
 ![Prometheus: rate por endpoint](illustrations/02_prometheus_graph_rate.png)
 
-O texto bruto que o scrape lê (exporter sintético da 010 no harness; no curso
-real, o BentoML em `:3000`):
+O texto bruto que o scrape lê (BentoML em `:3000`, ou o exporter do harness
+desta pasta):
 
 ![Trecho de /metrics no navegador](illustrations/09_metrics_raw_text.png)
 
@@ -120,7 +119,7 @@ ou monte à mão (tutorial §5). Layout de referência:
 | Linha de base | `avg_over_time(...[30m]) + 3 * stddev_over_time(...[30m])` | A cauda saiu do orçamento? |
 
 Se o label de código HTTP no seu `/metrics` diferir de `http_response_code`,
-ajuste — a fonte da verdade é o texto que a 010 ensinou a ler, não esta tabela.
+ajuste — a fonte da verdade é o texto em `/metrics`, não esta tabela.
 
 Detalhe de construção: [`docs/grafana.md`](../docs/grafana.md) §5–6 (inclui o
 painel de alertas geridos pelo Prometheus).
@@ -129,9 +128,9 @@ painel de alertas geridos pelo Prometheus).
 
 ## 5. Explore versus Graph do Prometheus
 
-O **Explore** do Grafana é o primo do Graph da 010: uma query, uma janela, sem
-compromisso de layout. Use-o para **provar** uma expressão antes de a cravar no
-dashboard.
+O **Explore** do Grafana é o primo do Graph do Prometheus: uma query, uma
+janela, sem compromisso de layout. Use-o para **provar** uma expressão antes
+de a cravar no dashboard.
 
 ![Explore com up{job=…}](illustrations/07_grafana_explore_up.png)
 
@@ -145,10 +144,10 @@ Diferença prática:
 
 ## 6. História curta: o semáforo e o romanceiro
 
-Na 010, o alerta `BentoMLResponseTimeAnomaly` vive no Prometheus. No Grafana
-você **vê** a mesma curva de p95 e o limite de três desvios-padrão lado a
-lado — o romanceiro (dashboard) e o semáforo (regra) deixam de ser mundos
-separados.
+O alerta `BentoMLResponseTimeAnomaly` (quando existir) vive no Prometheus. No
+Grafana você **vê** a mesma curva de p95 e o limite de três desvios-padrão
+lado a lado — o romanceiro (dashboard) e o semáforo (regra) deixam de ser
+mundos separados.
 
 Quando o p95 cruza o limite e permanece um minuto, a regra dispara; o painel
 só ilustra. Não peça ao Grafana para «ser» o Alertmanager nesta aula.
@@ -162,7 +161,7 @@ Relato curto (até uma página), **sem** Streamlit:
 3. Resposta **citando só o gráfico**:
    «Neste intervalo, o p95 está / não está dentro do limite de três
    desvios-padrão? Em que `endpoint`?»
-4. Uma frase de comparação: o que a UI do Prometheus da 010 faria melhor /
+4. Uma frase de comparação: o que a UI ad-hoc do Prometheus faria melhor /
    pior para a mesma pergunta.
 5. Uma limitação (janela curta, pouco tráfego, label de erro ausente, scrape
    noutro Prometheus).
@@ -189,7 +188,7 @@ bash scripts/capture_screenshots.sh
 ~~~
 
 O harness **não** altera o contrato 3000/9090/4000 do aluno; só contorna
-anfitriões onde essas portas já estão ocupadas.
+hosts onde essas portas já estão ocupadas.
 
 ## 9. Critério de conclusão
 
@@ -204,7 +203,7 @@ anfitriões onde essas portas já estão ocupadas.
 | :--- | :--- |
 | **Datasource** | Ponte Grafana → Prometheus (`:9090`) |
 | **Dashboard** | Conjunto versionável de painéis |
-| **Explore** | Query ad-hoc no Grafana (irmão do Graph da 010) |
+| **Explore** | Query ad-hoc no Grafana (irmão do Graph do Prometheus) |
 | **Recording rule** | Série pré-computada no Prometheus (ex. p95) |
 | **Linha de base** | Aqui: média ± k·σ sobre o p95 numa janela |
 
@@ -212,7 +211,5 @@ anfitriões onde essas portas já estão ocupadas.
 
 | | Pasta |
 | :--- | :--- |
-| **Anterior** | [`015_prometheus_histcdf_streamlit`](../015_prometheus_histcdf_streamlit/README.md) (ou [`010`](../010_prometheus_promql/README.md) se saltar o reforço) |
-| **Seguinte** | [`019_loki_grafana_logs`](../019_loki_grafana_logs/README.md) (logs OSS; se stub, Ato II [`011`](../011_corpus_histograms_model/README.md)) |
-
-Ordem completa: [`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md).
+| **Anterior** | [`015_prometheus_histcdf_streamlit`](../015_prometheus_histcdf_streamlit/README.md) |
+| **Seguinte** | [`019_loki_grafana_logs`](../019_loki_grafana_logs/README.md) |

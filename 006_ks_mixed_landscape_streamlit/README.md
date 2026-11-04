@@ -295,7 +295,7 @@ just generate-illustrations
 # opcional: regenera illustrations/*.png usadas neste README
 
 just streamlit
-# sobe o app em http://localhost:8506
+# sobe o app em http://localhost:8507
 ```
 
 Caminho **com servidor** (log real em `request_features/`):
@@ -360,9 +360,6 @@ just test
 5. [Pillow — Image](https://pillow.readthedocs.io/en/stable/reference/Image.html)
 
 ## Roteiro da trilha
-
-Ordem de estudo em quatro atos: ver
-[`000_mlops_pipelines_goals`](../000_mlops_pipelines_goals/README.md).
 
 | | Pasta |
 | :--- | :--- |

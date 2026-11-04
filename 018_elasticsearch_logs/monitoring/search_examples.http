@@ -1,0 +1,25 @@
+### Aula 018 — exemplos Dev Tools / curl (índice bentoml-requests)
+
+### Cluster
+GET http://127.0.0.1:9200/_cluster/health
+
+### Contagem
+GET http://127.0.0.1:9200/bentoml-requests/_count
+
+### Pico lento
+POST http://127.0.0.1:9200/bentoml-requests/_search
+Content-Type: application/json
+
+{"query":{"term":{"phase":"slow"}},"size":5}
+
+### Agregação por fase
+POST http://127.0.0.1:9200/bentoml-requests/_search
+Content-Type: application/json
+
+{"size":0,"aggs":{"by_phase":{"terms":{"field":"phase"}}}}
+
+### Latência alta
+POST http://127.0.0.1:9200/bentoml-requests/_search
+Content-Type: application/json
+
+{"query":{"range":{"latency_ms":{"gte":400}}},"size":3,"sort":[{"latency_ms":"desc"}]}
