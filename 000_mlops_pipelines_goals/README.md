@@ -70,24 +70,36 @@ Antes de medir saúde, a ponte `009` deixa o runtime raspável; em seguida
 
 ## Ordem de estudo em quatro atos
 
-Estude nesta ordem (atos, não lexicografia das pastas). `001`–`002`
-vocabulário; ponte `009` (BentoML → OCI); `010`–`015` PromQL (+ Streamlit
-opcional); `016` Grafana; depois logs/vendors `019` Loki → `018` ES →
-`017` Datadog (este último exige chave de laboratório); `011`–`014` tijolos;
-`003`–`006` teatro KS; `008` PSI; contrato `020`. A `003` e a `008`
+Estude nesta ordem (atos, não lexicografia das pastas). A `003` e a `008`
 mantêm os paths estáveis (links e extratos Cloud).
 
-**Ato 0 — Vocabulário.** Histograma e CDF, as duas leituras de distribuição
-que sustentam o resto:
+### Ato 0 — Vocabulário
+
+Sem um léxico comum de distribuição, o restante da trilha vira jargão:
+ninguém sabe dizer o que um bucket de latência ou uma luminância «deslocada»
+significa em números. Este ato fixa histograma e CDF — as duas leituras que
+sustentam saúde, drift e anomalia — primeiro na linha de comando e depois no
+painel.
+
 [`001_histogram_cdf_cli`](../001_histogram_cdf_cli/README.md) →
 [`002_histogram_cdf_streamlit`](../002_histogram_cdf_streamlit/README.md).
 
-**Ponte — Runtime empacotado.** Do código ao contêiner OCI, com `/metrics`
-alcançável antes de consultar séries:
+### Ponte — Runtime empacotado
+
+Antes de scrapes e painéis, cumpre existir um processo que responda HTTP e
+publique `/metrics`. A ponte motiva o empacote (serve → bento → OCI com
+Docker ou Podman), prova a porta **3000** e esboça o mapa BentoCloud, para
+que o Ato I não comece a consultar séries de um Host vazio.
+
 [`009_bentoml_oci_runtime`](../009_bentoml_oci_runtime/README.md).
 
-**Ato I — Saúde do servidor.** Latência e séries no caminho BentoML →
-Prometheus → Grafana, depois logs/vendors:
+### Ato I — Saúde do servidor
+
+O primeiro fim de monitoramento: o Runtime responde, a latência e o erro
+estão em faixa, e o operador lê isso em séries e painéis — não só no
+código. Percorre-se PromQL, regras, alertas, Grafana e, em seguida, logs e
+um vendor (Datadog exige chave de laboratório).
+
 [`010_prometheus_promql`](../010_prometheus_promql/README.md) →
 [`022_prometheus_rules_ui`](../022_prometheus_rules_ui/README.md) →
 [`021_prometheus_alerts_ui`](../021_prometheus_alerts_ui/README.md) →
@@ -98,24 +110,38 @@ Prometheus → Grafana, depois logs/vendors:
 [`018_elasticsearch_logs`](../018_elasticsearch_logs/README.md) →
 [`017_datadog_apm_metrics`](../017_datadog_apm_metrics/README.md).
 
-**Ato II — Tijolos no serviço.** Corpus, log e rotas de monitor — o caminho
-dos dados; o juízo do alerta vem depois:
+### Ato II — Tijolos no serviço
+
+HTTP verde não prova que o *mundo de entrada* permanece o do treino. Este
+ato constrói, no próprio serviço, corpus, log de pedidos e rotas que
+expõem histogramas e KS — o caminho dos dados — antes do teatro de alerta
+do Ato III.
+
 [`011_corpus_histograms_model`](../011_corpus_histograms_model/README.md) →
 [`012_grayscale_request_logging`](../012_grayscale_request_logging/README.md) →
 [`013_request_log_histograms`](../013_request_log_histograms/README.md) →
 [`014_ks_production_vs_corpus`](../014_ks_production_vs_corpus/README.md).
 
-**Ato III — Drift e anomalias.** O teatro das imagens: referência versus
-lote, janela, entrada/saída, tráfego misto e, por fim, outro instrumento
-(PSI):
+### Ato III — Drift e anomalias
+
+Com os tijolos no ar, o foco muda para o juízo: referência versus lote,
+candidato ou janela, entrada versus saída, tráfego misto e, por fim, o
+mesmo problema com outro instrumento (PSI). Motivo: saúde do Host pode
+permanecer aceitável enquanto a distribuição das imagens já não é a do
+corpus.
+
 [`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md) →
 [`004_ks_anomaly_detection_streamlit`](../004_ks_anomaly_detection_streamlit/README.md) →
 [`005_ks_input_output_streamlit`](../005_ks_input_output_streamlit/README.md) →
 [`006_ks_mixed_landscape_streamlit`](../006_ks_mixed_landscape_streamlit/README.md) →
 [`008_psi_drift_alert_streamlit`](../008_psi_drift_alert_streamlit/README.md).
 
-**Sinal, limiar, ação e dono.** Uma página que amarra os três fins
-desta aula 000 a sinais e limiares:
+### Sinal, limiar, ação e dono
+
+Fecha-se a trilha sem inventar ferramenta nova: uma página amarra os três
+fins desta aula 000 a sinal, limiar, ação e dono, citando pastas já
+praticadas. Motivo: limiar sem responsável vira aviso órfão.
+
 [`020_monitoring_contract`](../020_monitoring_contract/README.md).
 
 ## Índice das aulas
@@ -124,25 +150,40 @@ Catálogo por pasta. Para **estudar**, use a ordem dos quatro atos acima.
 
 ### Ato 0 — Vocabulário
 
+Histograma e CDF são o alfabeto desta trilha. Sem eles, buckets de Prometheus
+e luminâncias de imagem ficam nomes sem operação. As duas pastas abaixo
+ensinam o mesmo objeto duas vezes: na CLI (controle fino) e no Streamlit
+(visão conjunta de tabela e gráfico).
+
 **[`001_histogram_cdf_cli`](../001_histogram_cdf_cli/README.md)** —
 Aprende o que é um histograma (contagens por faixa) e uma CDF (fração
-acumulada), com um microexemplo na linha de comando. Você produz JSON, CSV
+acumulada), com um microexemplo na linha de comando. Produz-se JSON, CSV
 ou PNG a partir de uma lista de números. É a base matemática de quase tudo
 que vem depois — inclusive buckets de latência e luminância de imagens.
 
 **[`002_histogram_cdf_streamlit`](../002_histogram_cdf_streamlit/README.md)** —
-O mesmo objeto da `001`, agora num painel: cola valores (ou amostra), ajusta
-bins e intervalo, vê tabela e gráfico juntos. Consolida a intuição antes de
-falar de alertas ou Prometheus.
+O mesmo objeto da `001`, agora num painel: cola-se valores (ou amostra),
+ajusta-se bins e intervalo, vê-se tabela e gráfico juntos. Consolida a
+intuição antes de falar de alertas ou Prometheus.
 
 ### Ponte — Runtime empacotado
 
+O monitoramento de saúde pressupõe um alvo raspável. Esta ponte existe para
+o aluno empacotar o serviço, subir o Contêiner e confirmar `/metrics` na
+porta **3000** — motivação: a `010` não inventa o Endpoint; ela o consulta.
+
 **[`009_bentoml_oci_runtime`](../009_bentoml_oci_runtime/README.md)** —
-Empacota o serviço (`just build`), gera imagem OCI e prova
-`GET /metrics` na porta **3000**. Critério de saída: nomear o que a `010`
-irá consultar. Inclui leitura rasa do workflow de CI — sem editar YAML.
+Motiva o empacote (serve → bento → OCI), gera imagem com backend Docker ou
+Podman, prova `GET /metrics` na porta **3000** e desenha o mapa BentoCloud
+(sem conta obrigatória). Critério de saída: nomear o que a `010` irá
+consultar. Inclui leitura rasa do workflow de CI — sem editar YAML.
 
 ### Ato I — Saúde do servidor
+
+Aqui responde-se à primeira pergunta da trilha: o pipeline está de pé e a
+latência é interpretável? Percorre-se a cadeia BentoML → Prometheus →
+Grafana e, depois, logs e um vendor. Motivo: sem essa evidência, drift e
+anomalia discutem-se no vácuo operacional.
 
 **[`010_prometheus_promql`](../010_prometheus_promql/README.md)** —
 Pergunta: o pipeline responde com latência interpretável? Você lê o
@@ -155,7 +196,8 @@ Pré-req: ponte `009`, vocabulário `001`–`002` e o
 **[`022_prometheus_rules_ui`](../022_prometheus_rules_ui/README.md)** —
 Página **Rules** (`/rules`): grupo `bentoml-response-time`, recording e
 alerting a partir de `monitoring/bentoml.rules.yml`, estado de avaliação
-(OK ≠ firing). Confirme o job `bentoml-imagens` (ou use a demo 9112).
+(OK na regra não é o mesmo que firing). Confirme o job `bentoml-imagens`
+(ou use a demo 9112).
 
 **[`021_prometheus_alerts_ui`](../021_prometheus_alerts_ui/README.md)** —
 Página **Alerts** (`/alerts`): pending e firing, regra
@@ -188,10 +230,15 @@ o trio 3000/9090/4000 permanece.
 
 ### Ato II — Tijolos no serviço
 
+Para drift e anomalia existirem de fato, o Runtime precisa carregar um
+corpus, registrar pedidos e expor números de comparação. Este ato monta
+esses tijolos no serviço — motivação: o Ato III alerta sobre evidência que
+alguém gravou, não sobre um PDF de teoria.
+
 **[`011_corpus_histograms_model`](../011_corpus_histograms_model/README.md)** —
 O serviço deixa de ser só filtro HTTP: entra um corpus de treino, um modelo
-picklable de tons de cinza e rotas que reportam histogramas do corpus. Você
-vê onde o «mundo de referência» mora no runtime.
+picklable de tons de cinza e rotas que reportam histogramas do corpus.
+Vê-se onde o «mundo de referência» mora no runtime.
 
 **[`012_grayscale_request_logging`](../012_grayscale_request_logging/README.md)** —
 Cada pedido a `/inference-grayscale` grava features em disco **antes** da
@@ -210,10 +257,15 @@ substitui o painel e o semáforo da `003`.
 
 ### Ato III — Drift e anomalias
 
+Fecha-se o segundo e o terceiro fins: o lote (ou a janela) afastou-se do
+corpus? Uma imagem ou um intervalo é anômalo? Motivo pedagógico: o aluno já
+viu Host saudável no Ato I; agora confronta distribuição de entrada — e
+aprende que trocar KS por PSI não apaga a pergunta.
+
 **[`003_ks_drift_alert_streamlit`](../003_ks_drift_alert_streamlit/README.md)** —
 Âncora do arco: HTTP pode estar verde e a latência aceitável, enquanto as
 luminâncias dos pedidos já não parecem o treino. Fluxo L → histograma → CDF
-→ D → alerta (com regra de amostra inconclusiva). Volta aqui depois dos
+→ D → alerta (com regra de amostra inconclusiva). Volta-se aqui depois dos
 tijolos `011`–`014`.
 
 **[`004_ks_anomaly_detection_streamlit`](../004_ks_anomaly_detection_streamlit/README.md)** —
@@ -237,6 +289,10 @@ clássicas de monitoramento). Fecha o Ato III mostrando que trocar a métrica
 não apaga a pergunta sobre o mundo dos dados.
 
 ### Sinal, limiar, ação e dono
+
+Depois de praticar os três fins, falta o artefato que impede o limiar órfão:
+quem age quando o número cruza a linha? Esta seção motiva o contrato como
+fecho — uma página, quatro campos, evidência nas pastas já cursadas.
 
 **[`020_monitoring_contract`](../020_monitoring_contract/README.md)** —
 Uma página que amarra saúde, drift e anomalia a sinais, limiares e dono,

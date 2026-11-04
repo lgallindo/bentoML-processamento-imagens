@@ -102,9 +102,25 @@ def test_readme_goals_path_and_runtime_label() -> None:
     assert "../docs/prometheus.md" in text
     assert "../docs/grafana.md" in text
     assert "../docs/ports.md" in text
-    assert "## Portas locais padrão" in text
+    assert "## Portas nesta aula" in text
     assert "**3000**" in text and "**9090**" in text and "**4000**" in text
     assert "8501 + N" in text
+    # Cada ato (e a ponte / o fecho) traz prosa de introdução e motivação.
+    for heading in (
+        "### Ato 0 — Vocabulário",
+        "### Ponte — Runtime empacotado",
+        "### Ato I — Saúde do servidor",
+        "### Ato II — Tijolos no serviço",
+        "### Ato III — Drift e anomalias",
+        "### Sinal, limiar, ação e dono",
+    ):
+        assert text.count(heading) >= 2, f"expected order+index for {heading}"
+    assert "léxico comum de distribuição" in text or "alfabeto desta trilha" in text
+    assert "alvo raspável" in text or "Host vazio" in text
+    assert "primeira pergunta da trilha" in text or "pipeline está de pé" in text
+    assert "tijolos no serviço" in text.lower() or "mundo de entrada" in text
+    assert "segundo e o terceiro fins" in text or "Host saudável no Ato I" in text
+    assert "limiar órfão" in text or "aviso órfão" in text
 
 
 def test_readme_mermaid_architecture() -> None:
