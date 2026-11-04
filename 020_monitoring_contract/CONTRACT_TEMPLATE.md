@@ -5,9 +5,9 @@
 | Campo | Preenchimento |
 | :--- | :--- |
 | Sinal | |
-| Fonte (aula `NNN_*`) | ex.: `010_prometheus_promql`, `016_grafana_dashboards` |
+| Fonte (aula `NNN_*`) | ex.: `010_prometheus_promql` |
 | Limiar | |
-| Acção se violado | |
+| Ação se violado | |
 | Dono / papel | |
 
 ## 2. Drift de dados
@@ -15,9 +15,9 @@
 | Campo | Preenchimento |
 | :--- | :--- |
 | Sinal | |
-| Fonte (aula `NNN_*`) | ex.: `003_ks_drift_alert_streamlit`, `008_psi_drift_alert_streamlit`, `014_ks_production_vs_corpus` |
+| Fonte (aula `NNN_*`) | ex.: `003_ks_drift_alert_streamlit`, `008_psi_drift_alert_streamlit` |
 | Limiar | |
-| Acção se violado | |
+| Ação se violado | |
 | Dono / papel | |
 
 ## 3. Detecção de anomalias
@@ -27,7 +27,7 @@
 | Sinal | |
 | Fonte (aula `NNN_*`) | ex.: `004_ks_anomaly_detection_streamlit` |
 | Limiar | |
-| Acção se violado | |
+| Ação se violado | |
 | Dono / papel | |
 
 ## 4. Lacunas conscientes
