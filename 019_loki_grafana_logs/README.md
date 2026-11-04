@@ -38,7 +38,7 @@ Pratique até conseguir:
    ([`fixtures/bentoml_requests.jsonl`](fixtures/bentoml_requests.jsonl));
    gera-se aqui, sem outro handout.
 
-> No anfitrião de desenvolvimento, a porta **3100** pode já estar ocupada
+> No host de desenvolvimento, a porta **3100** pode já estar ocupada
 > (outro serviço). O contrato do curso continua 3100; o harness usa
 > **13100** efémero e documenta o desvio — o Grafana do harness pode ir a
 > **14000** pelo mesmo motivo.

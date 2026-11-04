@@ -44,9 +44,9 @@ def check_streamlit_justfiles() -> None:
         text = just.read_text(encoding="utf-8")
         if "streamlit run" not in text and "streamlit" not in text.lower():
             # pastas sem painel Streamlit (ex. 001 CLI, 010+)
-            if f'port="{8500 + n}"' not in text and "streamlit" not in text:
+            if f'port="{8501 + n}"' not in text and "streamlit" not in text:
                 continue
-        expect = 8500 + n
+        expect = 8501 + n
         # recipes app/streamlit with default port=
         found = re.findall(
             r"(?:^|\n)(?:app|streamlit)\s+port=\"(\d+)\"",
@@ -63,7 +63,7 @@ def check_streamlit_justfiles() -> None:
             if int(port) != expect:
                 falhar(
                     f"{pasta.name}/justfile: Streamlit default {port}, "
-                    f"esperado {expect} (8500+{n:03d})"
+                    f"esperado {expect} (8501+{n:03d})"
                 )
 
 
@@ -113,7 +113,7 @@ def main() -> int:
         for item in FALHAS:
             print(f"  - {item}", file=sys.stderr)
         return 1
-    print("check-ports: OK (trio 3000/9090/4000 + Streamlit 8500+N)")
+    print("check-ports: OK (trio 3000/9090/4000 + Streamlit 8501+N; 8501 livre)")
     return 0
 
 

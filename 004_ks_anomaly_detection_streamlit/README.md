@@ -195,7 +195,7 @@ just sync-demo-from-003
 # copia corpus_stats.json + batch_stats/ da aula 003
 
 just streamlit
-# http://localhost:8504
+# http://localhost:8505
 ```
 
 ```bash

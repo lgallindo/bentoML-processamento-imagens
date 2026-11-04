@@ -22,15 +22,11 @@ parte desse chão e aprofunda a leitura do formato, a seleção por labels, o
 cálculo de `rate`, a reconstrução manual de CDF e p95 a partir de buckets, a
 expressão `histogram_quantile` e a interpretação de regras de linha de base.
 
-Esta aula **não** usa Streamlit: o trabalho é no texto de `/metrics` e na
-interface do Prometheus (Table / Graph). O painel visual (histograma/CDF) fica
-na [aula 015](../015_prometheus_histcdf_streamlit/README.md), opcional para quem
-quiser um gráfico interativo depois de dominar a conta no papel e no PromQL.
-Quem já está confortável com buckets e quantis pode avançar à
-[aula 016](../016_grafana_dashboards/README.md) para montar painéis; o
-raciocínio estatístico e as expressões desta aula continuam válidos lá.
+**Conceito desta aula:** ler o contrato de `/metrics`, confirmar o scrape e
+usar PromQL (taxa, buckets, `histogram_quantile`, linha de base) na UI do
+Prometheus — sem Streamlit e sem dashboard Grafana nesta pasta.
 
-Este documento espera os seguintes processos no anfitrião (mapa completo em
+Este documento espera os seguintes processos no host (mapa completo em
 [`docs/ports.md`](../docs/ports.md)):
 
 | Papel | Onde escuta | URL típica |

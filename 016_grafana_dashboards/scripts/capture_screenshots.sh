@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Harness efémero para capturas da aula 016.
 # Sobe exporter :8010 + Prometheus :9100 + Grafana :14000 (Docker),
-# porque no anfitrião as portas canónicas 3000/4000/9090 podem estar
+# porque no host as portas canónicas 3000/4000/9090 podem estar
 # ocupadas. O handout do aluno continua a usar 3000/9090/4000.
 set -euo pipefail
 

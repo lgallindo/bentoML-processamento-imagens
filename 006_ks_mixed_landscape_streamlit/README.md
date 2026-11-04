@@ -295,7 +295,7 @@ just generate-illustrations
 # opcional: regenera illustrations/*.png usadas neste README
 
 just streamlit
-# sobe o app em http://localhost:8506
+# sobe o app em http://localhost:8507
 ```
 
 Caminho **com servidor** (log real em `request_features/`):

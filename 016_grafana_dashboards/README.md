@@ -40,7 +40,7 @@ Pratique até conseguir:
    paralelo com a secção 3 abaixo.
 4. Algum tráfego de exemplo (tutorial §4) — senão os painéis ficam planos.
 
-Se no seu anfitrião a porta 4000 (ou 9090) já pertencer a **outro** serviço,
+Se no seu host a porta 4000 (ou 9090) já pertencer a **outro** serviço,
 suba o Grafana/Prometheus da aula noutro endereço **só** para laboratório e
 documente o desvio; o contrato do curso permanece 4000/9090. O harness de
 capturas desta pasta (`scripts/capture_screenshots.sh`) usa portas efémeras
@@ -188,7 +188,7 @@ bash scripts/capture_screenshots.sh
 ~~~
 
 O harness **não** altera o contrato 3000/9090/4000 do aluno; só contorna
-anfitriões onde essas portas já estão ocupadas.
+hosts onde essas portas já estão ocupadas.
 
 ## 9. Critério de conclusão
 

@@ -21,8 +21,8 @@ Contrato do curso (detalhe em [`docs/ports.md`](../docs/ports.md)):
 | **Prometheus** | **9090** |
 | **Grafana** | **4000** |
 
-Painéis Streamlit das aulas: **8500 + N** (exemplo: `003` → `8503`;
-`015` → `8515`).
+Painéis Streamlit das aulas: **8501 + N** (exemplo: `003` → `8504`;
+`015` → `8516`). A **8501** permanece livre.
 
 ## Objetivos finais de monitoramento
 
@@ -157,7 +157,7 @@ Pré-req: ponte `009`, vocabulário `001`–`002` e o
 [tutorial Prometheus](../docs/prometheus.md).
 
 **[`015_prometheus_histcdf_streamlit`](../015_prometheus_histcdf_streamlit/README.md)** —
-Painel Streamlit (porta **8515**): histograma, CDF e Python ↔ PromQL sobre
+Painel Streamlit (porta **8516**): histograma, CDF e Python ↔ PromQL sobre
 os mesmos buckets. Reforço visual **depois** da 010; não substitui a UI do
 Prometheus.
 

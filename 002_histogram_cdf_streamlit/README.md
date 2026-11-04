@@ -75,7 +75,7 @@ just sync
 just app
 ```
 
-O Streamlit sobe em **http://127.0.0.1:8502** (porta configurada no `justfile`).
+O Streamlit sobe em **http://127.0.0.1:8503** (porta configurada no `justfile`).
 Abra o URL impresso no terminal, cole `1, 2, 2, 5`, deixe `bins = 4` e confira
 a tabela e o gráfico acima.
 

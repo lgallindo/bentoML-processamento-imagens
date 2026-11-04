@@ -272,7 +272,7 @@ just serve
 
 Enquanto o servidor está no ar, outro terminal pode enviar um tema
 (`just exercise-theme …`) e agregar o log (`just snapshot-batch …`). O
-Streamlit (`just streamlit`, porta 8508) lê o corpus e o lote.
+Streamlit (`just streamlit`, porta 8509) lê o corpus e o lote.
 
 ---
 
@@ -682,7 +682,7 @@ just verify-psi forests
 # imprime PSI P2/P1 e a leitura das faixas
 
 just streamlit
-# sobe o app em http://localhost:8508
+# sobe o app em http://localhost:8509
 ```
 
 ### Caminho com servidor (log real em `request_features/`)

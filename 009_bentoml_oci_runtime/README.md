@@ -14,7 +14,7 @@ raspável. Não ensina PromQL nem drift; ensina empacotar e provar o runtime.
 
 ## Pré-requisitos
 
-- Docker Engine no anfitrião (para `containerize` / `docker run`).
+- Docker Engine no host (para `containerize` / `docker run`).
 - `uv` e as dependências da raiz (`just sync`).
 - Ficheiros da raiz: [`bentofile.yaml`](../bentofile.yaml),
   [`service.py`](../service.py), [`justfile`](../justfile).

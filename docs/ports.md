@@ -27,17 +27,19 @@ upstream do Grafana colide com o BentoML). A UI do Prometheus permanece em
 
 ## Painéis Streamlit (por aula)
 
-Pasta `NNN_*` → porta **8500 + N** (N = número da aula).
+Pasta `NNN_*` → porta **8501 + N** (N = número da aula). A porta **8501**
+fica livre (padrão upstream do Streamlit / uso ad hoc).
 
 | Aula | Porta | Exemplo |
 | ---: | ---: | :--- |
-| 002 | 8502 | histograma+CDF |
-| 003 | 8503 | alerta KS |
-| 004 | 8504 | anomalia KS |
-| 005 | 8505 | KS entrada/saída |
-| 006 | 8506 | tráfego misto |
-| 008 | 8508 | alerta PSI |
-| 015 | 8515 | histograma/CDF Prometheus (após a 010) |
+| 002 | 8503 | histograma+CDF |
+| 003 | 8504 | alerta KS |
+| 004 | 8505 | anomalia KS |
+| 005 | 8506 | KS entrada/saída |
+| 006 | 8507 | tráfego misto |
+| 008 | 8509 | alerta PSI |
+| 015 | 8516 | histograma/CDF Prometheus (após a 010) |
+
 
 A aula **010** (`010_prometheus_promql`) não usa Streamlit.
 

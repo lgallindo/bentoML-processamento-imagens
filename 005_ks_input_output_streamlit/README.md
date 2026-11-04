@@ -191,7 +191,7 @@ just verify-io-alerts
 # imprime D/alerta entrada e saída no terminal
 
 just streamlit
-# http://localhost:8505
+# http://localhost:8506
 ```
 
 Com servidor (log vivo):

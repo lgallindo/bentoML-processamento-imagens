@@ -309,7 +309,7 @@ just serve
 
 Enquanto o servidor está no ar, outro terminal pode enviar um tema de
 amostras (`just exercise-theme …`) e depois agregar o log
-(`just snapshot-batch …`). O Streamlit (`just streamlit`, porta 8503) lê
+(`just snapshot-batch …`). O Streamlit (`just streamlit`, porta 8505) lê
 o corpus de referência e o lote agregado.
 
 **Servir** e **observar** andam juntos. A resposta HTTP é o produto
@@ -904,7 +904,7 @@ just generate-illustrations
 # opcional: regenera illustrations/*.png usadas neste handout
 
 just streamlit
-# sobe o app em http://localhost:8503
+# sobe o app em http://localhost:8505
 ```
 
 ### Caminho com servidor (log real em `request_features/`)

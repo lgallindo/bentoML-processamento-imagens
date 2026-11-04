@@ -30,7 +30,7 @@ save-grayscale-model:
 serve port="3333":
     uv run --no-active bentoml serve service:ImageProcessor --reload --port {{port}}
 
-streamlit port="8503":
+streamlit port="8505":
     uv run --no-active streamlit run app.py --server.port {{port}} --server.headless true
 
 clear-request-features:
