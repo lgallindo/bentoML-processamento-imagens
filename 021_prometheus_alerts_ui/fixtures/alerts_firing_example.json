@@ -12,7 +12,7 @@
           "severity": "warning"
         },
         "value": [
-          1793819738.217,
+          0,
           "1"
         ]
       },
@@ -25,11 +25,24 @@
           "severity": "warning"
         },
         "value": [
-          1793819738.217,
+          0,
+          "1"
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "ALERTS",
+          "alertname": "BentoMLResponseTimeAnomaly",
+          "alertstate": "firing",
+          "endpoint": "/inference-grayscale",
+          "severity": "warning"
+        },
+        "value": [
+          0,
           "1"
         ]
       }
     ]
   },
-  "_fixture_note": "Captura real alinhada a illustrations/02_alerts_firing.png (Host :9090 com job bentoml-imagens)."
+  "_fixture_note": "Captura em :9100 (demo) com a mesma expr 3σ; for: 0s só no Prometheus de captura (YAML do curso permanece for: 1m). Alinhada a illustrations/02_alerts_firing.png."
 }

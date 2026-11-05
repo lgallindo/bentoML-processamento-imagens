@@ -108,10 +108,14 @@ arquivo) materializa o p95 que a expressão do alerta consulta.
 
 ![Página /alerts — firing](illustrations/02_alerts_firing.png)
 
-As figuras acima são capturas reais da UI `/alerts` (badges pending e
-firing). A `expr:` canónica da aula continua em
-[`monitoring/bentoml.rules.yml`](../monitoring/bentoml.rules.yml); use a UI
-viva e os JSON em [`fixtures/`](fixtures/) para confrontar o Host.
+As figuras acima são capturas reais da UI `/alerts` na demo **`:9100`**,
+com a **mesma `expr:` 3σ** de
+[`monitoring/bentoml.rules.yml`](../monitoring/bentoml.rules.yml). O cartão
+pending usa `for: 1m` como no curso; o de firing foi obtido com `for: 0s`
+só no Prometheus de captura — no ciclo sintético de 6 min a janela 3σ
+tende a se auto-neutralizar antes de cumprir 1 min. No Host do aluno, o
+YAML do repositório permanece `for: 1m`. Confrontar a UI viva e os JSON em
+[`fixtures/`](fixtures/).
 
 ## 4. Série `ALERTS` (Table) versus página Alerts
 

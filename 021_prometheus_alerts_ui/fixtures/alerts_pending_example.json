@@ -28,8 +28,21 @@
           0,
           "1"
         ]
+      },
+      {
+        "metric": {
+          "__name__": "ALERTS",
+          "alertname": "BentoMLResponseTimeAnomaly",
+          "alertstate": "pending",
+          "endpoint": "/inference-grayscale",
+          "severity": "warning"
+        },
+        "value": [
+          0,
+          "1"
+        ]
       }
     ]
   },
-  "_fixture_note": "Captura real alinhada a illustrations/01_alerts_pending.png (Host :9090 com job bentoml-imagens)."
+  "_fixture_note": "Captura em :9100 (demo) com regra 3σ do repositório e for: 1m; alinhada a illustrations/01_alerts_pending.png."
 }

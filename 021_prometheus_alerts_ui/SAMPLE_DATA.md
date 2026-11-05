@@ -33,7 +33,10 @@ Confirme <http://127.0.0.1:9100/targets> (`bentoml-imagens` UP) e abra
 <http://127.0.0.1:9100/alerts>.
 
 Durante a fase lenta do gerador (ver tabela de fases na SAMPLE_DATA da 010),
-acompanhe pending e, se o `for: 1m` se completar, firing.
+acompanhe pending. Com a regra 3σ e pouca história no TSDB, o pending pode
+aparecer no primeiro salto de latência; cumprir `for: 1m` até firing é
+frágil no ciclo de 6 min (o limiar adapta-se). As figuras da aula documentam
+esse contrato.
 
 ## Consulta de apoio
 
