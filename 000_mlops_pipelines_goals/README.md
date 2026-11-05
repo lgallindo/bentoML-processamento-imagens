@@ -31,39 +31,16 @@ Três perguntas atravessam a trilha inteira:
 
 ## Visão de arquitetura
 
-As figuras em [`illustrations/`](illustrations/) mostram o mesmo mapa em três
-batidas. O diagrama resume as camadas:
+Três figuras — o mesmo mapa em batidas diferentes. A primeira é o quadro
+de sala: do **Mundo Véio Sem Porteira** ao **Runtime (BentoML)** e daí aos
+painéis. A segunda isola o caminho de observabilidade. A terceira amarra
+os três fins de monitoramento às pastas da série.
 
-```mermaid
-flowchart LR
-  W["<img src='https://raw.githubusercontent.com/lgallindo/bentoML-processamento-imagens/main/000_mlops_pipelines_goals/illustrations/logos/mundo.png' width='56'/><br/>Mundo Véio Sem Porteira"]
+![Pipelines de MLOps: treinamento, inferência (Runtime BentoML) e monitoramento](illustrations/pipelines-mlops.webp)
 
-  subgraph pipelines [Pipelines de MLOps]
-    direction TB
-    subgraph treino [Treinamento]
-      direction LR
-      DS["<img src='https://raw.githubusercontent.com/lgallindo/bentoML-processamento-imagens/main/000_mlops_pipelines_goals/illustrations/logos/cientista.png' width='40'/><br/>Cientista / estatístico"]
-      MD["<img src='https://raw.githubusercontent.com/lgallindo/bentoML-processamento-imagens/main/000_mlops_pipelines_goals/illustrations/logos/modelo.png' width='48'/><br/>Modelo"]
-      DS --> MD
-    end
-    subgraph infer [Inferência]
-      direction LR
-      B["<img src='https://raw.githubusercontent.com/lgallindo/bentoML-processamento-imagens/main/000_mlops_pipelines_goals/illustrations/logos/bentoml.png' width='72'/><br/>BentoML<br/>empacota e serve"]
-      R["<img src='https://raw.githubusercontent.com/lgallindo/bentoML-processamento-imagens/main/000_mlops_pipelines_goals/illustrations/logos/oci.png' width='64'/><br/>Runtime (BentoML)<br/>contêiner"]
-      B --> R
-    end
-    subgraph mon [Monitoramento]
-      direction LR
-      P["<img src='https://raw.githubusercontent.com/lgallindo/bentoML-processamento-imagens/main/000_mlops_pipelines_goals/illustrations/logos/prometheus.png' width='48'/><br/>Prometheus<br/>papel: DB de séries"]
-      G["<img src='https://raw.githubusercontent.com/lgallindo/bentoML-processamento-imagens/main/000_mlops_pipelines_goals/illustrations/logos/grafana.png' width='48'/><br/>Grafana<br/>papel: dashboard"]
-      P --> G
-    end
-    MD --> B
-    R -->|/metrics| P
-  end
+![Arquitetura-alvo de observabilidade: BentoML → Prometheus → Grafana](illustrations/bentoml-prometheus-grafana.webp)
 
-  W -.->|HTTP| R
-```
+![Objetivos finais de monitoramento mapeados às pastas da série](illustrations/goals-lessons-map.webp)
 
 Antes de medir saúde, a ponte `009` deixa o runtime raspável; em seguida
 `010`/`016` e os tutoriais em `docs/` fecham a leitura de séries e painéis.

@@ -72,10 +72,6 @@ def _load_builder():
     return mod
 
 
-def _mermaid_block(text: str) -> str:
-    return text.split("```mermaid", 1)[1].split("```", 1)[0]
-
-
 def test_three_figures_exist_and_under_budget() -> None:
     for path in (PIPELINES, TARGET, GOALS_MAP):
         assert path.is_file(), f"missing {path}"
@@ -123,19 +119,20 @@ def test_readme_goals_path_and_runtime_label() -> None:
     assert "limiar órfão" in text or "aviso órfão" in text
 
 
-def test_readme_mermaid_architecture() -> None:
+def test_readme_architecture_figures() -> None:
+    """Arquitetura no handout = imagens embutidas; Mermaid retirado."""
     text = README.read_text(encoding="utf-8")
-    assert "```mermaid" in text
-    mermaid = _mermaid_block(text)
-    assert "Runtime (BentoML)" in mermaid
-    assert "papel: DB de séries" in mermaid
-    assert "papel: dashboard" in mermaid
-    assert "Mundo" in mermaid
-    assert "L001" not in mermaid
-    assert "001–002" not in mermaid
-    assert "040 KS" not in mermaid
-    for name in LOGO_FILES:
-        assert name in mermaid, f"mermaid missing logo ref: {name}"
+    assert "```mermaid" not in text
+    assert "illustrations/pipelines-mlops.webp" in text
+    assert "illustrations/bentoml-prometheus-grafana.webp" in text
+    assert "illustrations/goals-lessons-map.webp" in text
+    assert "![Pipelines de MLOps" in text
+    assert "![Arquitetura-alvo de observabilidade" in text
+    assert "![Objetivos finais de monitoramento" in text
+    assert "Mundo Véio Sem Porteira" in text
+    assert "Runtime (BentoML)" in text
+    assert "L001" not in text
+    assert "040 KS" not in text
 
 
 def test_readme_index() -> None:
