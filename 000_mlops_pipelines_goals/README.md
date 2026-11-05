@@ -36,7 +36,7 @@ batidas. O diagrama resume as camadas:
 
 ```mermaid
 flowchart LR
-  W["<img src='https://raw.githubusercontent.com/lgallindo/bentoML-processamento-imagens/main/000_mlops_pipelines_goals/illustrations/logos/mundo.png' width='56'/><br/>Mundo<br/>clientes / carga"]
+  W["<img src='https://raw.githubusercontent.com/lgallindo/bentoML-processamento-imagens/main/000_mlops_pipelines_goals/illustrations/logos/mundo.png' width='56'/><br/>Mundo Véio Sem Porteira"]
 
   subgraph pipelines [Pipelines de MLOps]
     direction TB
