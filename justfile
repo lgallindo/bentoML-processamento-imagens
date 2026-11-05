@@ -66,40 +66,71 @@ build:
 list:
     uv run --no-active bentoml list
 
-# Gera imagem OCI a partir do bento (tag opcional; default = último bento).
-# Ex.: just containerize
+# Backend OCI para containerize / oci-smoke (aula 009).
+# Omitir ou vazio = docker (legado). Valores: docker | podman.
+# Ex.: OCI_RUNTIME=podman just containerize
+#      just containerize
 #      just containerize image-demo:abc123
 containerize tag="":
     #!/usr/bin/env bash
     set -euo pipefail
+    backend="${OCI_RUNTIME:-docker}"
+    backend="$(echo "$backend" | tr -d '[:space:]')"
+    if [[ -z "$backend" ]]; then
+      backend="docker"
+    fi
+    case "$backend" in
+      docker|podman) ;;
+      *)
+        echo "OCI_RUNTIME inválido: '$backend' (use docker ou podman)." >&2
+        exit 1
+        ;;
+    esac
     if [[ -n "{{tag}}" ]]; then
-      uv run --no-active bentoml containerize "{{tag}}"
+      echo "containerize: {{tag}} (backend=$backend)"
+      uv run --no-active bentoml containerize "{{tag}}" --backend "$backend"
     else
       latest="$(uv run --no-active bentoml list -o=json | python3 -c 'import json,sys; rows=json.load(sys.stdin); print(rows[0]["tag"] if rows else "")')"
       if [[ -z "$latest" ]]; then
         echo "Nenhum bento encontrado; execute just build primeiro." >&2
         exit 1
       fi
-      echo "containerize: $latest"
-      uv run --no-active bentoml containerize "$latest"
+      echo "containerize: $latest (backend=$backend)"
+      uv run --no-active bentoml containerize "$latest" --backend "$backend"
     fi
 
 # Sobe a imagem OCI na porta canónica 3000 e prova GET /metrics (aula 009).
-# image: etiqueta Docker local (obrigatória).
+# image: etiqueta local (obrigatória). Runtime: OCI_RUNTIME=docker|podman (omit=docker).
 oci-smoke image:
     #!/usr/bin/env bash
     set -euo pipefail
-    cid="$(docker run -d --rm -p 3000:3000 "{{image}}")"
-    cleanup() { docker stop "$cid" >/dev/null 2>&1 || true; }
+    runtime="${OCI_RUNTIME:-docker}"
+    runtime="$(echo "$runtime" | tr -d '[:space:]')"
+    if [[ -z "$runtime" ]]; then
+      runtime="docker"
+    fi
+    case "$runtime" in
+      docker|podman) ;;
+      *)
+        echo "OCI_RUNTIME inválido: '$runtime' (use docker ou podman)." >&2
+        exit 1
+        ;;
+    esac
+    if ! command -v "$runtime" >/dev/null 2>&1; then
+      echo "oci-smoke: binário '$runtime' não encontrado no PATH." >&2
+      exit 1
+    fi
+    cid="$("$runtime" run -d --rm -p 3000:3000 "{{image}}")"
+    cleanup() { "$runtime" stop "$cid" >/dev/null 2>&1 || true; }
     trap cleanup EXIT
     for _ in $(seq 1 30); do
       if curl --fail --silent --show-error http://127.0.0.1:3000/metrics >/dev/null; then
-        echo "oci-smoke: OK — /metrics em :3000"
+        echo "oci-smoke: OK — /metrics em :3000 ($runtime)"
         exit 0
       fi
       sleep 1
     done
-    echo "oci-smoke: /metrics não respondeu a tempo" >&2
+    echo "oci-smoke: /metrics não respondeu a tempo ($runtime)" >&2
     exit 1
 
 # Baixa (ou regenera) amostras temáticas a partir de samples/SOURCES.toml.
