@@ -283,3 +283,7 @@ Vale ler os comentários do `service.py`: eles explicam não só o que o código
 faz, mas por que algumas decisões foram tomadas.
 
 [`001_histogram_cdf_cli`](001_histogram_cdf_cli/README.md)
+
+## Licença
+
+Código: GPL-3.0-or-later. Recursos de terceiros (dados, imagens, documentos) mantêm suas licenças/termos originais; consulte as fontes.
